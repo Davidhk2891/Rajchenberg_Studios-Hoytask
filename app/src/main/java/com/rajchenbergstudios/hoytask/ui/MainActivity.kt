@@ -1,7 +1,8 @@
-package com.rajchenbergstudios.hoytask
+package com.rajchenbergstudios.hoytask.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.rajchenbergstudios.hoytask.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
