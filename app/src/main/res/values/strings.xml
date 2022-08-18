@@ -3,4 +3,10 @@
     <string name="high_priority_task">high priority task</string>
     <string name="task_title">task title</string>
     <string name="important_task">Important task</string>
+    <string name="search">search</string>
+    <string name="sort">sort</string>
+    <string name="sort_by_name">Sort by name</string>
+    <string name="sort_by_date">sort by date</string>
+    <string name="hide_completed">hide completed</string>
+    <string name="delete_all_completed">delete all completed</string>
 </resources>
