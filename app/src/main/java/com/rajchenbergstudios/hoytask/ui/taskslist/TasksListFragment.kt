@@ -61,6 +61,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list){
                 val searchView = searchItem.actionView as SearchView
 
                 searchView.OnQueryTextChanged{ searchQuery ->
+
                     viewModel.searchQuery.value = searchQuery
                 }
             }
