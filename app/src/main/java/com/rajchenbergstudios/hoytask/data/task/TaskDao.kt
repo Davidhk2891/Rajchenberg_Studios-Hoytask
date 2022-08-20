@@ -1,7 +1,7 @@
 package com.rajchenbergstudios.hoytask.data.task
 
 import androidx.room.*
-import com.rajchenbergstudios.hoytask.ui.taskslist.SortOrder
+import com.rajchenbergstudios.hoytask.data.prefs.SortOrder
 import kotlinx.coroutines.flow.Flow
 
 @Dao
