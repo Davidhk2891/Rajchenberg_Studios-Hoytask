@@ -8,6 +8,24 @@
     <fragment
         android:id="@+id/tasksListFragment"
         android:name="com.rajchenbergstudios.hoytask.ui.taskslist.TasksListFragment"
-        android:label="fragment_tasks_list"
-        tools:layout="@layout/fragment_tasks_list" />
+        android:label="Hoytask"
+        tools:layout="@layout/fragment_tasks_list" >
+        <action
+            android:id="@+id/action_tasksListFragment_to_taskAddEditFragment"
+            app:destination="@id/taskAddEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/taskAddEditFragment"
+        android:name="com.rajchenbergstudios.hoytask.ui.taskaddedit.TaskAddEditFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_add_edit_task" >
+        <argument
+            android:name="task"
+            app:argType="com.rajchenbergstudios.hoytask.data.task.Task"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
 </navigation>
