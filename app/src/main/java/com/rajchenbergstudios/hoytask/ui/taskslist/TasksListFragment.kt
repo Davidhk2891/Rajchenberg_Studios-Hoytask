@@ -1,5 +1,6 @@
 package com.rajchenbergstudios.hoytask.ui.taskslist
 
+import android.content.ClipData
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -11,7 +12,10 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.data.prefs.SortOrder
 import com.rajchenbergstudios.hoytask.data.task.Task
@@ -41,11 +45,43 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
             }
+
+            ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val task = tasksListAdapter.currentList[viewHolder.adapterPosition]
+                    viewModel.onTaskSwiped(task)
+                }
+            }).attachToRecyclerView(tasksListRecyclerview)
         }
 
         viewModel.tasks.observe(viewLifecycleOwner){ tasksList ->
 
             tasksListAdapter.submitList(tasksList)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.tasksEvent.collect { event ->
+                when (event) {
+                    is TasksListViewModel.TaskEvent.ShowUndoDeleteTaskMessage -> {
+                        Snackbar
+                            .make(requireView(), "Task deleted", Snackbar.LENGTH_LONG)
+                            .setAction("UNDO"){
+                                viewModel.onUndoDeleteClick(event.task)
+                            }
+                            .show()
+                    }
+                }
+            }
         }
 
         loadMenu()
