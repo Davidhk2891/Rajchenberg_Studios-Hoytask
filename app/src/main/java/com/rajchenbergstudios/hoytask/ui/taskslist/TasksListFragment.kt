@@ -9,6 +9,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -70,6 +71,11 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
             }
         }
 
+        setFragmentResultListener("add_edit_request"){_, bundle ->
+            val result = bundle.getInt("add_edit_result")
+            viewModel.onAddEditResult(result)
+        }
+
         viewModel.tasks.observe(viewLifecycleOwner){ tasksList ->
 
             tasksListAdapter.submitList(tasksList)
@@ -88,13 +94,16 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                     }
                     is TasksListViewModel.TaskEvent.NavigateToAddTaskScreen -> {
                         val action = TasksListFragmentDirections
-                            .actionTasksListFragmentToTaskAddEditFragment(title = "Add task", task = null)
+                            .actionTasksListFragmentToTaskAddEditFragment(task = null, title = "Add task")
                         findNavController().navigate(action)
                     }
                     is TasksListViewModel.TaskEvent.NavigateToEditTaskScreen -> {
                         val action = TasksListFragmentDirections
-                            .actionTasksListFragmentToTaskAddEditFragment(title = "Edit task", task = event.task)
+                            .actionTasksListFragmentToTaskAddEditFragment(task = event.task, title = "Edit task")
                         findNavController().navigate(action)
+                    }
+                    is TasksListViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                     }
                 }.exhaustive
             }

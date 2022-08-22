@@ -5,6 +5,8 @@ import com.rajchenbergstudios.hoytask.data.prefs.PreferencesManager
 import com.rajchenbergstudios.hoytask.data.prefs.SortOrder
 import com.rajchenbergstudios.hoytask.data.task.Task
 import com.rajchenbergstudios.hoytask.data.task.TaskDao
+import com.rajchenbergstudios.hoytask.ui.ADD_TASK_RESULT_OK
+import com.rajchenbergstudios.hoytask.ui.EDIT_TASK_RESULT_OK
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -19,7 +21,7 @@ import javax.inject.Inject
 class TasksListViewModel @Inject constructor(
     private val taskDao: TaskDao,
     private val preferencesManager: PreferencesManager,
-    private val state: SavedStateHandle
+    state: SavedStateHandle
 ) : ViewModel(){
 
     val searchQuery = state.getLiveData("searchQuery", "")
@@ -70,11 +72,23 @@ class TasksListViewModel @Inject constructor(
         tasksEventChannel.send(TaskEvent.NavigateToAddTaskScreen)
     }
 
+    fun onAddEditResult(result: Int) {
+        when (result) {
+            ADD_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task added")
+            EDIT_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task updated")
+        }
+    }
+
+    private fun showTaskSavedConfirmationMessage(text: String) = viewModelScope.launch {
+        tasksEventChannel.send(TaskEvent.ShowTaskSavedConfirmationMessage(text))
+    }
+
     val tasks = tasksFlow.asLiveData()
 
     sealed class TaskEvent {
         object NavigateToAddTaskScreen : TaskEvent()
         data class NavigateToEditTaskScreen(val task: Task) : TaskEvent()
         data class ShowUndoDeleteTaskMessage(val task: Task) : TaskEvent()
+        data class ShowTaskSavedConfirmationMessage(val msg: String) : TaskEvent()
     }
 }
