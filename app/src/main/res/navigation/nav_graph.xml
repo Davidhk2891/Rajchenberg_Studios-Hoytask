@@ -28,4 +28,8 @@
             android:name="title"
             app:argType="string" />
     </fragment>
+    <dialog
+        android:id="@+id/tasksDeleteAllCompletedDialogFragment"
+        android:name="com.rajchenbergstudios.hoytask.ui.tasksdeleteallcompleted.TasksDeleteAllCompletedDialogFragment"
+        android:label="TasksDeleteAllCompletedDialogFragment" /><action android:id="@+id/action_global_tasksDeleteAllCompletedDialogFragment" app:destination="@id/tasksDeleteAllCompletedDialogFragment"/>
 </navigation>
