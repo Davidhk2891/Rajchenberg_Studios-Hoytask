@@ -34,6 +34,8 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
 
     private val viewModel: TasksListViewModel by viewModels()
 
+    private lateinit var searchView: SearchView
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -128,7 +130,13 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                 menuInflater.inflate(R.menu.menu_tasks_list_fragment, menu)
 
                 val searchItem = menu.findItem(R.id.tasks_list_menu_search)
-                val searchView = searchItem.actionView as SearchView
+                searchView = searchItem.actionView as SearchView
+
+                val pendingQuery = viewModel.searchQuery.value
+                if (pendingQuery != null && pendingQuery.isNotEmpty()) {
+                    searchItem.expandActionView()
+                    searchView.setQuery(pendingQuery, false)
+                }
 
                 searchView.OnQueryTextChanged{ searchQuery ->
 
@@ -172,5 +180,10 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
 
     override fun onCheckboxClick(task: Task, isChecked: Boolean) {
         viewModel.onTaskCheckedChanged(task, isChecked)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        searchView.setOnQueryTextListener(null)
     }
 }
