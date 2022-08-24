@@ -13,8 +13,6 @@
         <!-- Status bar -->
         <item name="android:statusBarColor">@color/hoytask_white</item>
         <item name="android:windowLightStatusBar">true</item>
-        <!-- Action bar -->
-        <item name="android:actionBarStyle">@style/Hoytask.ActionBar</item>
         <!-- Navigation bar -->
         <item name="android:navigationBarColor">@color/hoytask_white</item>
         <item name="android:windowLightNavigationBar">true</item>
