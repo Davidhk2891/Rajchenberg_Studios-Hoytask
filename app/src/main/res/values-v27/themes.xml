@@ -1,10 +1,6 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
 
-    <!-- Hoytask base theme -->
-    <style name="HoytaskBaseTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-    </style>
-
-    <!-- Hoytask main theme -->
     <style name="Theme.Hoytask.main" parent="HoytaskBaseTheme">
         <!-- Primary brand color -->
         <item name="colorPrimary">@color/hoytask_white</item>
@@ -13,16 +9,12 @@
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/hoytask_purple</item>
         <item name="colorSecondaryVariant">@color/purple_200</item>
-        <item name="colorOnSecondary">@color/hoytask_grey</item>
+        <item name="colorOnSecondary">@color/hoytask_black</item>
         <!-- Status bar -->
         <item name="android:statusBarColor">@color/hoytask_white</item>
         <item name="android:windowLightStatusBar">true</item>
         <!-- Navigation bar -->
         <item name="android:navigationBarColor">@color/hoytask_white</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
-
-    <style name="CustomActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
-        <item name="android:textColorSecondary">@color/hoytask_grey</item>
-    </style>
-
 </resources>
