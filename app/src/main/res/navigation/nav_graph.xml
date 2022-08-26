@@ -31,5 +31,16 @@
     <dialog
         android:id="@+id/tasksDeleteAllCompletedDialogFragment"
         android:name="com.rajchenbergstudios.hoytask.ui.tasksdeleteallcompleted.TasksDeleteAllCompletedDialogFragment"
-        android:label="TasksDeleteAllCompletedDialogFragment" /><action android:id="@+id/action_global_tasksDeleteAllCompletedDialogFragment" app:destination="@id/tasksDeleteAllCompletedDialogFragment"/>
+        android:label="TasksDeleteAllCompletedDialogFragment" />
+    <action android:id="@+id/action_global_tasksDeleteAllCompletedDialogFragment" app:destination="@id/tasksDeleteAllCompletedDialogFragment" />
+    <fragment
+        android:id="@+id/daysListFragment"
+        android:name="com.rajchenbergstudios.hoytask.ui.dayshistory.DaysListFragment"
+        android:label="Past days"
+        tools:layout="@layout/fragment_days_history" />
+    <fragment
+        android:id="@+id/taskSetsListFragment"
+        android:name="com.rajchenbergstudios.hoytask.ui.tasksset.TaskSetsListFragment"
+        android:label="Sets of tasks"
+        tools:layout="@layout/fragment_tasks_set" />
 </navigation>
