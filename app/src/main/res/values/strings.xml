@@ -9,4 +9,7 @@
     <string name="sort_by_date">sort by date</string>
     <string name="hide_completed">hide completed</string>
     <string name="delete_all_completed">delete all completed</string>
+    <string name="home">Home</string>
+    <string name="history">History</string>
+    <string name="sets">Sets</string>
 </resources>
