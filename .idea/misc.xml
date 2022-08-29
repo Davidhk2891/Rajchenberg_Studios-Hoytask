@@ -17,6 +17,7 @@
         <entry key="app/src/main/res/layout/fragment_days_history.xml" value="0.26313405797101447" />
         <entry key="app/src/main/res/layout/fragment_tasks_list.xml" value="0.2223731884057971" />
         <entry key="app/src/main/res/layout/fragment_tasks_set.xml" value="0.26313405797101447" />
+        <entry key="app/src/main/res/layout/item_days_list.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_tasks_list.xml" value="0.25" />
         <entry key="app/src/main/res/menu/menu_bottom_navigation.xml" value="0.40260416666666665" />
         <entry key="app/src/main/res/menu/menu_tasks_list_fragment.xml" value="0.33" />

@@ -80,6 +80,11 @@ dependencies {
 
     // CardView
     implementation "androidx.cardview:cardview:1.0.0"
+
+    // Jackson parser
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.11.1'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.11.1'
 }
 
 kapt {
