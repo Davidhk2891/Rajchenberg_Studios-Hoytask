@@ -44,7 +44,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
         val tasksListAdapter = TasksListAdapter(this)
 
         binding.apply {
-            tasksListRecyclerview.apply {
+            tasksListRecyclerview.layoutTasksListRecyclerview.apply {
 
                 adapter = tasksListAdapter
                 layoutManager = LinearLayoutManager(requireContext())
@@ -66,7 +66,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                     val task = tasksListAdapter.currentList[viewHolder.adapterPosition]
                     viewModel.onTaskSwiped(task)
                 }
-            }).attachToRecyclerView(tasksListRecyclerview)
+            }).attachToRecyclerView(tasksListRecyclerview.layoutTasksListRecyclerview)
 
             tasksListFab.setOnClickListener {
                 viewModel.onAddNewTaskClick()

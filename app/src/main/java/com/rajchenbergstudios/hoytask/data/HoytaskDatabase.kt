@@ -2,7 +2,6 @@ package com.rajchenbergstudios.hoytask.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.rajchenbergstudios.hoytask.data.day.Day
 import com.rajchenbergstudios.hoytask.data.day.DayDao
@@ -15,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
 
-@Database(entities = [Task::class, Day::class], version = 2, exportSchema = false)
+@Database(entities = [Task::class, Day::class], version = 3, exportSchema = false)
 abstract class HoytaskDatabase : RoomDatabase(){
 
     abstract fun taskDao(): TaskDao
@@ -41,7 +40,9 @@ abstract class HoytaskDatabase : RoomDatabase(){
                 val tasks = listOf(task1, task2, task3)
 
                 taskDao.insert(Task("Work", important = true, completed = true))
-                dayDao.insert(Day("Firday", "26", "August", "2022", 1, Converters.fromTaskListToJson(tasks)))
+                dayDao.insert(Day("Friday", "26", "August", "2022", 1, Converters.fromTaskListToJson(tasks)))
+                dayDao.insert(Day("Saturday", "27", "August", "2022", 1, Converters.fromTaskListToJson(tasks)))
+                dayDao.insert(Day("Sunday", "28", "August", "2022", 1, Converters.fromTaskListToJson(tasks)))
             }
         }
     }

@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Day(
     val dayOfWeek: String,
-    val dateOfDay: String,
+    val dayOfMonth: String,
     val month: String,
     val year: String,
     val bgColor: Int,
