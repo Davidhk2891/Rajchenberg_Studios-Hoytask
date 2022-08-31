@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rajchenbergstudios.hoytask.data.day.Day
 import com.rajchenbergstudios.hoytask.databinding.SingleItemDaysListBinding
 
-class DaysListAdapter : ListAdapter<Day, DaysListAdapter.DaysListViewHolder>(DiffCallback()){
+class DaysListAdapter(private val listener: OnItemClickListener) : ListAdapter<Day, DaysListAdapter.DaysListViewHolder>(DiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DaysListViewHolder {
         val binding = SingleItemDaysListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -20,7 +20,19 @@ class DaysListAdapter : ListAdapter<Day, DaysListAdapter.DaysListViewHolder>(Dif
         holder.bind(currentItem)
     }
 
-    class DaysListViewHolder(private val binding: SingleItemDaysListBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class DaysListViewHolder(private val binding: SingleItemDaysListBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.apply {
+                root.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION){
+                        val day = getItem(position)
+                        listener.onItemClick(day)
+                    }
+                }
+            }
+        }
 
         fun bind(day: Day) {
             binding.apply {
@@ -34,6 +46,10 @@ class DaysListAdapter : ListAdapter<Day, DaysListAdapter.DaysListViewHolder>(Dif
                 }
             }
         }
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(day: Day)
     }
 
     class DiffCallback : DiffUtil.ItemCallback<Day>() {

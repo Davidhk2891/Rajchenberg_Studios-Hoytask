@@ -1,6 +1,7 @@
 package com.rajchenbergstudios.hoytask.util
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.rajchenbergstudios.hoytask.data.task.Task
 
 class Converters {
@@ -9,12 +10,14 @@ class Converters {
 
         // Serialize
         fun fromTaskListToJson(taskList: List<Task>): String {
-            return ObjectMapper().writeValueAsString(taskList)
+            val mapper = jacksonObjectMapper()
+            return mapper.writeValueAsString(taskList)
         }
 
         // Unserialize
         fun fromJsonToTaskList(json: String): List<Task> {
-            return listOf(ObjectMapper().readValue(json, Task::class.java))
+            val mapper = jacksonObjectMapper()
+            return mapper.readValue(json)
         }
     }
 }

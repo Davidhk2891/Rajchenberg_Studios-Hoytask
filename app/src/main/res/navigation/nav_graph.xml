@@ -37,10 +37,23 @@
         android:id="@+id/daysListFragment"
         android:name="com.rajchenbergstudios.hoytask.ui.dayshistory.DaysListFragment"
         android:label="Past days"
-        tools:layout="@layout/fragment_days_history" />
+        tools:layout="@layout/fragment_days_history" >
+        <action
+            android:id="@+id/action_daysListFragment_to_daysDetailsFragment"
+            app:destination="@id/daysDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/taskSetsListFragment"
         android:name="com.rajchenbergstudios.hoytask.ui.tasksset.TaskSetsListFragment"
         android:label="Sets of tasks"
         tools:layout="@layout/fragment_tasks_set" />
+    <fragment
+        android:id="@+id/daysDetailsFragment"
+        android:name="com.rajchenbergstudios.hoytask.ui.daysdetails.DaysDetailsFragment"
+        android:label="Past days"
+        tools:layout="@layout/fragment_days_details">
+        <argument
+            android:name="day"
+            app:argType="com.rajchenbergstudios.hoytask.data.day.Day" />
+    </fragment>
 </navigation>

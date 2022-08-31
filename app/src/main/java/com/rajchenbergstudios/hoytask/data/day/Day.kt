@@ -13,7 +13,7 @@ data class Day(
     val month: String,
     val year: String,
     val bgColor: Int,
-    val tasksList: String,
+    val tasksListJson: String,
     @PrimaryKey(autoGenerate = true) val id: Long = 0
 ) : Parcelable {
 
