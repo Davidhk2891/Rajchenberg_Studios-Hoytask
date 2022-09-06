@@ -36,6 +36,7 @@ class DaysDetailsFragment : Fragment(R.layout.fragment_days_details) {
                 }
             }
         }
+        // TODO: Figure out way to load list asynchronously. Maybe with Flow as well
         //daysDetailsTasksAdapter.submitList(viewModel.tasks)
     }
 }
