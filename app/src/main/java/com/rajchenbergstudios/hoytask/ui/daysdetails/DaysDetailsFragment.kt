@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.databinding.FragmentDaysDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class DaysDetailsFragment : Fragment(R.layout.fragment_days_details) {
@@ -36,7 +39,10 @@ class DaysDetailsFragment : Fragment(R.layout.fragment_days_details) {
                 }
             }
         }
-        // TODO: Figure out way to load list asynchronously. Maybe with Flow as well
-        //daysDetailsTasksAdapter.submitList(viewModel.tasks)
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            withContext(Dispatchers.IO) {
+                daysDetailsTasksAdapter.submitList(viewModel.tasks)
+            }
+        }
     }
 }
