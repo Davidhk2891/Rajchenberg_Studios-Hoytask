@@ -29,6 +29,7 @@
             <include
                 android:id="@+id/tasks_list_dateheader"
                 layout="@layout/layout_date_header"
+                android:layout_marginStart="4dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

@@ -44,6 +44,9 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
         val tasksListAdapter = TasksListAdapter(this)
 
         binding.apply {
+
+            todayDateDisplay(binding)
+
             tasksListRecyclerview.layoutTasksListRecyclerview.apply {
 
                 adapter = tasksListAdapter
@@ -172,6 +175,17 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun todayDateDisplay(binding: FragmentTasksListBinding) {
+        binding.apply {
+            tasksListDateheader.apply {
+                dateHeaderDayofmonth.text = viewModel.getCurrentDayOfMonth()
+                dateHeaderMonth.text =  viewModel.getCurrentMonth()
+                dateHeaderYear.text = viewModel.getCurrentYear()
+                dateHeaderDayofweek.text = viewModel.getCurrentDayOfWeek()
+            }
+        }
     }
 
     override fun onItemClick(task: Task) {

@@ -7,6 +7,7 @@ import com.rajchenbergstudios.hoytask.data.task.Task
 import com.rajchenbergstudios.hoytask.data.task.TaskDao
 import com.rajchenbergstudios.hoytask.ui.ADD_TASK_RESULT_OK
 import com.rajchenbergstudios.hoytask.ui.EDIT_TASK_RESULT_OK
+import com.rajchenbergstudios.hoytask.util.CurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -85,6 +86,22 @@ class TasksListViewModel @Inject constructor(
 
     fun onDeleteAllCompletedClick() = viewModelScope.launch {
         tasksEventChannel.send(TaskEvent.NavigateToDeleteAllCompletedScreen)
+    }
+
+    fun getCurrentDayOfMonth(): String {
+        return CurrentDate.currentDayOfMonthFormatted
+    }
+
+    fun getCurrentMonth(): String {
+        return CurrentDate.currentMonthFormatted
+    }
+
+    fun getCurrentYear(): String {
+        return CurrentDate.currentYearFormatted
+    }
+
+    fun getCurrentDayOfWeek(): String {
+        return CurrentDate.currentDayOfWeekFormatted
     }
 
     val tasks = tasksFlow.asLiveData()
