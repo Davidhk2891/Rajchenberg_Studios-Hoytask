@@ -13,6 +13,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,7 +28,9 @@ class TasksListViewModel @Inject constructor(
 
     val searchQuery = state.getLiveData("searchQuery", "")
 
+    // DataStore
     val preferencesFlow = preferencesManager.preferencesFlow
+    val internalPrefsFlow = preferencesManager.daySavingFlow
 
     // Tasks Channel
     private val tasksEventChannel = Channel<TaskEvent>()
@@ -102,6 +105,16 @@ class TasksListViewModel @Inject constructor(
 
     fun getCurrentDayOfWeek(): String {
         return CurrentDate.currentDayOfWeekFormatted
+    }
+
+    fun onSetDaySaving() {
+        internalPrefsFlow.map { preference ->
+            if(!preference.isDaySaved) {
+                //Set alarm
+
+                preferencesManager.setDaySavingSetting()
+            }
+        }
     }
 
     val tasks = tasksFlow.asLiveData()

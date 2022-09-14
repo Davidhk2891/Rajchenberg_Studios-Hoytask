@@ -18,6 +18,8 @@ enum class SortOrder{BY_DATE, BY_NAME}
 
 data class FilterPreferences(val sortOrder: SortOrder, val hideCompleted: Boolean)
 
+data class DaySavingPreferences(val isDaySaved: Boolean)
+
 @Singleton
 class PreferencesManager @Inject constructor(@ApplicationContext context: Context){
 
@@ -44,6 +46,21 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
             FilterPreferences(sortOrder, hideCompleted)
         }
 
+    val daySavingFlow = dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                Log.e(TAG, "Error reading internal preferences", exception)
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
+            val isDaySaved = preferences[InternalPreferencesKeys.DAY_SAVING_SET] ?: false
+
+            DaySavingPreferences(isDaySaved)
+        }
+
     // Write data to DataStore
     suspend fun updateSortOrder(sortOrder: SortOrder) {
         dataStore.edit { preferences ->
@@ -57,8 +74,18 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
         }
     }
 
+    suspend fun setDaySavingSetting() {
+        dataStore.edit { preferences ->
+            preferences[InternalPreferencesKeys.DAY_SAVING_SET] = true
+        }
+    }
+
     private object PreferencesKeys {
         val SORT_ORDER = stringPreferencesKey("sort_order")
         val HIDE_COMPLETED = booleanPreferencesKey("hide_completed")
+    }
+
+    private object InternalPreferencesKeys {
+        val DAY_SAVING_SET = booleanPreferencesKey("day_saving_set")
     }
 }

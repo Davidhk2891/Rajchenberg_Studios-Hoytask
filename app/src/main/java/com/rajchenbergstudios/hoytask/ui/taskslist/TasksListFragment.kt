@@ -119,6 +119,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
             }
         }
 
+        onSetDaysSaving()
         loadMenu()
     }
 
@@ -186,6 +187,10 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                 dateHeaderDayofweek.text = viewModel.getCurrentDayOfWeek()
             }
         }
+    }
+
+    private fun onSetDaysSaving() {
+        viewModel.onSetDaySaving()
     }
 
     override fun onItemClick(task: Task) {
