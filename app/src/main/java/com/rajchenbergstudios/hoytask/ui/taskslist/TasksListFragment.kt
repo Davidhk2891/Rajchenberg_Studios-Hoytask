@@ -190,7 +190,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
     }
 
     private fun onSetDaysSaving() {
-        viewModel.onSetDaySaving()
+        viewModel.onSetDaySaving(requireContext())
     }
 
     override fun onItemClick(task: Task) {

@@ -1,6 +1,8 @@
 package com.rajchenbergstudios.hoytask.ui.taskslist
 
+import android.content.Context
 import androidx.lifecycle.*
+import com.rajchenbergstudios.hoytask.br.SavedDayAlarm
 import com.rajchenbergstudios.hoytask.data.prefs.PreferencesManager
 import com.rajchenbergstudios.hoytask.data.prefs.SortOrder
 import com.rajchenbergstudios.hoytask.data.task.Task
@@ -107,11 +109,10 @@ class TasksListViewModel @Inject constructor(
         return CurrentDate.currentDayOfWeekFormatted
     }
 
-    fun onSetDaySaving() {
+    fun onSetDaySaving(context: Context) {
         internalPrefsFlow.map { preference ->
             if(!preference.isDaySaved) {
-                //Set alarm
-
+                SavedDayAlarm.setDaySavingAlarm(context)
                 preferencesManager.setDaySavingSetting()
             }
         }
