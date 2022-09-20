@@ -6,7 +6,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
@@ -44,6 +46,14 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
             FilterPreferences(sortOrder, hideCompleted)
         }
 
+    suspend fun getDaySavingSetting(): Boolean? {
+        var isDaySavingSet: Boolean? = null
+        dataStore.data.map { preferences ->
+            isDaySavingSet = preferences[InternalPreferencesKeys.DAY_SAVING_SET]
+        }.firstOrNull()
+        return isDaySavingSet
+    }
+
     // Write data to DataStore
     suspend fun updateSortOrder(sortOrder: SortOrder) {
         dataStore.edit { preferences ->
@@ -57,8 +67,18 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
         }
     }
 
+    suspend fun setDaySavingSetting() {
+        dataStore.edit { preferences ->
+            preferences[InternalPreferencesKeys.DAY_SAVING_SET] = true
+        }
+    }
+
     private object PreferencesKeys {
         val SORT_ORDER = stringPreferencesKey("sort_order")
         val HIDE_COMPLETED = booleanPreferencesKey("hide_completed")
+    }
+
+    private object InternalPreferencesKeys {
+        val DAY_SAVING_SET = booleanPreferencesKey("day_saving_set")
     }
 }

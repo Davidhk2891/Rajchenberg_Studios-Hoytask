@@ -1,20 +1,24 @@
 package com.rajchenbergstudios.hoytask.ui.taskslist
 
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
+import com.rajchenbergstudios.hoytask.br.SavedDayAlarm
 import com.rajchenbergstudios.hoytask.data.prefs.PreferencesManager
 import com.rajchenbergstudios.hoytask.data.prefs.SortOrder
 import com.rajchenbergstudios.hoytask.data.task.Task
 import com.rajchenbergstudios.hoytask.data.task.TaskDao
 import com.rajchenbergstudios.hoytask.ui.ADD_TASK_RESULT_OK
 import com.rajchenbergstudios.hoytask.ui.EDIT_TASK_RESULT_OK
+import com.rajchenbergstudios.hoytask.util.CurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val TAG = "TasksListViewModel"
 
 @ExperimentalCoroutinesApi
 @HiltViewModel
@@ -26,6 +30,7 @@ class TasksListViewModel @Inject constructor(
 
     val searchQuery = state.getLiveData("searchQuery", "")
 
+    // DataStore
     val preferencesFlow = preferencesManager.preferencesFlow
 
     // Tasks Channel
@@ -85,6 +90,32 @@ class TasksListViewModel @Inject constructor(
 
     fun onDeleteAllCompletedClick() = viewModelScope.launch {
         tasksEventChannel.send(TaskEvent.NavigateToDeleteAllCompletedScreen)
+    }
+
+    fun getCurrentDayOfMonth(): String {
+        return CurrentDate.currentDayOfMonthFormatted
+    }
+
+    fun getCurrentMonth(): String {
+        return CurrentDate.currentMonthFormatted
+    }
+
+    fun getCurrentYear(): String {
+        return CurrentDate.currentYearFormatted
+    }
+
+    fun getCurrentDayOfWeek(): String {
+        return CurrentDate.currentDayOfWeekFormatted
+    }
+
+    fun onSetDaySaving(context: Context) = viewModelScope.launch {
+        if (preferencesManager.getDaySavingSetting() == null){
+            Log.i(TAG, "alarm to be set")
+            SavedDayAlarm.setDaySavingAlarm(context)
+            preferencesManager.setDaySavingSetting()
+        } else {
+            Log.i(TAG, "alarm already set")
+        }
     }
 
     val tasks = tasksFlow.asLiveData()

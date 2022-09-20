@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.rajchenbergstudios.hoytask.data.task.Task
-import com.rajchenbergstudios.hoytask.databinding.ItemTasksListBinding
+import com.rajchenbergstudios.hoytask.databinding.SingleItemTasksListBinding
 
 class TasksListAdapter(private val listener: OnItemClickListener) : ListAdapter<Task, TasksListAdapter.TasksListViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksListViewHolder {
 
-        val binding = ItemTasksListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = SingleItemTasksListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TasksListViewHolder(binding)
     }
 
@@ -23,7 +23,7 @@ class TasksListAdapter(private val listener: OnItemClickListener) : ListAdapter<
         holder.bind(currentItem)
     }
 
-    inner class TasksListViewHolder(private val binding: ItemTasksListBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class TasksListViewHolder(private val binding: SingleItemTasksListBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.apply {
