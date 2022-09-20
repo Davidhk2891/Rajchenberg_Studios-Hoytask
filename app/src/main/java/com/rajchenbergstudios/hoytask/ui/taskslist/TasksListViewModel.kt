@@ -1,6 +1,7 @@
 package com.rajchenbergstudios.hoytask.ui.taskslist
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
 import com.rajchenbergstudios.hoytask.br.SavedDayAlarm
 import com.rajchenbergstudios.hoytask.data.prefs.PreferencesManager
@@ -13,12 +14,11 @@ import com.rajchenbergstudios.hoytask.util.CurrentDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val TAG = "TasksListViewModel"
 
 @ExperimentalCoroutinesApi
 @HiltViewModel
@@ -32,7 +32,6 @@ class TasksListViewModel @Inject constructor(
 
     // DataStore
     val preferencesFlow = preferencesManager.preferencesFlow
-    val internalPrefsFlow = preferencesManager.daySavingFlow
 
     // Tasks Channel
     private val tasksEventChannel = Channel<TaskEvent>()
@@ -109,12 +108,13 @@ class TasksListViewModel @Inject constructor(
         return CurrentDate.currentDayOfWeekFormatted
     }
 
-    fun onSetDaySaving(context: Context) {
-        internalPrefsFlow.map { preference ->
-            if(!preference.isDaySaved) {
-                SavedDayAlarm.setDaySavingAlarm(context)
-                preferencesManager.setDaySavingSetting()
-            }
+    fun onSetDaySaving(context: Context) = viewModelScope.launch {
+        if (preferencesManager.getDaySavingSetting() == null){
+            Log.i(TAG, "alarm to be set")
+            SavedDayAlarm.setDaySavingAlarm(context)
+            preferencesManager.setDaySavingSetting()
+        } else {
+            Log.i(TAG, "alarm already set")
         }
     }
 

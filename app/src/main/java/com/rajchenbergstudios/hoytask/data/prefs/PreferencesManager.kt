@@ -6,7 +6,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
@@ -17,8 +19,6 @@ private const val TAG = "PreferencesManager"
 enum class SortOrder{BY_DATE, BY_NAME}
 
 data class FilterPreferences(val sortOrder: SortOrder, val hideCompleted: Boolean)
-
-data class DaySavingPreferences(val isDaySaved: Boolean)
 
 @Singleton
 class PreferencesManager @Inject constructor(@ApplicationContext context: Context){
@@ -46,20 +46,13 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
             FilterPreferences(sortOrder, hideCompleted)
         }
 
-    val daySavingFlow = dataStore.data
-        .catch { exception ->
-            if (exception is IOException) {
-                Log.e(TAG, "Error reading internal preferences", exception)
-                emit(emptyPreferences())
-            } else {
-                throw exception
-            }
-        }
-        .map { preferences ->
-            val isDaySaved = preferences[InternalPreferencesKeys.DAY_SAVING_SET] ?: false
-
-            DaySavingPreferences(isDaySaved)
-        }
+    suspend fun getDaySavingSetting(): Boolean? {
+        var isDaySavingSet: Boolean? = null
+        dataStore.data.map { preferences ->
+            isDaySavingSet = preferences[InternalPreferencesKeys.DAY_SAVING_SET]
+        }.firstOrNull()
+        return isDaySavingSet
+    }
 
     // Write data to DataStore
     suspend fun updateSortOrder(sortOrder: SortOrder) {
