@@ -33,14 +33,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-            <include
-                android:id="@+id/tasks_list_recyclerview"
-                layout="@layout/layout_tasks_list"
+            <FrameLayout
+                android:id="@+id/tasks_list_framelayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="6dp"
-                android:layout_marginEnd="4dp"/>
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@+id/tasks_list_recyclerview"
+                    layout="@layout/layout_tasks_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginEnd="4dp"/>
+
+                <include
+                    android:id="@+id/tasks_list_layout_no_data"
+                    layout="@layout/layout_no_data_with_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginEnd="4dp"/>
+
+            </FrameLayout>
 
         </LinearLayout>
 

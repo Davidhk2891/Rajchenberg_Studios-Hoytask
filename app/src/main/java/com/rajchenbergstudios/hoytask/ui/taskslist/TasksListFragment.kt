@@ -82,8 +82,14 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
         }
 
         viewModel.tasks.observe(viewLifecycleOwner){ tasksList ->
-
-            tasksListAdapter.submitList(tasksList)
+            if (tasksList.isEmpty()) {
+                binding.tasksListLayoutNoData.layoutNoDataLinearlayout.visibility = View.VISIBLE
+                binding.tasksListRecyclerview.layoutTasksListRecyclerview.visibility = View.INVISIBLE
+            } else {
+                binding.tasksListLayoutNoData.layoutNoDataLinearlayout.visibility = View.INVISIBLE
+                binding.tasksListRecyclerview.layoutTasksListRecyclerview.visibility = View.VISIBLE
+                tasksListAdapter.submitList(tasksList)
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {

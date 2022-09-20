@@ -33,7 +33,16 @@ class DaysListFragment : Fragment(R.layout.fragment_days_history), DaysListAdapt
         }
 
         viewModel.days.observe(viewLifecycleOwner){ daysList ->
-            daysListAdapter.submitList(daysList)
+            if (daysList.isEmpty()) {
+                binding.daysListRecyclerview.visibility = View.INVISIBLE
+                binding.daysListLayoutNoData.layoutNoDataLinearlayout.visibility = View.VISIBLE
+                binding.daysListLayoutNoData.layoutNoDataTextview.text = getString(R.string.you_don_t_have_any_days)
+                binding.daysListLayoutNoData.layoutNoDataImageview.visibility = View.GONE
+            } else {
+                binding.daysListRecyclerview.visibility = View.VISIBLE
+                binding.daysListLayoutNoData.layoutNoDataLinearlayout.visibility = View.INVISIBLE
+                daysListAdapter.submitList(daysList)
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
