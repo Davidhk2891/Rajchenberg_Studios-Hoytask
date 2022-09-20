@@ -29,7 +29,7 @@ abstract class HoytaskDatabase : RoomDatabase(){
 
             val taskDao = database.get().taskDao()
             applicationScope.launch {
-                taskDao.insert(Task("Work", important = true, completed = true))
+                taskDao.insert(Task("Start setting up your tasks", important = true))
             }
         }
     }
