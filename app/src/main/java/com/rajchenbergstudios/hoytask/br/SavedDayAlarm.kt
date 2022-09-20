@@ -4,7 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
+import com.rajchenbergstudios.hoytask.util.Logger
 import java.util.*
 
 private const val TAG = "SavedDayAlarm"
@@ -22,6 +22,6 @@ object SavedDayAlarm {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.setRepeating(AlarmManager.RTC, daySavingHour.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
-        Log.i(TAG, "alarm set")
+        Logger.i(TAG, "setDaySavingAlarm", "alarm set")
     }
 }

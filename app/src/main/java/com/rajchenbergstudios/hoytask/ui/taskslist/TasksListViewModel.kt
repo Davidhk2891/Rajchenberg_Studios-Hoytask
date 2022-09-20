@@ -11,6 +11,7 @@ import com.rajchenbergstudios.hoytask.data.task.TaskDao
 import com.rajchenbergstudios.hoytask.ui.ADD_TASK_RESULT_OK
 import com.rajchenbergstudios.hoytask.ui.EDIT_TASK_RESULT_OK
 import com.rajchenbergstudios.hoytask.util.CurrentDate
+import com.rajchenbergstudios.hoytask.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -110,11 +111,11 @@ class TasksListViewModel @Inject constructor(
 
     fun onSetDaySaving(context: Context) = viewModelScope.launch {
         if (preferencesManager.getDaySavingSetting() == null){
-            Log.i(TAG, "alarm to be set")
+            Logger.i(TAG, "onSetDaySaving", "alarm to be set")
             SavedDayAlarm.setDaySavingAlarm(context)
             preferencesManager.setDaySavingSetting()
         } else {
-            Log.i(TAG, "alarm already set")
+            Logger.i(TAG, "onSetDaySaving", "alarm already set")
         }
     }
 
