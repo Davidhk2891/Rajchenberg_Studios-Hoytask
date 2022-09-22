@@ -114,7 +114,9 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                         findNavController().navigate(action)
                     }
                     is TasksListViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {
-                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
+                        Snackbar
+                            .make(requireView(), event.msg, Snackbar.LENGTH_LONG)
+                            .show()
                     }
                     is TasksListViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen -> {
                         val action = TasksListFragmentDirections
