@@ -15,4 +15,6 @@
     <string name="you_don_t_have_any_tasks">You don\'t have any tasks</string>
     <string name="no_data">no data</string>
     <string name="you_don_t_have_any_days">Past days with tasks will show up here</string>
+    <string name="add_new_set">add new set</string>
+    <string name="set_icon_in_list">Set icon in list</string>
 </resources>
