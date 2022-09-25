@@ -6,24 +6,42 @@ import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rajchenbergstudios.hoytask.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setupCustomActionBar()
+        setupNavControllerWithNavHostFrag()
+        setupBottomNavigationView()
+        setupActionBarWithNavController(navController, appBarConfiguration)
+    }
+
+    private fun setupCustomActionBar(){
+        setSupportActionBar(findViewById(R.id.hoytask_appbar))
+    }
+
+    private fun setupNavControllerWithNavHostFrag(){
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container)
-            as NavHostFragment
-
+                as NavHostFragment
         navController = navHostFragment.findNavController()
+    }
 
-        setupActionBarWithNavController(navController)
+    private fun setupBottomNavigationView(){
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.hoytask_bottom_nav)
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.tasksListFragment, R.id.daysListFragment, R.id.taskSetsListFragment))
+        bottomNavigationView.setupWithNavController(navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {

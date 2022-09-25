@@ -44,7 +44,10 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
         val tasksListAdapter = TasksListAdapter(this)
 
         binding.apply {
-            tasksListRecyclerview.apply {
+
+            todayDateDisplay(binding)
+
+            tasksListRecyclerview.layoutTasksListRecyclerview.apply {
 
                 adapter = tasksListAdapter
                 layoutManager = LinearLayoutManager(requireContext())
@@ -66,7 +69,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                     val task = tasksListAdapter.currentList[viewHolder.adapterPosition]
                     viewModel.onTaskSwiped(task)
                 }
-            }).attachToRecyclerView(tasksListRecyclerview)
+            }).attachToRecyclerView(tasksListRecyclerview.layoutTasksListRecyclerview)
 
             tasksListFab.setOnClickListener {
                 viewModel.onAddNewTaskClick()
@@ -79,8 +82,14 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
         }
 
         viewModel.tasks.observe(viewLifecycleOwner){ tasksList ->
-
-            tasksListAdapter.submitList(tasksList)
+            if (tasksList.isEmpty()) {
+                binding.tasksListLayoutNoData.layoutNoDataLinearlayout.visibility = View.VISIBLE
+                binding.tasksListRecyclerview.layoutTasksListRecyclerview.visibility = View.INVISIBLE
+            } else {
+                binding.tasksListLayoutNoData.layoutNoDataLinearlayout.visibility = View.INVISIBLE
+                binding.tasksListRecyclerview.layoutTasksListRecyclerview.visibility = View.VISIBLE
+                tasksListAdapter.submitList(tasksList)
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -105,7 +114,9 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                         findNavController().navigate(action)
                     }
                     is TasksListViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {
-                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
+                        Snackbar
+                            .make(requireView(), event.msg, Snackbar.LENGTH_LONG)
+                            .show()
                     }
                     is TasksListViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen -> {
                         val action = TasksListFragmentDirections
@@ -116,6 +127,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
             }
         }
 
+        onSetDaysSaving()
         loadMenu()
     }
 
@@ -172,6 +184,21 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun todayDateDisplay(binding: FragmentTasksListBinding) {
+        binding.apply {
+            tasksListDateheader.apply {
+                dateHeaderDayofmonth.text = viewModel.getCurrentDayOfMonth()
+                dateHeaderMonth.text =  viewModel.getCurrentMonth()
+                dateHeaderYear.text = viewModel.getCurrentYear()
+                dateHeaderDayofweek.text = viewModel.getCurrentDayOfWeek()
+            }
+        }
+    }
+
+    private fun onSetDaysSaving() {
+        viewModel.onSetDaySaving(requireContext())
     }
 
     override fun onItemClick(task: Task) {

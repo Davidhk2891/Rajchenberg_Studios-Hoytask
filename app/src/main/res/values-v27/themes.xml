@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Hoytask.main" parent="HoytaskBaseTheme">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/hoytask_white</item>
+        <item name="colorPrimaryVariant">@color/hoytask_purple</item>
+        <item name="colorOnPrimary">@color/hoytask_black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/hoytask_purple</item>
+        <item name="colorSecondaryVariant">@color/purple_200</item>
+        <item name="colorOnSecondary">@color/hoytask_black</item>
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/hoytask_white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Navigation bar -->
+        <item name="android:navigationBarColor">@color/hoytask_white</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+</resources>

@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/tasksListFragment"
         android:name="com.rajchenbergstudios.hoytask.ui.taskslist.TasksListFragment"
-        android:label="Hoytask"
+        android:label="Today"
         tools:layout="@layout/fragment_tasks_list" >
         <action
             android:id="@+id/action_tasksListFragment_to_taskAddEditFragment"
@@ -31,5 +31,42 @@
     <dialog
         android:id="@+id/tasksDeleteAllCompletedDialogFragment"
         android:name="com.rajchenbergstudios.hoytask.ui.tasksdeleteallcompleted.TasksDeleteAllCompletedDialogFragment"
-        android:label="TasksDeleteAllCompletedDialogFragment" /><action android:id="@+id/action_global_tasksDeleteAllCompletedDialogFragment" app:destination="@id/tasksDeleteAllCompletedDialogFragment"/>
+        android:label="TasksDeleteAllCompletedDialogFragment" />
+    <action android:id="@+id/action_global_tasksDeleteAllCompletedDialogFragment" app:destination="@id/tasksDeleteAllCompletedDialogFragment" />
+    <fragment
+        android:id="@+id/daysListFragment"
+        android:name="com.rajchenbergstudios.hoytask.ui.dayshistory.DaysListFragment"
+        android:label="Past days"
+        tools:layout="@layout/fragment_days_history" >
+        <action
+            android:id="@+id/action_daysListFragment_to_daysDetailsFragment"
+            app:destination="@id/daysDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/taskSetsListFragment"
+        android:name="com.rajchenbergstudios.hoytask.ui.tasksset.TaskSetsListFragment"
+        android:label="Sets of tasks"
+        tools:layout="@layout/fragment_tasks_set" >
+        <action
+            android:id="@+id/action_taskSetsListFragment_to_tasksSetEditListFragment"
+            app:destination="@id/tasksSetEditListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/daysDetailsFragment"
+        android:name="com.rajchenbergstudios.hoytask.ui.daysdetails.DaysDetailsFragment"
+        android:label="Past days"
+        tools:layout="@layout/fragment_days_details">
+        <argument
+            android:name="day"
+            app:argType="com.rajchenbergstudios.hoytask.data.day.Day" />
+    </fragment>
+    <fragment
+        android:id="@+id/tasksSetEditListFragment"
+        android:name="com.rajchenbergstudios.hoytask.ui.taskssetedit.TasksSetEditListFragment"
+        android:label="fragment_tasks_set_edit"
+        tools:layout="@layout/fragment_tasks_set_edit" >
+        <action
+            android:id="@+id/action_tasksSetEditListFragment_to_taskAddEditFragment"
+            app:destination="@id/taskAddEditFragment" />
+    </fragment>
 </navigation>

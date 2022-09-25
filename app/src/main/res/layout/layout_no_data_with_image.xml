@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_no_data_linearlayout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:ignore="UseCompoundDrawables">
+
+    <TextView
+        android:id="@+id/layout_no_data_textview"
+        android:text="@string/you_don_t_have_any_tasks"
+        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/layout_no_data_imageview"
+        android:src="@drawable/img_no_data"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:contentDescription="@string/no_data" />
+
+</LinearLayout>
