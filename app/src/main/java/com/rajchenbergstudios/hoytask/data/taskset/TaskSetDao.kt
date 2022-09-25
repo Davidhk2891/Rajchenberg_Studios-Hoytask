@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TaskSetDao {
 
-    @Query("SELECT * FROM set_table")
-    fun getSets(): Flow<List<TaskSet>>
+    @Query("SELECT * FROM set_table WHERE title LIKE '%' || :searchQuery || '%' ORDER BY title DESC")
+    fun getSets(searchQuery: String): Flow<List<TaskSet>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(set: TaskSet)

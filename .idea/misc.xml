@@ -29,7 +29,7 @@
         <entry key="app/src/main/res/layout/layout_tasks_list.xml" value="0.25815217391304346" />
         <entry key="app/src/main/res/layout/single_item_days_list.xml" value="0.22" />
         <entry key="app/src/main/res/layout/single_item_tasks_list.xml" value="0.24954710144927536" />
-        <entry key="app/src/main/res/layout/single_item_tasks_set.xml" value="0.3875" />
+        <entry key="app/src/main/res/layout/single_item_tasks_set.xml" value="0.25" />
         <entry key="app/src/main/res/menu/menu_bottom_navigation.xml" value="0.40260416666666665" />
         <entry key="app/src/main/res/menu/menu_tasks_list_fragment.xml" value="0.33" />
         <entry key="app/src/main/res/menu/menu_tasks_set_fragment.xml" value="0.5" />

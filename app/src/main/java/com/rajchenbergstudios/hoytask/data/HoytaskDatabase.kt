@@ -47,7 +47,11 @@ abstract class HoytaskDatabase : RoomDatabase(){
                 val task3 = Task("Read 10 pages", false, false)
                 val listOfSets = listOf(task1, task2, task3)
                 val set1 = TaskSet("Dailies", Converters.fromTaskListToJson(listOfSets))
+                val set2 = TaskSet("Weekends", Converters.fromTaskListToJson(listOfSets))
+                val set3 = TaskSet("Morning routine", Converters.fromTaskListToJson(listOfSets))
                 taskSetDao.insert(set1)
+                taskSetDao.insert(set2)
+                taskSetDao.insert(set3)
             }
         }
     }
