@@ -1,7 +1,6 @@
 package com.rajchenbergstudios.hoytask.ui.taskslist
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
 import com.rajchenbergstudios.hoytask.br.SavedDayAlarm
 import com.rajchenbergstudios.hoytask.data.prefs.PreferencesManager

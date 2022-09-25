@@ -12,10 +12,12 @@
 
     <!-- Hoytask colors main theme -->
     <color name="hoytask_orange">#FDA573</color>
+    <color name="hoytask_orange_2">#FFA965</color>
     <color name="hoytask_purple">#8C80F8</color>
     <color name="hoytask_white">#F5F5F5</color>
     <color name="hoytask_black">#111111</color>
     <color name="hoytask_grey">#646464</color>
+    <color name="hoytask_yellow">#F7CD39</color>
     <color name="hoytask_card_view_light_beige">#FFF7F1</color>
     <color name="hoytask_card_view_light_purple">#D9D7EE</color>
     <color name="hoytask_card_view_light_orange">#F18725</color>

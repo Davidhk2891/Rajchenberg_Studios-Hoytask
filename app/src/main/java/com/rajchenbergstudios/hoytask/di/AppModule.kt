@@ -32,6 +32,9 @@ object AppModule {
     @Provides
     fun provideDayDao(db: HoytaskDatabase) = db.dayDao()
 
+    @Provides
+    fun provideTaskSetDao(db: HoytaskDatabase) = db.taskSetDao()
+
     @ApplicationScope
     @Provides
     @Singleton
