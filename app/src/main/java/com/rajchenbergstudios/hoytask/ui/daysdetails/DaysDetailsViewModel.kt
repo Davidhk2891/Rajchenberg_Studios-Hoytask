@@ -23,7 +23,8 @@ class DaysDetailsViewModel @Inject constructor(
 
     val dayMonthDay = stateHandle["monthDay"] ?: day?.dayOfMonth ?: "null"
 
-    var tasks: List<Task> = stateHandle["tasksList"] ?: Converters.fromJsonToTaskList(
+    @Suppress("UNCHECKED_CAST")
+    var tasks: List<Task> = (stateHandle["tasksList"] ?: Converters.fromJsonToTaskList(
         stateHandle["tasksList"] ?: day?.tasksListJson ?: "null"
-    ) ?: listOf()
+    ) ?: listOf()) as List<Task>
 }

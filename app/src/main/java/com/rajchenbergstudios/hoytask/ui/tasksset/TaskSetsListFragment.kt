@@ -11,16 +11,20 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rajchenbergstudios.hoytask.R
+import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.databinding.FragmentTasksSetBinding
 import com.rajchenbergstudios.hoytask.util.OnQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set){
+class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsListAdapter.OnItemClickListener{
 
     private val viewModel: TasksSetsListViewModel by viewModels()
 
@@ -31,7 +35,7 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set){
 
         val binding = FragmentTasksSetBinding.bind(view)
 
-        val tasksSetListAdapter = TaskSetsListAdapter()
+        val tasksSetListAdapter = TaskSetsListAdapter(this)
 
         binding.apply {
             tasksSetRecyclerview.apply {
@@ -45,6 +49,21 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set){
 
         viewModel.taskSets.observe(viewLifecycleOwner) { taskSetsList ->
             tasksSetListAdapter.submitList(taskSetsList)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.taskSetEvent.collect{ event ->
+                when (event) {
+                    is TasksSetsListViewModel.TaskSetEvent.NavigateToDeleteAllSetsScreen -> {
+
+                    }
+                    is TasksSetsListViewModel.TaskSetEvent.NavigateToEditTaskSet -> {
+                        val action = TaskSetsListFragmentDirections
+                            .actionTaskSetsListFragmentToTasksSetEditListFragment(taskset = event.taskSet, settitle = event.taskSet.title)
+                        findNavController().navigate(action)
+                    }
+                }
+            }
         }
 
         loadMenu()
@@ -85,6 +104,10 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set){
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    override fun onItemClick(taskSet: TaskSet) {
+        viewModel.onTaskSetSelected(taskSet)
     }
 
     override fun onDestroyView() {
