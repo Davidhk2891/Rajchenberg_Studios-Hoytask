@@ -20,7 +20,6 @@ import com.rajchenbergstudios.hoytask.databinding.FragmentTasksSetBinding
 import com.rajchenbergstudios.hoytask.util.OnQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint

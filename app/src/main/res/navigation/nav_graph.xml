@@ -62,7 +62,7 @@
     </fragment>
     <fragment
         android:id="@+id/tasksSetEditListFragment"
-        android:name="com.rajchenbergstudios.hoytask.ui.taskssetedit.TasksSetEditListFragment"
+        android:name="com.rajchenbergstudios.hoytask.ui.taskssetedit.TasksInSetListFragment"
         android:label="{settitle}"
         tools:layout="@layout/fragment_tasks_set_edit" >
         <action
