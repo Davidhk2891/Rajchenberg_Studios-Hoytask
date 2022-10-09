@@ -105,12 +105,12 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                     }
                     is TasksListViewModel.TaskEvent.NavigateToAddTaskScreen -> {
                         val action = TasksListFragmentDirections
-                            .actionTasksListFragmentToTaskAddEditFragment(task = null, title = "Add task")
+                            .actionTasksListFragmentToTaskAddEditFragment(task = null, title = "Add task", taskInSet = null)
                         findNavController().navigate(action)
                     }
                     is TasksListViewModel.TaskEvent.NavigateToEditTaskScreen -> {
                         val action = TasksListFragmentDirections
-                            .actionTasksListFragmentToTaskAddEditFragment(task = event.task, title = "Edit task")
+                            .actionTasksListFragmentToTaskAddEditFragment(task = event.task, title = "Edit task", taskInSet = null)
                         findNavController().navigate(action)
                     }
                     is TasksListViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {
