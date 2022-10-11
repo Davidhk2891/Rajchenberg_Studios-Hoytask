@@ -98,11 +98,6 @@ class TaskAddEditViewModel @Inject constructor(
                     taskInSet.copy(taskInSetBigTitle = taskInSetBigTitle, taskInSet = taskInSetName)
                 updateTaskInSet(updatedTaskInSet)
             } else {
-                Logger.i(
-                    com.rajchenbergstudios.hoytask.ui.taskssetedit.TAG,
-                    "onSaveTaskInSetClick",
-                    "taskSetTitle is: $taskInSetBigTitle"
-                )
                 val newTaskInSet =
                     TaskInSet(taskInSetBigTitle = taskInSetBigTitle, taskInSet = taskInSetName)
                 createTaskInSet(newTaskInSet)

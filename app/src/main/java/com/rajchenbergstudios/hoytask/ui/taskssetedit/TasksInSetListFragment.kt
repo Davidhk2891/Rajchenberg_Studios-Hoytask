@@ -54,7 +54,6 @@ class TasksInSetListFragment : Fragment(R.layout.fragment_tasks_in_set), TasksIn
             }).attachToRecyclerView(tasksSetDetailsRecyclerview.layoutTasksListRecyclerview)
 
             tasksSetDetailsFab.setOnClickListener {
-                Logger.i(TAG, "onGetTaskSetTitle", "taskSetTitle is: ${viewModel.onGetTaskSetTitle()}")
                 viewModel.onAddTaskInSetClick(TaskInSet("", viewModel.onGetTaskSetTitle()))
             }
         }
