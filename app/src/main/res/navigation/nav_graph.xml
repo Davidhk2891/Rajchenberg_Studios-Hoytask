@@ -27,6 +27,15 @@
         <argument
             android:name="title"
             app:argType="string" />
+        <argument
+            android:name="taskinset"
+            app:argType="com.rajchenbergstudios.hoytask.data.taskinset.TaskInSet"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="origin"
+            app:argType="integer"
+            android:defaultValue="1" />
     </fragment>
     <dialog
         android:id="@+id/tasksDeleteAllCompletedDialogFragment"
@@ -62,11 +71,19 @@
     </fragment>
     <fragment
         android:id="@+id/tasksSetEditListFragment"
-        android:name="com.rajchenbergstudios.hoytask.ui.taskssetedit.TasksSetEditListFragment"
-        android:label="fragment_tasks_set_edit"
-        tools:layout="@layout/fragment_tasks_set_edit" >
+        android:name="com.rajchenbergstudios.hoytask.ui.taskssetedit.TasksInSetListFragment"
+        android:label="{settitle}"
+        tools:layout="@layout/fragment_tasks_in_set" >
         <action
             android:id="@+id/action_tasksSetEditListFragment_to_taskAddEditFragment"
             app:destination="@id/taskAddEditFragment" />
+        <argument
+            android:name="taskset"
+            app:argType="com.rajchenbergstudios.hoytask.data.taskset.TaskSet"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="settitle"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -3,6 +3,7 @@ package com.rajchenbergstudios.hoytask.ui.tasksset
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSetDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,9 +36,14 @@ class TasksSetsListViewModel @Inject constructor(
         taskSetsEventChannel.send(TaskSetEvent.NavigateToDeleteAllSetsScreen)
     }
 
+    fun onTaskSetSelected(taskSet: TaskSet) = viewModelScope.launch {
+        taskSetsEventChannel.send(TaskSetEvent.NavigateToEditTaskSet(taskSet))
+    }
+
     val taskSets = setsFlow.asLiveData()
 
     sealed class TaskSetEvent {
         object NavigateToDeleteAllSetsScreen : TaskSetEvent()
+        data class NavigateToEditTaskSet(val taskSet: TaskSet) : TaskSetEvent()
     }
 }

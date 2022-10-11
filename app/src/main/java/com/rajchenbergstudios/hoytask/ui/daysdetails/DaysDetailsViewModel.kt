@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.rajchenbergstudios.hoytask.data.day.Day
 import com.rajchenbergstudios.hoytask.data.task.Task
-import com.rajchenbergstudios.hoytask.util.Converters
+import com.rajchenbergstudios.hoytask.util.HoytaskConverters
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -23,7 +23,8 @@ class DaysDetailsViewModel @Inject constructor(
 
     val dayMonthDay = stateHandle["monthDay"] ?: day?.dayOfMonth ?: "null"
 
-    var tasks: List<Task> = stateHandle["tasksList"] ?: Converters.fromJsonToTaskList(
-        stateHandle["tasksList"] ?: day?.tasksListJson ?: "null"
-    ) ?: listOf()
+//    @Suppress("UNCHECKED_CAST")
+//    var tasks: List<Task> = (stateHandle["tasksList"] ?: HoytaskConverters.fromJsonToTaskList(
+//        stateHandle["tasksList"] ?: day?.tasksListJson ?: "null"
+//    ) ?: listOf()) as List<Task>
 }

@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.taskssetedit.TasksSetEditListFragment">
+    tools:context=".ui.taskssetedit.TasksInSetListFragment"
+    android:padding="16dp">
 
     <include
         android:id="@+id/tasks_set_details_recyclerview"

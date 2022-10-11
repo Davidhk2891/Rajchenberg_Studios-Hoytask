@@ -13,8 +13,11 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.databinding.FragmentAddEditTaskBinding
+import com.rajchenbergstudios.hoytask.util.Logger
 import com.rajchenbergstudios.hoytask.util.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
+
+private const val TAG = "TaskAddEditFragment.kt"
 
 @AndroidEntryPoint
 class TaskAddEditFragment : Fragment(R.layout.fragment_add_edit_task){
@@ -28,23 +31,42 @@ class TaskAddEditFragment : Fragment(R.layout.fragment_add_edit_task){
         val binding = FragmentAddEditTaskBinding.bind(view)
 
         binding.apply {
-            fragmentAddEditTitleEdittext.setText(viewModel.taskName)
-            fragmentAddEditImportantCheckbox.isChecked = viewModel.taskImportance
-            fragmentAddEditImportantCheckbox.jumpDrawablesToCurrentState()
-            fragmentAddEditCreatedTextview.isVisible = viewModel.task != null
-            val dateCreated = "Date created: ${viewModel.task?.createdDateFormat}"
-            fragmentAddEditCreatedTextview.text = dateCreated
+            Logger.i(TAG, "onViewCreated", "CODE 1")
+            if (viewModel.origin == 1) {
+                Logger.i(TAG, "onViewCreated", "CODE 1.1")
+                fragmentAddEditTitleEdittext.setText(viewModel.taskName)
+                fragmentAddEditImportantCheckbox.isChecked = viewModel.taskImportance
+                fragmentAddEditImportantCheckbox.jumpDrawablesToCurrentState()
+                fragmentAddEditCreatedTextview.isVisible = viewModel.task != null
+                val dateCreated = "Date created: ${viewModel.task?.createdDateFormat}"
+                fragmentAddEditCreatedTextview.text = dateCreated
 
-            fragmentAddEditTitleEdittext.addTextChangedListener {
-                viewModel.taskName = it.toString()
-            }
+                fragmentAddEditTitleEdittext.addTextChangedListener { newText ->
+                    viewModel.taskName = newText.toString()
+                }
 
-            fragmentAddEditImportantCheckbox.setOnCheckedChangeListener { _, isChecked ->
-                viewModel.taskImportance = isChecked
-            }
+                fragmentAddEditImportantCheckbox.setOnCheckedChangeListener { _, isChecked ->
+                    viewModel.taskImportance = isChecked
+                }
 
-            fragmentAddEditFab.setOnClickListener {
-                viewModel.onSaveClick()
+                fragmentAddEditFab.setOnClickListener {
+                    viewModel.onSaveTaskClick()
+                }
+            } else {
+                // TODO: edting current task works. Creating new ones doesn't. Task isn't saved
+                Logger.i(TAG, "onViewCreated", "CODE 1.2")
+                fragmentAddEditTitleEdittext.setText(viewModel.taskInSetName)
+                fragmentAddEditImportantCheckbox.isVisible = viewModel.task != null
+                fragmentAddEditImportantCheckbox.isClickable = false
+                fragmentAddEditCreatedTextview.isVisible = viewModel.task != null
+
+                fragmentAddEditTitleEdittext.addTextChangedListener { newText ->
+                    viewModel.taskInSetName = newText.toString()
+                }
+
+                fragmentAddEditFab.setOnClickListener {
+                    viewModel.onSaveTaskInSetClick()
+                }
             }
         }
 
