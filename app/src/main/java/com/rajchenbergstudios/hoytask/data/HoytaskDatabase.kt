@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
 
-@Database(entities = [Task::class, Day::class, TaskSet::class, TaskInSet::class], version = 7, exportSchema = false)
+@Database(entities = [Task::class, Day::class, TaskSet::class, TaskInSet::class], version = 10, exportSchema = false)
 @TypeConverters(HoytaskConverters::class, TaskInSetTypeConverter::class)
 abstract class HoytaskDatabase : RoomDatabase(){
 

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TaskInSetDao {
 
-    @Query("SELECT * FROM task_in_set_table WHERE setTitle LIKE '%' || :setTitle || '%' ORDER BY id ASC")
+    @Query("SELECT * FROM task_in_set_table WHERE taskInSetBigTitle LIKE '%' || :setTitle || '%' ORDER BY id ASC")
     fun getTasksInSet(setTitle: String): Flow<List<TaskInSet>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

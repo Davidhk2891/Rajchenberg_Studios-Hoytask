@@ -28,10 +28,14 @@
             android:name="title"
             app:argType="string" />
         <argument
-            android:name="taskInSet"
+            android:name="taskinset"
             app:argType="com.rajchenbergstudios.hoytask.data.taskinset.TaskInSet"
             app:nullable="true"
             android:defaultValue="@null" />
+        <argument
+            android:name="origin"
+            app:argType="integer"
+            android:defaultValue="1" />
     </fragment>
     <dialog
         android:id="@+id/tasksDeleteAllCompletedDialogFragment"

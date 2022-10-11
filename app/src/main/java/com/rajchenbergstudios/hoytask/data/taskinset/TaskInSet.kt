@@ -11,6 +11,6 @@ import kotlinx.parcelize.Parcelize
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class TaskInSet(
     val taskInSet: String,
-    val setTitle: String,
+    val taskInSetBigTitle: String?,
     @PrimaryKey(autoGenerate = true) val id: Long = 0
 ) : Parcelable
