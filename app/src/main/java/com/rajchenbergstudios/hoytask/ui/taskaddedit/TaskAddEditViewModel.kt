@@ -9,14 +9,13 @@ import com.rajchenbergstudios.hoytask.data.taskinset.TaskInSet
 import com.rajchenbergstudios.hoytask.data.taskinset.TaskInSetDao
 import com.rajchenbergstudios.hoytask.ui.ADD_TASK_RESULT_OK
 import com.rajchenbergstudios.hoytask.ui.EDIT_TASK_RESULT_OK
-import com.rajchenbergstudios.hoytask.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val TAG = "TaskEditViewModel.kt"
+// private const val TAG = "TaskEditViewModel.kt"
 
 @HiltViewModel
 class TaskAddEditViewModel @Inject constructor(
@@ -49,7 +48,7 @@ class TaskAddEditViewModel @Inject constructor(
             state["taskInSetName"] = value
         }
 
-    var taskInSetBigTitle = state.get<String>("taskInSetBigTitle") ?: taskInSet?.taskInSetBigTitle ?: ""
+    private var taskInSetBigTitle = state.get<String>("taskInSetBigTitle") ?: taskInSet?.taskInSetBigTitle ?: ""
         set(value) {
             field = value
             state["taskInSetBigTitle"] = value
@@ -61,7 +60,7 @@ class TaskAddEditViewModel @Inject constructor(
     // AddEdit event
     val addEditEvent = addEditEventChannel.receiveAsFlow()
 
-    var isNewTask: Boolean = false
+    private var isNewTask: Boolean = false
 
     init {
         if (taskInSetName.isBlank() || taskInSetName.isEmpty()) {

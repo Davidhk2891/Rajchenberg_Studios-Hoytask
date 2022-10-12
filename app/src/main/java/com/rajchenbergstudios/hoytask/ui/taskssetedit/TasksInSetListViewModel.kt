@@ -6,17 +6,13 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.rajchenbergstudios.hoytask.data.taskinset.TaskInSet
 import com.rajchenbergstudios.hoytask.data.taskinset.TaskInSetDao
-import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.ui.ADD_TASK_RESULT_OK
 import com.rajchenbergstudios.hoytask.ui.EDIT_TASK_RESULT_OK
-import com.rajchenbergstudios.hoytask.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-const val TAG = "TasksInsetListViewModel.kt"
 
 @HiltViewModel
 class TasksInSetListViewModel @Inject constructor(
@@ -30,9 +26,7 @@ class TasksInSetListViewModel @Inject constructor(
     // Tasks in set event
     val tasksInSetsEvent = tasksInSetsChannel.receiveAsFlow()
 
-    private val taskSet = state.get<TaskSet>("taskset")
-
-    private val taskSetTitle = state.get<String>("taskSetTitle") ?: taskSet?.title
+    private val taskSetTitle = state.get<String>("settitle")
 
     val tasksSet = taskSetTitle?.let {
         taskInSetDao.getTasksInSet(taskSetTitle).asLiveData()

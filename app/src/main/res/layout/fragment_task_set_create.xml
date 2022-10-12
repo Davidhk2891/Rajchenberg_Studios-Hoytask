@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     tools:context=".ui.createtaskset.CreateTaskSetDialogFragment"
+     android:padding="10dp">
+
+    <TextView
+        android:id="@+id/task_set_create_new_set_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/new_set"/>
+
+    <EditText
+        android:id="@+id/task_set_create_set_title_edittext"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/title"
+        app:layout_constraintStart_toStartOf="@+id/task_set_create_new_set_textview"
+        app:layout_constraintTop_toBottomOf="@+id/task_set_create_new_set_textview"
+        android:layout_marginTop="8dp"
+        android:inputType="text"
+        android:maxLines="1"
+        android:ellipsize="end"
+        tools:ignore="Autofill" />
+
+    <LinearLayout
+        android:id="@+id/task_set_create_options_linearlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/task_set_create_set_title_edittext"
+        app:layout_constraintEnd_toEndOf="@+id/task_set_create_set_title_edittext"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/task_set_create_options_cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:textColor="@color/hoytask_purple"
+            android:background="?android:attr/selectableItemBackground" />
+
+        <Button
+            android:id="@+id/task_set_create_options_create_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/create"
+            android:textColor="@color/hoytask_purple"
+            android:background="?android:attr/selectableItemBackground" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
