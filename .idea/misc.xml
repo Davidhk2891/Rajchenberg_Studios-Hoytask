@@ -19,6 +19,8 @@
         <entry key="app/src/main/res/layout/fragment_add_edit_task.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_days_details.xml" value="0.24954710144927536" />
         <entry key="app/src/main/res/layout/fragment_days_history.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_task_set_create.xml" value="0.22447916666666667" />
+        <entry key="app/src/main/res/layout/fragment_tasks_in_set.xml" value="0.22552083333333334" />
         <entry key="app/src/main/res/layout/fragment_tasks_list.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_tasks_set.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_tasks_set_details.xml" value="0.33" />

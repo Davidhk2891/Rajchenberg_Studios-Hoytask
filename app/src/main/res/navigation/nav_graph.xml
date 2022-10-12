@@ -78,12 +78,16 @@
             android:id="@+id/action_tasksSetEditListFragment_to_taskAddEditFragment"
             app:destination="@id/taskAddEditFragment" />
         <argument
-            android:name="taskset"
-            app:argType="com.rajchenbergstudios.hoytask.data.taskset.TaskSet"
-            app:nullable="true"
-            android:defaultValue="@null" />
-        <argument
             android:name="settitle"
             app:argType="string" />
     </fragment>
+    <dialog
+        android:id="@+id/createTaskSetDialogFragment"
+        android:name="com.rajchenbergstudios.hoytask.ui.createtaskset.CreateTaskSetDialogFragment"
+        android:label="fragment_task_set_create"
+        tools:layout="@layout/fragment_task_set_create" >
+        <action
+            android:id="@+id/action_createTaskSetDialogFragment_to_tasksSetEditListFragment"
+            app:destination="@id/tasksSetEditListFragment" />
+    </dialog><action android:id="@+id/action_global_createTaskSetDialogFragment" app:destination="@id/createTaskSetDialogFragment"/>
 </navigation>

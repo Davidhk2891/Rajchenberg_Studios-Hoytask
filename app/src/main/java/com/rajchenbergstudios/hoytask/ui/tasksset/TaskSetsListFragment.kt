@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.databinding.FragmentTasksSetBinding
+import com.rajchenbergstudios.hoytask.ui.createtaskset.CreateTaskSetDialogFragmentDirections
 import com.rajchenbergstudios.hoytask.util.OnQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -44,6 +45,11 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
                     setHasFixedSize(true)
                 }
             }
+
+            tasksSetFab.setOnClickListener {
+                val action = CreateTaskSetDialogFragmentDirections.actionGlobalCreateTaskSetDialogFragment()
+                findNavController().navigate(action)
+            }
         }
 
         viewModel.taskSets.observe(viewLifecycleOwner) { taskSetsList ->
@@ -58,7 +64,7 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
                     }
                     is TasksSetsListViewModel.TaskSetEvent.NavigateToEditTaskSet -> {
                         val action = TaskSetsListFragmentDirections
-                            .actionTaskSetsListFragmentToTasksSetEditListFragment(taskset = event.taskSet, settitle = event.taskSet.title)
+                            .actionTaskSetsListFragmentToTasksSetEditListFragment(settitle = event.taskSet.title)
                         findNavController().navigate(action)
                     }
                 }
@@ -82,7 +88,7 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
                 searchView = searchItem.actionView as SearchView
 
                 val pendingQuery = viewModel.searchQuery.value
-                if (pendingQuery != null && pendingQuery.isNotEmpty()) {
+                if (pendingQuery.isNotEmpty()) {
                     searchItem.expandActionView()
                     searchView.setQuery(pendingQuery, false)
                 }

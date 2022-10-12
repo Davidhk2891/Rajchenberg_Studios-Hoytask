@@ -18,4 +18,8 @@
     <string name="add_new_set">add new set</string>
     <string name="set_icon_in_list">Set icon in list</string>
     <string name="delete_all_sets">Delete all sets</string>
+    <string name="new_set">New set</string>
+    <string name="title">title</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">Create</string>
 </resources>
