@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_tasksListFragment_to_taskAddEditFragment"
             app:destination="@id/taskAddEditFragment" />
+        <action
+            android:id="@+id/action_tasksListFragment_to_taskToSetBottomSheetDialogFragment"
+            app:destination="@id/taskToSetBottomSheetDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/taskAddEditFragment"
@@ -90,4 +93,13 @@
             android:id="@+id/action_createTaskSetDialogFragment_to_tasksSetEditListFragment"
             app:destination="@id/tasksSetEditListFragment" />
     </dialog><action android:id="@+id/action_global_createTaskSetDialogFragment" app:destination="@id/createTaskSetDialogFragment"/>
+    <dialog
+        android:id="@+id/taskToSetBottomSheetDialogFragment"
+        android:name="com.rajchenbergstudios.hoytask.ui.todaytasktoset.TaskToSetBottomSheetDialogFragment"
+        android:label="fragment_today_task_save_to_set"
+        tools:layout="@layout/fragment_today_task_save_to_set" >
+        <argument
+            android:name="task"
+            app:argType="com.rajchenbergstudios.hoytask.data.task.Task" />
+    </dialog>
 </navigation>

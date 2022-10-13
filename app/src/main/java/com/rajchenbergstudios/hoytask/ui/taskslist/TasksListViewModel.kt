@@ -118,12 +118,17 @@ class TasksListViewModel @Inject constructor(
         }
     }
 
+    fun onTaskLongSelected(task: Task) = viewModelScope.launch {
+        tasksEventChannel.send(TaskEvent.NavigateToAddTaskToSetBottomSheet(task))
+    }
+
     val tasks = tasksFlow.asLiveData()
 
     sealed class TaskEvent {
         object NavigateToDeleteAllCompletedScreen : TaskEvent()
         object NavigateToAddTaskScreen : TaskEvent()
         data class NavigateToEditTaskScreen(val task: Task) : TaskEvent()
+        data class NavigateToAddTaskToSetBottomSheet(val task: Task) : TaskEvent()
         data class ShowUndoDeleteTaskMessage(val task: Task) : TaskEvent()
         data class ShowTaskSavedConfirmationMessage(val msg: String) : TaskEvent()
     }

@@ -113,6 +113,10 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                             .actionTasksListFragmentToTaskAddEditFragment(task = event.task, title = "Edit task", taskinset = null, origin = 1)
                         findNavController().navigate(action)
                     }
+                    is TasksListViewModel.TaskEvent.NavigateToAddTaskToSetBottomSheet -> {
+                        val action = TasksListFragmentDirections.actionTasksListFragmentToTaskToSetBottomSheetDialogFragment(task = event.task)
+                        findNavController().navigate(action)
+                    }
                     is TasksListViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {
                         Snackbar
                             .make(requireView(), event.msg, Snackbar.LENGTH_LONG)
@@ -203,6 +207,10 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
 
     override fun onItemClick(task: Task) {
         viewModel.onTaskSelected(task)
+    }
+
+    override fun onItemLongClick(task: Task) {
+        viewModel.onTaskLongSelected(task)
     }
 
     override fun onCheckboxClick(task: Task, isChecked: Boolean) {
