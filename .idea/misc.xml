@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.1235" />
         <entry key="app/src/main/res/drawable/ic_baseline_add_task_24.xml" value="0.1855" />
         <entry key="app/src/main/res/drawable/ic_baseline_check_24.xml" value="0.1235" />
+        <entry key="app/src/main/res/drawable/ic_baseline_check_24_black.xml" value="0.1185" />
         <entry key="app/src/main/res/drawable/ic_baseline_priority_high_24.xml" value="0.1235" />
         <entry key="app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.1235" />
         <entry key="app/src/main/res/drawable/ic_baseline_sort_24.xml" value="0.1235" />
@@ -25,6 +26,7 @@
         <entry key="app/src/main/res/layout/fragment_tasks_set.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_tasks_set_details.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_tasks_set_edit.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_today_task_save_to_set.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_days_list.xml" value="0.22" />
         <entry key="app/src/main/res/layout/item_tasks_list.xml" value="0.25" />
         <entry key="app/src/main/res/layout/layout_date_header.xml" value="0.24954710144927536" />

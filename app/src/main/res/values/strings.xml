@@ -22,4 +22,7 @@
     <string name="title">title</string>
     <string name="cancel">Cancel</string>
     <string name="create">Create</string>
+    <string name="save_task_to">Save task to…</string>
+    <string name="today_add_new_set">new set</string>
+    <string name="done">done</string>
 </resources>
