@@ -68,13 +68,25 @@ class TaskAddEditViewModel @Inject constructor(
         }
     }
 
-    fun onSaveTaskClick(){
+    fun onSaveClick(){
+        when (origin) {
+            1 -> createOrUpdateTask()
+            2 -> createOrUpdateTaskInSet()
+        }
+    }
 
+    fun deduceFlow() = viewModelScope.launch {
+        if (origin == 1)
+            addEditEventChannel.send(AddEditEvent.ShowFlowFromTaskList)
+        else
+            addEditEventChannel.send(AddEditEvent.ShowFlowFromTaskInSetList)
+    }
+
+    private fun createOrUpdateTask() {
         if (taskName.isBlank()) {
             showInvalidInputMessage()
             return
         }
-
         if (task != null) {
             val updatedTask = task.copy(name = taskName, important = taskImportance)
             updateTask(updatedTask)
@@ -84,13 +96,11 @@ class TaskAddEditViewModel @Inject constructor(
         }
     }
 
-    fun onSaveTaskInSetClick() {
-
+    private fun createOrUpdateTaskInSet() {
         if (taskInSetName.isBlank()) {
             showInvalidInputMessage()
             return
         }
-
         if (taskInSet != null) {
             if (!isNewTask) {
                 val updatedTaskInSet =
@@ -129,6 +139,8 @@ class TaskAddEditViewModel @Inject constructor(
     }
 
     sealed class AddEditEvent {
+        object ShowFlowFromTaskList : AddEditEvent()
+        object ShowFlowFromTaskInSetList : AddEditEvent()
         data class ShowInvalidInputMessage(val msg: String) : AddEditEvent()
         data class NavigateBackWithResult(val result: Int) : AddEditEvent()
     }

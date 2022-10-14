@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -51,6 +53,14 @@ class CreateTaskSetDialogFragment : DialogFragment(){
                         val action = CreateTaskSetDialogFragmentDirections
                             .actionCreateTaskSetDialogFragmentToTasksSetEditListFragment(settitle = event.title)
                         findNavController().navigate(action)
+                    }
+                    is CreateTaskSetDialogViewModel.CreateTaskSetEvent.DoNotGoToSetAndShowSetCreatedConfirmationMessage -> {
+                        dismiss()
+                        setFragmentResult(
+                            "create_set_request",
+                            bundleOf("create_set_result" to event.result)
+                        )
+                        findNavController().popBackStack()
                     }
                 }
             }

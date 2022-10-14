@@ -76,11 +76,6 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
             }
         }
 
-        setFragmentResultListener("add_edit_request"){_, bundle ->
-            val result = bundle.getInt("add_edit_result")
-            viewModel.onAddEditResult(result)
-        }
-
         viewModel.tasks.observe(viewLifecycleOwner){ tasksList ->
             if (tasksList.isEmpty()) {
                 binding.tasksListLayoutNoData.layoutNoDataLinearlayout.visibility = View.VISIBLE
@@ -127,12 +122,16 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                             .actionGlobalTasksDeleteAllCompletedDialogFragment()
                         findNavController().navigate(action)
                     }
+                    is TasksListViewModel.TaskEvent.ShowTaskSavedInNewOrOldSetConfirmationMessage -> {
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
+                    }
                 }.exhaustive
             }
         }
 
-        onSetDaysSaving()
         loadMenu()
+        getFragmentResultListeners()
+        onSetDaysSaving()
     }
 
     private fun loadMenu(){
@@ -188,6 +187,22 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun getFragmentResultListeners() {
+        setFragmentResultListener("add_edit_request"){_, bundle ->
+            val result = bundle.getInt("add_edit_result")
+            onFragmentResult(result)
+        }
+
+        setFragmentResultListener("create_set_request_2"){_, bundle ->
+            val result = bundle.getInt("create_set_result_2")
+            onFragmentResult(result)
+        }
+    }
+
+    private fun onFragmentResult(result: Int){
+        viewModel.onFragmentResult(result)
     }
 
     private fun todayDateDisplay(binding: FragmentTasksListBinding) {
