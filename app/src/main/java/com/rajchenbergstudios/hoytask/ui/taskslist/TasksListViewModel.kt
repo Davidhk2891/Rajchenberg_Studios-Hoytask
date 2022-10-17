@@ -8,6 +8,8 @@ import com.rajchenbergstudios.hoytask.data.prefs.SortOrder
 import com.rajchenbergstudios.hoytask.data.task.Task
 import com.rajchenbergstudios.hoytask.data.task.TaskDao
 import com.rajchenbergstudios.hoytask.ui.ADD_TASK_RESULT_OK
+import com.rajchenbergstudios.hoytask.ui.CREATE_SET_RESULT_OK
+import com.rajchenbergstudios.hoytask.ui.EDIT_SET_RESULT_OK
 import com.rajchenbergstudios.hoytask.ui.EDIT_TASK_RESULT_OK
 import com.rajchenbergstudios.hoytask.util.CurrentDate
 import com.rajchenbergstudios.hoytask.util.Logger
@@ -77,15 +79,21 @@ class TasksListViewModel @Inject constructor(
         tasksEventChannel.send(TaskEvent.NavigateToAddTaskScreen)
     }
 
-    fun onAddEditResult(result: Int) {
+    fun onFragmentResult(result: Int, message: String?) {
         when (result) {
             ADD_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task added")
             EDIT_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task updated")
+            CREATE_SET_RESULT_OK -> showTaskSavedInNewOrOldSetConfirmationMessage("Task added to new set")
+            EDIT_SET_RESULT_OK ->   showTaskSavedInNewOrOldSetConfirmationMessage(message)
         }
     }
 
     private fun showTaskSavedConfirmationMessage(text: String) = viewModelScope.launch {
         tasksEventChannel.send(TaskEvent.ShowTaskSavedConfirmationMessage(text))
+    }
+
+    private fun showTaskSavedInNewOrOldSetConfirmationMessage(text: String?) = viewModelScope.launch {
+        tasksEventChannel.send(TaskEvent.ShowTaskSavedInNewOrOldSetConfirmationMessage(text))
     }
 
     fun onDeleteAllCompletedClick() = viewModelScope.launch {
@@ -118,13 +126,19 @@ class TasksListViewModel @Inject constructor(
         }
     }
 
+    fun onTaskLongSelected(task: Task) = viewModelScope.launch {
+        tasksEventChannel.send(TaskEvent.NavigateToAddTaskToSetBottomSheet(task))
+    }
+
     val tasks = tasksFlow.asLiveData()
 
     sealed class TaskEvent {
         object NavigateToDeleteAllCompletedScreen : TaskEvent()
         object NavigateToAddTaskScreen : TaskEvent()
         data class NavigateToEditTaskScreen(val task: Task) : TaskEvent()
+        data class NavigateToAddTaskToSetBottomSheet(val task: Task) : TaskEvent()
         data class ShowUndoDeleteTaskMessage(val task: Task) : TaskEvent()
         data class ShowTaskSavedConfirmationMessage(val msg: String) : TaskEvent()
+        data class ShowTaskSavedInNewOrOldSetConfirmationMessage(val msg: String?) : TaskEvent()
     }
 }

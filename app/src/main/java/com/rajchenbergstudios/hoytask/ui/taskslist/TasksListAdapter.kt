@@ -34,6 +34,14 @@ class TasksListAdapter(private val listener: OnItemClickListener) : ListAdapter<
                         listener.onItemClick(task)
                     }
                 }
+                root.setOnLongClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val task = getItem(position)
+                        listener.onItemLongClick(task)
+                    }
+                    return@setOnLongClickListener true
+                }
                 itemTaskCompletedCheckbox.setOnClickListener {
                     val position = adapterPosition
                     if (position != RecyclerView.NO_POSITION) {
@@ -57,6 +65,7 @@ class TasksListAdapter(private val listener: OnItemClickListener) : ListAdapter<
 
     interface OnItemClickListener {
         fun onItemClick(task: Task)
+        fun onItemLongClick(task: Task)
         fun onCheckboxClick(task: Task, isChecked: Boolean)
     }
 

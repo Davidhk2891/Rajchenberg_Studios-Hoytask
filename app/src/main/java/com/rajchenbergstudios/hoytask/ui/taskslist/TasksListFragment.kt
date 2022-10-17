@@ -76,11 +76,6 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
             }
         }
 
-        setFragmentResultListener("add_edit_request"){_, bundle ->
-            val result = bundle.getInt("add_edit_result")
-            viewModel.onAddEditResult(result)
-        }
-
         viewModel.tasks.observe(viewLifecycleOwner){ tasksList ->
             if (tasksList.isEmpty()) {
                 binding.tasksListLayoutNoData.layoutNoDataLinearlayout.visibility = View.VISIBLE
@@ -113,6 +108,10 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                             .actionTasksListFragmentToTaskAddEditFragment(task = event.task, title = "Edit task", taskinset = null, origin = 1)
                         findNavController().navigate(action)
                     }
+                    is TasksListViewModel.TaskEvent.NavigateToAddTaskToSetBottomSheet -> {
+                        val action = TasksListFragmentDirections.actionTasksListFragmentToTaskToSetBottomSheetDialogFragment(task = event.task)
+                        findNavController().navigate(action)
+                    }
                     is TasksListViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {
                         Snackbar
                             .make(requireView(), event.msg, Snackbar.LENGTH_LONG)
@@ -123,12 +122,16 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                             .actionGlobalTasksDeleteAllCompletedDialogFragment()
                         findNavController().navigate(action)
                     }
+                    is TasksListViewModel.TaskEvent.ShowTaskSavedInNewOrOldSetConfirmationMessage -> {
+                        Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
+                    }
                 }.exhaustive
             }
         }
 
-        onSetDaysSaving()
         loadMenu()
+        getFragmentResultListeners()
+        onSetDaysSaving()
     }
 
     private fun loadMenu(){
@@ -186,6 +189,28 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
+    private fun getFragmentResultListeners() {
+        setFragmentResultListener("add_edit_request"){_, bundle ->
+            val result = bundle.getInt("add_edit_result")
+            onFragmentResult(result)
+        }
+
+        setFragmentResultListener("create_set_request_2"){_, bundle ->
+            val result = bundle.getInt("create_set_result_2")
+            onFragmentResult(result)
+        }
+
+        setFragmentResultListener("task_added_to_set_request"){_, bundle ->
+            val result = bundle.getInt("task_added_to_set_result")
+            val message = bundle.getString("task_added_to_set_message")
+            onFragmentResult(result, message)
+        }
+    }
+
+    private fun onFragmentResult(result: Int, message: String? = ""){
+        viewModel.onFragmentResult(result, message)
+    }
+
     private fun todayDateDisplay(binding: FragmentTasksListBinding) {
         binding.apply {
             tasksListDateheader.apply {
@@ -203,6 +228,10 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
 
     override fun onItemClick(task: Task) {
         viewModel.onTaskSelected(task)
+    }
+
+    override fun onItemLongClick(task: Task) {
+        viewModel.onTaskLongSelected(task)
     }
 
     override fun onCheckboxClick(task: Task, isChecked: Boolean) {

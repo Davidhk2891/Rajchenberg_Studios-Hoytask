@@ -2,6 +2,7 @@ package com.rajchenbergstudios.hoytask.ui.tasksset
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +39,8 @@ class TaskSetsListAdapter(private val listener: OnItemClickListener) : ListAdapt
         fun bind(set: TaskSet) {
             binding.apply {
                 itemSetTitle.text = set.title
+                itemSetAddToCheckbox.isClickable = false
+                itemSetAddToCheckbox.isVisible = false
             }
         }
     }

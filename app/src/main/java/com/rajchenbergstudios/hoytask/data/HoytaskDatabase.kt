@@ -15,12 +15,15 @@ import com.rajchenbergstudios.hoytask.data.taskset.TaskInSetTypeConverter
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.di.ApplicationScope
 import com.rajchenbergstudios.hoytask.util.HoytaskConverters
+import com.rajchenbergstudios.hoytask.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
 
-@Database(entities = [Task::class, Day::class, TaskSet::class, TaskInSet::class], version = 10, exportSchema = false)
+const val TAG = "HoytaskDatabase.kt"
+
+@Database(entities = [Task::class, Day::class, TaskSet::class, TaskInSet::class], version = 13, exportSchema = false)
 @TypeConverters(HoytaskConverters::class, TaskInSetTypeConverter::class)
 abstract class HoytaskDatabase : RoomDatabase(){
 
@@ -78,12 +81,27 @@ abstract class HoytaskDatabase : RoomDatabase(){
                     insert(set1)
                     insert(set2)
                     insert(set3)
+
+                    //TODO: test 1
+                    var i = 0
+                    repeat(20){
+                        i += 1
+                        val testTask1 = TaskInSet("Do thing 1", "Set $i")
+                        val testTask2 = TaskInSet("Do thing 2", "Set $i")
+                        val testTask3 = TaskInSet("Do thing 3", "Set $i")
+                        val listOfTestTasks = listOf(testTask1, testTask2, testTask3)
+                        val set = TaskSet("Set $i", listOfTestTasks)
+                        insert(set)
+                        for (item in listOfTestTasks) {
+                            taskInSetDao.insert(item)
+                        }
+                    }
                 }
 
                 taskInSetDao.apply {
-                    for (listOfTasks in listOfTasksDailies) { taskInSetDao.insert(listOfTasks) }
-                    for (listOfTasks in listOfTasksWeekends) { taskInSetDao.insert(listOfTasks) }
-                    for (listOfTasks in listOfTasksMorningRoutine) { taskInSetDao.insert(listOfTasks) }
+                    for (item in listOfTasksDailies) { insert(item) }
+                    for (item in listOfTasksWeekends) { insert(item) }
+                    for (item in listOfTasksMorningRoutine) { insert(item) }
                 }
             }
         }
