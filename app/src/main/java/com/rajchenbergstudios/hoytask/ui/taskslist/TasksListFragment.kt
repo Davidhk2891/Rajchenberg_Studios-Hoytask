@@ -123,7 +123,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                         findNavController().navigate(action)
                     }
                     is TasksListViewModel.TaskEvent.ShowTaskSavedInNewOrOldSetConfirmationMessage -> {
-                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
                     }
                 }.exhaustive
             }
@@ -199,10 +199,16 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
             val result = bundle.getInt("create_set_result_2")
             onFragmentResult(result)
         }
+
+        setFragmentResultListener("task_added_to_set_request"){_, bundle ->
+            val result = bundle.getInt("task_added_to_set_result")
+            val message = bundle.getString("task_added_to_set_message")
+            onFragmentResult(result, message)
+        }
     }
 
-    private fun onFragmentResult(result: Int){
-        viewModel.onFragmentResult(result)
+    private fun onFragmentResult(result: Int, message: String? = ""){
+        viewModel.onFragmentResult(result, message)
     }
 
     private fun todayDateDisplay(binding: FragmentTasksListBinding) {

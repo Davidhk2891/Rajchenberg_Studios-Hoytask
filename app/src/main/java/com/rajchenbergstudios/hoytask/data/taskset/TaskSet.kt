@@ -14,6 +14,7 @@ import kotlinx.parcelize.Parcelize
 data class TaskSet(
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "listOfTasks") val listOfTasks: List<TaskInSet> = emptyList(),
+    @ColumnInfo(name = "chosen") val chosen: Boolean = false,
     @PrimaryKey(autoGenerate = true) val id: Long = 0
 ) : Parcelable
 

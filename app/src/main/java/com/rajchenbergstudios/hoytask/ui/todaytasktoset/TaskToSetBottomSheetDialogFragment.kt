@@ -10,36 +10,55 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rajchenbergstudios.hoytask.R
+import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.databinding.FragmentTodayTaskSaveToSetBinding
 import com.rajchenbergstudios.hoytask.util.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 
+@Suppress("IMPLICIT_CAST_TO_ANY")
 @AndroidEntryPoint
-class TaskToSetBottomSheetDialogFragment : BottomSheetDialogFragment(){
+class TaskToSetBottomSheetDialogFragment : BottomSheetDialogFragment(), TaskToSetBottomSheetDialogAdapter.OnItemClickListener{
 
     private val viewModel: TaskToSetBottomSheetDialogViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_today_task_save_to_set, container, false)
+    }
 
-        val view: View = inflater.inflate(R.layout.fragment_today_task_save_to_set, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentTodayTaskSaveToSetBinding.bind(view)
 
+        val bottomSheetDialogAdapter = TaskToSetBottomSheetDialogAdapter(this)
+
         binding.apply {
+
+            taskTodayAddToSetSetsRecyclerview.layoutTasksListRecyclerview.apply {
+                adapter = bottomSheetDialogAdapter
+                layoutManager = LinearLayoutManager(requireContext())
+                setHasFixedSize(true)
+            }
+
             taskTodayAddToSetAddSetButton.setOnClickListener {
                 viewModel.onCreateSetClicked()
+            }
+
+            taskTodayAddToSetDoneButton.setOnClickListener {
+                viewModel.onDoneClicked()
             }
         }
 
         setFragmentResultListener("create_set_request"){_, bundle ->
             val result = bundle.getInt("create_set_result")
             viewModel.onCreateSetResult(result)
+        }
+
+        viewModel.taskSets.observe(viewLifecycleOwner) { taskSetsList ->
+            bottomSheetDialogAdapter.submitList(taskSetsList)
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -57,11 +76,30 @@ class TaskToSetBottomSheetDialogFragment : BottomSheetDialogFragment(){
                         )
                         findNavController().popBackStack()
                     }
+                    is TaskToSetBottomSheetDialogViewModel.TaskToSetEvent.NavigateBackWithNoSetsSelected -> {
+                        findNavController().popBackStack()
+                    }
+                    is TaskToSetBottomSheetDialogViewModel.TaskToSetEvent.NaigateBackWithResultUponSavingTaskToSet -> {
+                        setFragmentResult(
+                            "task_added_to_set_request",
+                            bundleOf(
+                                "task_added_to_set_result" to event.result,
+                                "task_added_to_set_message" to event.msg)
+                        )
+                        findNavController().popBackStack()
+                    }
                 }.exhaustive
             }
         }
+    }
 
-        return view
+    override fun onTaskSetClick(taskSet: TaskSet, isChecked: Boolean) {
+        viewModel.holdDataToSave(taskSet, isChecked)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.onClearChosenStatus()
     }
 
     companion object {
