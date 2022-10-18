@@ -36,6 +36,11 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
 
     private lateinit var searchView: SearchView
 
+    /*
+    Below is for testing only, after you confirm that everything
+    works, try to move all this logic to the viewModel.
+     */
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -109,7 +114,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                         findNavController().navigate(action)
                     }
                     is TasksListViewModel.TaskEvent.NavigateToAddTaskToSetBottomSheet -> {
-                        val action = TasksListFragmentDirections.actionTasksListFragmentToTaskToSetBottomSheetDialogFragment(task = event.task)
+                        val action = TasksListFragmentDirections.actionGlobalTaskToSetBottomSheetDialogFragment(task = event.task)
                         findNavController().navigate(action)
                     }
                     is TasksListViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {

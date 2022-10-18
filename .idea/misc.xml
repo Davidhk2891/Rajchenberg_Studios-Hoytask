@@ -16,7 +16,7 @@
         <entry key="app/src/main/res/drawable/ic_outline_checklist_24.xml" value="0.1245" />
         <entry key="app/src/main/res/drawable/ic_outline_history_24.xml" value="0.1245" />
         <entry key="app/src/main/res/drawable/ic_outline_home_24.xml" value="0.1245" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/date_header.xml" value="0.23641304347826086" />
         <entry key="app/src/main/res/layout/fragment_add_edit_task.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_days_details.xml" value="0.24954710144927536" />

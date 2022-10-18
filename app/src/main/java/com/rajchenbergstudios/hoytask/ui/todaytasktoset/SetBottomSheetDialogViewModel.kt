@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-const val TAG = "TaskToSetBottomSheetDialogViewModel.kt"
+const val TAG = "SetBottomSheetDialogViewModel.kt"
 
 @HiltViewModel
 class TaskToSetBottomSheetDialogViewModel @Inject constructor(

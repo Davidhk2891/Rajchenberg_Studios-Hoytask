@@ -14,26 +14,26 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
-import com.rajchenbergstudios.hoytask.databinding.FragmentTodayTaskSaveToSetBinding
+import com.rajchenbergstudios.hoytask.databinding.FragmentSetBottomSheetBinding
 import com.rajchenbergstudios.hoytask.util.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 
 @Suppress("IMPLICIT_CAST_TO_ANY")
 @AndroidEntryPoint
-class TaskToSetBottomSheetDialogFragment : BottomSheetDialogFragment(), TaskToSetBottomSheetDialogAdapter.OnItemClickListener{
+class SetBottomSheetDialogFragment : BottomSheetDialogFragment(), SetBottomSheetDialogAdapter.OnItemClickListener{
 
     private val viewModel: TaskToSetBottomSheetDialogViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_today_task_save_to_set, container, false)
+        return inflater.inflate(R.layout.fragment_set_bottom_sheet, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val binding = FragmentTodayTaskSaveToSetBinding.bind(view)
+        val binding = FragmentSetBottomSheetBinding.bind(view)
 
-        val bottomSheetDialogAdapter = TaskToSetBottomSheetDialogAdapter(this)
+        val bottomSheetDialogAdapter = SetBottomSheetDialogAdapter(this)
 
         binding.apply {
 
@@ -65,7 +65,7 @@ class TaskToSetBottomSheetDialogFragment : BottomSheetDialogFragment(), TaskToSe
             viewModel.taskToSetEvent.collect { event ->
                 when (event) {
                     is TaskToSetBottomSheetDialogViewModel.TaskToSetEvent.NavigateToCreateTaskSetDialog -> {
-                        val action = TaskToSetBottomSheetDialogFragmentDirections
+                        val action = SetBottomSheetDialogFragmentDirections
                             .actionGlobalCreateTaskSetDialogFragment(task = event.task, origin = 2)
                         findNavController().navigate(action)
                     }
@@ -103,8 +103,8 @@ class TaskToSetBottomSheetDialogFragment : BottomSheetDialogFragment(), TaskToSe
     }
 
     companion object {
-        fun newInstance(): TaskToSetBottomSheetDialogFragment {
-            return TaskToSetBottomSheetDialogFragment()
+        fun newInstance(): SetBottomSheetDialogFragment {
+            return SetBottomSheetDialogFragment()
         }
     }
 }
