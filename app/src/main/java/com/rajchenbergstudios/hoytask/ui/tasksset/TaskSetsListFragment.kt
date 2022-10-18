@@ -60,7 +60,7 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
             viewModel.taskSetEvent.collect{ event ->
                 when (event) {
                     is TasksSetsListViewModel.TaskSetEvent.NavigateToDeleteAllSetsScreen -> {
-                        // TODO
+
                     }
                     is TasksSetsListViewModel.TaskSetEvent.NavigateToEditTaskSet -> {
                         val action = TaskSetsListFragmentDirections

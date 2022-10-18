@@ -76,9 +76,12 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                 }
             }).attachToRecyclerView(tasksListRecyclerview.layoutTasksListRecyclerview)
 
-            tasksListFab.setOnClickListener {
-                viewModel.onAddNewTaskClick()
-            }
+//            tasksListFab.setOnClickListener {
+//                viewModel.onAddNewTaskClick()
+//            }
+
+            // TODO: Understand why the emulator behaves like that when opening the bottomSheetDialog
+            // TODO: Write down what happened in notebook (how you solved the expandable fab issue. That little attribute)
         }
 
         viewModel.tasks.observe(viewLifecycleOwner){ tasksList ->
@@ -114,7 +117,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                         findNavController().navigate(action)
                     }
                     is TasksListViewModel.TaskEvent.NavigateToAddTaskToSetBottomSheet -> {
-                        val action = TasksListFragmentDirections.actionGlobalTaskToSetBottomSheetDialogFragment(task = event.task)
+                        val action = TasksListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = event.task)
                         findNavController().navigate(action)
                     }
                     is TasksListViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {

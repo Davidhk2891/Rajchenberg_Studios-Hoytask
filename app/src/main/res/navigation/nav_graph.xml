@@ -107,5 +107,5 @@
             android:name="task"
             app:argType="com.rajchenbergstudios.hoytask.data.task.Task" />
     </dialog>
-    <action android:id="@+id/action_global_taskToSetBottomSheetDialogFragment" app:destination="@id/SetBottomSheetDialogFragment" />
+    <action android:id="@+id/action_global_SetBottomSheetDialogFragment" app:destination="@id/SetBottomSheetDialogFragment" />
 </navigation>

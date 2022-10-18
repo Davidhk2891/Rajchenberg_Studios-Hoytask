@@ -21,15 +21,17 @@
         <entry key="app/src/main/res/layout/fragment_add_edit_task.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_days_details.xml" value="0.24954710144927536" />
         <entry key="app/src/main/res/layout/fragment_days_history.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_set_bottom_sheet.xml" value="0.4036458333333333" />
         <entry key="app/src/main/res/layout/fragment_task_set_create.xml" value="0.22447916666666667" />
         <entry key="app/src/main/res/layout/fragment_tasks_in_set.xml" value="0.22552083333333334" />
-        <entry key="app/src/main/res/layout/fragment_tasks_list.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_tasks_list.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_tasks_set.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_tasks_set_details.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_tasks_set_edit.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_today_task_save_to_set.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_days_list.xml" value="0.22" />
         <entry key="app/src/main/res/layout/item_tasks_list.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/layout_action_fabs.xml" value="0.40260416666666665" />
         <entry key="app/src/main/res/layout/layout_date_header.xml" value="0.24954710144927536" />
         <entry key="app/src/main/res/layout/layout_no_data_with_image.xml" value="0.23076923076923078" />
         <entry key="app/src/main/res/layout/layout_tasks_list.xml" value="0.25815217391304346" />
