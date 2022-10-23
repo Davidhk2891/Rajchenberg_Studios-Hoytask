@@ -3,8 +3,6 @@ package com.rajchenbergstudios.hoytask.ui.daysdetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.rajchenbergstudios.hoytask.data.day.Day
-import com.rajchenbergstudios.hoytask.data.task.Task
-import com.rajchenbergstudios.hoytask.util.HoytaskConverters
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

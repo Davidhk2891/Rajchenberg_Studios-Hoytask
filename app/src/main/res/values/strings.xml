@@ -26,4 +26,6 @@
     <string name="today_add_new_set">new set</string>
     <string name="done">done</string>
     <string name="dummy_view">dummy view</string>
+    <string name="add_set">Add set</string>
+    <string name="add_task">Add task</string>
 </resources>

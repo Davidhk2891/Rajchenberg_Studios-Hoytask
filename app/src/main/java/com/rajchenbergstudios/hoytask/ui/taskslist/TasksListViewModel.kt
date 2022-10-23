@@ -11,8 +11,8 @@ import com.rajchenbergstudios.hoytask.ui.ADD_TASK_RESULT_OK
 import com.rajchenbergstudios.hoytask.ui.CREATE_SET_RESULT_OK
 import com.rajchenbergstudios.hoytask.ui.EDIT_SET_RESULT_OK
 import com.rajchenbergstudios.hoytask.ui.EDIT_TASK_RESULT_OK
-import com.rajchenbergstudios.hoytask.util.CurrentDate
-import com.rajchenbergstudios.hoytask.util.Logger
+import com.rajchenbergstudios.hoytask.utils.CurrentDate
+import com.rajchenbergstudios.hoytask.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel

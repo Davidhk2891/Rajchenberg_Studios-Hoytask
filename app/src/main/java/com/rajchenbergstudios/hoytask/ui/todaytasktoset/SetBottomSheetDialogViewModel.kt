@@ -12,7 +12,7 @@ import com.rajchenbergstudios.hoytask.data.taskset.TaskSetDao
 import com.rajchenbergstudios.hoytask.di.ApplicationScope
 import com.rajchenbergstudios.hoytask.ui.CREATE_SET_RESULT_OK
 import com.rajchenbergstudios.hoytask.ui.EDIT_SET_RESULT_OK
-import com.rajchenbergstudios.hoytask.util.Logger
+import com.rajchenbergstudios.hoytask.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel

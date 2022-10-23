@@ -15,7 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.databinding.FragmentSetBottomSheetBinding
-import com.rajchenbergstudios.hoytask.util.exhaustive
+import com.rajchenbergstudios.hoytask.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 
 @Suppress("IMPLICIT_CAST_TO_ANY")

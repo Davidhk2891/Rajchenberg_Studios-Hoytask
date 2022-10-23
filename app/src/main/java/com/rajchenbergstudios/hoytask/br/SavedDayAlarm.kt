@@ -4,7 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import com.rajchenbergstudios.hoytask.util.Logger
+import com.rajchenbergstudios.hoytask.utils.Logger
 import java.util.*
 
 private const val TAG = "SavedDayAlarm"

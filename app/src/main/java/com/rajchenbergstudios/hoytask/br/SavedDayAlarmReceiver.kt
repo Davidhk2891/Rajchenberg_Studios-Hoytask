@@ -6,7 +6,7 @@ import android.content.Intent
 import com.rajchenbergstudios.hoytask.data.day.Day
 import com.rajchenbergstudios.hoytask.data.day.DayDao
 import com.rajchenbergstudios.hoytask.data.task.TaskDao
-import com.rajchenbergstudios.hoytask.util.CurrentDate
+import com.rajchenbergstudios.hoytask.utils.CurrentDate
 import kotlinx.coroutines.*
 import javax.inject.Inject
 

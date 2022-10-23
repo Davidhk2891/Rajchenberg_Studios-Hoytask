@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.data.day.Day
 import com.rajchenbergstudios.hoytask.databinding.FragmentDaysHistoryBinding
-import com.rajchenbergstudios.hoytask.util.exhaustive
+import com.rajchenbergstudios.hoytask.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
