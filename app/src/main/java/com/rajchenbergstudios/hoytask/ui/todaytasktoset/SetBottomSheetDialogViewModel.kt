@@ -5,14 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.rajchenbergstudios.hoytask.data.task.Task
+import com.rajchenbergstudios.hoytask.data.task.TaskDao
 import com.rajchenbergstudios.hoytask.data.taskinset.TaskInSet
 import com.rajchenbergstudios.hoytask.data.taskinset.TaskInSetDao
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSetDao
 import com.rajchenbergstudios.hoytask.di.ApplicationScope
+import com.rajchenbergstudios.hoytask.ui.ADD_TASK_FROM_SET_RESULT_OK
 import com.rajchenbergstudios.hoytask.ui.CREATE_SET_RESULT_OK
 import com.rajchenbergstudios.hoytask.ui.EDIT_SET_RESULT_OK
-import com.rajchenbergstudios.hoytask.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
@@ -20,10 +21,11 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-const val TAG = "SetBottomSheetDialogViewModel.kt"
+// const val TAG = "SetBottomSheetDialogViewModel.kt"
 
 @HiltViewModel
 class TaskToSetBottomSheetDialogViewModel @Inject constructor(
+    private val taskDao: TaskDao,
     private val taskSetDao: TaskSetDao,
     private val taskInSetDao: TaskInSetDao,
     @ApplicationScope private val applicationScope: CoroutineScope,
@@ -31,6 +33,8 @@ class TaskToSetBottomSheetDialogViewModel @Inject constructor(
 ) : ViewModel(){
 
     val task = state.get<Task>("task")
+
+    val origin = state.get<Int>("origin")
 
     private val taskName = state.get<String>("taskName") ?: task?.name
 
@@ -59,7 +63,10 @@ class TaskToSetBottomSheetDialogViewModel @Inject constructor(
             navigateBackWithNoSetsSelected()
             return
         }
-        onSaveTaskToSets()
+        if (origin == 1)
+            onSaveTaskToSets()
+        else
+            onFetchTasksFromSets()
     }
 
     private fun onSaveTaskToSets() = viewModelScope.launch {
@@ -74,14 +81,39 @@ class TaskToSetBottomSheetDialogViewModel @Inject constructor(
         }
     }
 
+    private fun onFetchTasksFromSets() = viewModelScope.launch {
+        var multipleTasks = false
+        var conditionChecked = false
+        for (setTitle in setsTitles) {
+            for (task in taskInSetDao.getTasksFromSet(setTitle)) {
+                taskDao.insert(Task(task.taskInSet))
+                if (!conditionChecked){
+                    if (taskInSetDao.getTasksFromSet(setTitle).size > 1) {
+                        multipleTasks = true
+                        conditionChecked = true
+                    }
+                }
+            }
+        }
+        if (setsTitles.size > 1) {
+            if (multipleTasks)
+                showTaskAddedFromExistingSetMessage("Tasks added from sets")
+            else
+                showTaskAddedFromExistingSetMessage("Task added from sets")
+        } else {
+            if (multipleTasks)
+                showTaskAddedFromExistingSetMessage("Tasks added from set")
+            else
+                showTaskAddedFromExistingSetMessage("Task added from set")
+        }
+    }
+
     fun holdDataToSave(taskSet: TaskSet, isChecked: Boolean) {
         onTaskSetCheckedChanged(taskSet, isChecked)
         if (isChecked)
             setsTitles.add(taskSet.title)
         else
             setsTitles.remove(taskSet.title)
-
-        Logger.i(TAG, "holdDataToSave", setsTitles.toString())
     }
 
     private fun navigateBackWithResultFromSetCreatedWithTask(result: Int) = viewModelScope.launch {
@@ -94,6 +126,11 @@ class TaskToSetBottomSheetDialogViewModel @Inject constructor(
 
     private fun showTaskAddedtoExistingSetMessage(msg: String) = viewModelScope.launch {
         taskToSetChannel.send(TaskToSetEvent.NaigateBackWithResultUponSavingTaskToSet(EDIT_SET_RESULT_OK, msg))
+    }
+
+    private fun showTaskAddedFromExistingSetMessage(msg: String) = viewModelScope.launch {
+        taskToSetChannel.send(TaskToSetEvent.NavigateBackWithResultUponAddingTasksFromSet(
+            ADD_TASK_FROM_SET_RESULT_OK ,msg))
     }
 
     private fun onTaskSetCheckedChanged(taskSet: TaskSet, isChecked: Boolean) = viewModelScope.launch {
@@ -110,6 +147,7 @@ class TaskToSetBottomSheetDialogViewModel @Inject constructor(
     sealed class TaskToSetEvent {
         object NavigateBackWithNoSetsSelected : TaskToSetEvent()
         data class NaigateBackWithResultUponSavingTaskToSet(val result: Int, val msg: String) : TaskToSetEvent()
+        data class NavigateBackWithResultUponAddingTasksFromSet(val result: Int, val msg: String) : TaskToSetEvent()
         data class NavigateToCreateTaskSetDialog(val task: Task?) : TaskToSetEvent()
         data class NavigateBackWithResultFromSetCreatedWithTask(val result: Int) : TaskToSetEvent()
     }

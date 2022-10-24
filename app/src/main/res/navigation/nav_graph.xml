@@ -105,7 +105,12 @@
         tools:layout="@layout/fragment_set_bottom_sheet" >
         <argument
             android:name="task"
-            app:argType="com.rajchenbergstudios.hoytask.data.task.Task" />
+            app:argType="com.rajchenbergstudios.hoytask.data.task.Task"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="origin"
+            app:argType="integer" />
     </dialog>
     <action android:id="@+id/action_global_SetBottomSheetDialogFragment" app:destination="@id/SetBottomSheetDialogFragment" />
 </navigation>

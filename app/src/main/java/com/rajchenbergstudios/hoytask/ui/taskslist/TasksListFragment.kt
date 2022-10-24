@@ -119,13 +119,15 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                         findNavController().navigate(action)
                     }
                     is TasksListViewModel.TaskEvent.NavigateToAddTaskToSetBottomSheet -> {
-                        val action = TasksListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = event.task)
+                        val action = TasksListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = event.task, origin = 1)
+                        findNavController().navigate(action)
+                    }
+                    is TasksListViewModel.TaskEvent.NavigateToAddTasksFromSetBottomSheet -> {
+                        val action = TasksListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = null, origin = 2)
                         findNavController().navigate(action)
                     }
                     is TasksListViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {
-                        Snackbar
-                            .make(requireView(), event.msg, Snackbar.LENGTH_LONG)
-                            .show()
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                     }
                     is TasksListViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen -> {
                         val action = TasksListFragmentDirections
@@ -135,10 +137,14 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                     is TasksListViewModel.TaskEvent.ShowTaskSavedInNewOrOldSetConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
                     }
+                    is TasksListViewModel.TaskEvent.ShowTaskAddedFromSetConfirmationMessage -> {
+                        Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
+                        clicked = true
+                        setAnimationsAndViewStates(binding)
+                    }
                 }.exhaustive
             }
         }
-
         loadMenu()
         getFragmentResultListeners()
         onSetDaysSaving()
@@ -204,15 +210,18 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
             val result = bundle.getInt("add_edit_result")
             onFragmentResult(result)
         }
-
         setFragmentResultListener("create_set_request_2"){_, bundle ->
             val result = bundle.getInt("create_set_result_2")
             onFragmentResult(result)
         }
-
         setFragmentResultListener("task_added_to_set_request"){_, bundle ->
             val result = bundle.getInt("task_added_to_set_result")
             val message = bundle.getString("task_added_to_set_message")
+            onFragmentResult(result, message)
+        }
+        setFragmentResultListener("task_added_from_set_request"){_, bundle ->
+            val result = bundle.getInt("task_added_from_set_result")
+            val message = bundle.getString("task_added_from_set_message")
             onFragmentResult(result, message)
         }
     }
@@ -237,11 +246,9 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
             tasksListFab.setOnClickListener {
                 onMainFabClick(binding)
             }
-
             tasksListSubFab1.setOnClickListener {
-                Toast.makeText(context, "Add task from set", Toast.LENGTH_LONG).show()
+                viewModel.onAddTasksFromSetClick()
             }
-
             tasksListSubFab2.setOnClickListener {
                 viewModel.onAddNewTaskClick()
             }
@@ -249,6 +256,10 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
     }
 
     private fun onMainFabClick(binding: FragmentTasksListBinding) {
+        setAnimationsAndViewStates(binding)
+    }
+
+    private fun setAnimationsAndViewStates(binding: FragmentTasksListBinding) {
         setAnimation(binding, clicked)
         setVisibility(binding, clicked)
         setClickable(binding, clicked)

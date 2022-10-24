@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -36,6 +37,14 @@ class SetBottomSheetDialogFragment : BottomSheetDialogFragment(), SetBottomSheet
         val bottomSheetDialogAdapter = SetBottomSheetDialogAdapter(this)
 
         binding.apply {
+
+            if (viewModel.origin == 2) {
+                taskTodayAddToSetTitleTextview.text = getString(R.string.select_set)
+                taskTodayAddToSetAddSetButton.apply {
+                    isClickable = false
+                    isVisible = false
+                }
+            }
 
             taskTodayAddToSetSetsRecyclerview.layoutTasksListRecyclerview.apply {
                 adapter = bottomSheetDialogAdapter
@@ -85,6 +94,16 @@ class SetBottomSheetDialogFragment : BottomSheetDialogFragment(), SetBottomSheet
                             bundleOf(
                                 "task_added_to_set_result" to event.result,
                                 "task_added_to_set_message" to event.msg)
+                        )
+                        findNavController().popBackStack()
+                    }
+                    is TaskToSetBottomSheetDialogViewModel.TaskToSetEvent.NavigateBackWithResultUponAddingTasksFromSet -> {
+                        setFragmentResult(
+                            "task_added_from_set_request",
+                            bundleOf(
+                                "task_added_from_set_result" to event.result,
+                                "task_added_from_set_message" to event.msg
+                            )
                         )
                         findNavController().popBackStack()
                     }
