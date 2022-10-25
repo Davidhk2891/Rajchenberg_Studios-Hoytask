@@ -3,6 +3,7 @@ package com.rajchenbergstudios.hoytask.data.day
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.rajchenbergstudios.hoytask.data.task.Task
 import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "day_table")
@@ -12,7 +13,7 @@ data class Day(
     val dayOfMonth: String,
     val month: String,
     val year: String,
-    val tasksListJson: String = "",
+    val listOfDays: List<Task> = emptyList(),
     @PrimaryKey(autoGenerate = true) val id: Long = 0
 ) : Parcelable {
 

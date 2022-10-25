@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.databinding.SingleItemTasksSetBinding
 
-class TaskToSetBottomSheetDialogAdapter(private val listener: OnItemClickListener) : ListAdapter<TaskSet, TaskToSetBottomSheetDialogAdapter.TaskToSetBottomSheetDialogViewHolder>(DiffCallback()){
+class SetBottomSheetDialogAdapter(private val listener: OnItemClickListener) : ListAdapter<TaskSet, SetBottomSheetDialogAdapter.TaskToSetBottomSheetDialogViewHolder>(DiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskToSetBottomSheetDialogViewHolder {
 

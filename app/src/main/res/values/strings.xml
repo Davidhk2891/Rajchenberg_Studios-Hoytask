@@ -25,4 +25,8 @@
     <string name="save_task_to">Save task to…</string>
     <string name="today_add_new_set">new set</string>
     <string name="done">done</string>
+    <string name="dummy_view">dummy view</string>
+    <string name="add_set">Add set</string>
+    <string name="add_task">Add task</string>
+    <string name="select_set">Select set</string>
 </resources>

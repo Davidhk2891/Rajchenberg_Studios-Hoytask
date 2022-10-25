@@ -9,22 +9,21 @@ import com.rajchenbergstudios.hoytask.data.day.DayDao
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSetDao
 import com.rajchenbergstudios.hoytask.data.task.Task
 import com.rajchenbergstudios.hoytask.data.task.TaskDao
+import com.rajchenbergstudios.hoytask.data.task.TaskTypeConverter
 import com.rajchenbergstudios.hoytask.data.taskinset.TaskInSet
 import com.rajchenbergstudios.hoytask.data.taskinset.TaskInSetDao
 import com.rajchenbergstudios.hoytask.data.taskset.TaskInSetTypeConverter
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.di.ApplicationScope
-import com.rajchenbergstudios.hoytask.util.HoytaskConverters
-import com.rajchenbergstudios.hoytask.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
 
-const val TAG = "HoytaskDatabase.kt"
+// const val TAG = "HoytaskDatabase.kt"
 
-@Database(entities = [Task::class, Day::class, TaskSet::class, TaskInSet::class], version = 13, exportSchema = false)
-@TypeConverters(HoytaskConverters::class, TaskInSetTypeConverter::class)
+@Database(entities = [Task::class, Day::class, TaskSet::class, TaskInSet::class], version = 14, exportSchema = false)
+@TypeConverters(TaskTypeConverter::class, TaskInSetTypeConverter::class)
 abstract class HoytaskDatabase : RoomDatabase(){
 
     abstract fun taskDao(): TaskDao
@@ -82,7 +81,6 @@ abstract class HoytaskDatabase : RoomDatabase(){
                     insert(set2)
                     insert(set3)
 
-                    //TODO: test 1
                     var i = 0
                     repeat(20){
                         i += 1

@@ -7,12 +7,9 @@ import com.rajchenbergstudios.hoytask.data.prefs.PreferencesManager
 import com.rajchenbergstudios.hoytask.data.prefs.SortOrder
 import com.rajchenbergstudios.hoytask.data.task.Task
 import com.rajchenbergstudios.hoytask.data.task.TaskDao
-import com.rajchenbergstudios.hoytask.ui.ADD_TASK_RESULT_OK
-import com.rajchenbergstudios.hoytask.ui.CREATE_SET_RESULT_OK
-import com.rajchenbergstudios.hoytask.ui.EDIT_SET_RESULT_OK
-import com.rajchenbergstudios.hoytask.ui.EDIT_TASK_RESULT_OK
-import com.rajchenbergstudios.hoytask.util.CurrentDate
-import com.rajchenbergstudios.hoytask.util.Logger
+import com.rajchenbergstudios.hoytask.ui.*
+import com.rajchenbergstudios.hoytask.utils.CurrentDate
+import com.rajchenbergstudios.hoytask.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -79,12 +76,17 @@ class TasksListViewModel @Inject constructor(
         tasksEventChannel.send(TaskEvent.NavigateToAddTaskScreen)
     }
 
+    fun onAddTasksFromSetClick() = viewModelScope.launch {
+        tasksEventChannel.send(TaskEvent.NavigateToAddTasksFromSetBottomSheet)
+    }
+
     fun onFragmentResult(result: Int, message: String?) {
         when (result) {
             ADD_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task added")
             EDIT_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task updated")
             CREATE_SET_RESULT_OK -> showTaskSavedInNewOrOldSetConfirmationMessage("Task added to new set")
             EDIT_SET_RESULT_OK ->   showTaskSavedInNewOrOldSetConfirmationMessage(message)
+            ADD_TASK_FROM_SET_RESULT_OK -> showTaskAddedFromSetConfirmationMessage(message)
         }
     }
 
@@ -94,6 +96,10 @@ class TasksListViewModel @Inject constructor(
 
     private fun showTaskSavedInNewOrOldSetConfirmationMessage(text: String?) = viewModelScope.launch {
         tasksEventChannel.send(TaskEvent.ShowTaskSavedInNewOrOldSetConfirmationMessage(text))
+    }
+
+    private fun showTaskAddedFromSetConfirmationMessage(text: String?) = viewModelScope.launch {
+        tasksEventChannel.send(TaskEvent.ShowTaskAddedFromSetConfirmationMessage(text))
     }
 
     fun onDeleteAllCompletedClick() = viewModelScope.launch {
@@ -135,10 +141,12 @@ class TasksListViewModel @Inject constructor(
     sealed class TaskEvent {
         object NavigateToDeleteAllCompletedScreen : TaskEvent()
         object NavigateToAddTaskScreen : TaskEvent()
+        object NavigateToAddTasksFromSetBottomSheet : TaskEvent()
         data class NavigateToEditTaskScreen(val task: Task) : TaskEvent()
         data class NavigateToAddTaskToSetBottomSheet(val task: Task) : TaskEvent()
         data class ShowUndoDeleteTaskMessage(val task: Task) : TaskEvent()
         data class ShowTaskSavedConfirmationMessage(val msg: String) : TaskEvent()
         data class ShowTaskSavedInNewOrOldSetConfirmationMessage(val msg: String?) : TaskEvent()
+        data class ShowTaskAddedFromSetConfirmationMessage(val msg: String?) : TaskEvent()
     }
 }

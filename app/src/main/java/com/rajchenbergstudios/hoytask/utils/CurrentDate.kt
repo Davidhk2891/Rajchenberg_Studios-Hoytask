@@ -1,4 +1,4 @@
-package com.rajchenbergstudios.hoytask.util
+package com.rajchenbergstudios.hoytask.utils
 
 import java.time.LocalDate
 

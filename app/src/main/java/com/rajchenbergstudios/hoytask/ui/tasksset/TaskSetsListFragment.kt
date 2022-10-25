@@ -18,7 +18,7 @@ import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.databinding.FragmentTasksSetBinding
 import com.rajchenbergstudios.hoytask.ui.createtaskset.CreateTaskSetDialogFragmentDirections
-import com.rajchenbergstudios.hoytask.util.OnQueryTextChanged
+import com.rajchenbergstudios.hoytask.utils.OnQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -60,7 +60,7 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
             viewModel.taskSetEvent.collect{ event ->
                 when (event) {
                     is TasksSetsListViewModel.TaskSetEvent.NavigateToDeleteAllSetsScreen -> {
-                        // TODO
+
                     }
                     is TasksSetsListViewModel.TaskSetEvent.NavigateToEditTaskSet -> {
                         val action = TaskSetsListFragmentDirections

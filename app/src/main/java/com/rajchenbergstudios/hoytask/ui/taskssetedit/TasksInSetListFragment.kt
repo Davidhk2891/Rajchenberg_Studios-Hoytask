@@ -14,7 +14,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.data.taskinset.TaskInSet
 import com.rajchenbergstudios.hoytask.databinding.FragmentTasksInSetBinding
-import com.rajchenbergstudios.hoytask.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

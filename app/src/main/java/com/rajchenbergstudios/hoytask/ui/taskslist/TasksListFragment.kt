@@ -5,6 +5,9 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -22,8 +25,10 @@ import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.data.prefs.SortOrder
 import com.rajchenbergstudios.hoytask.data.task.Task
 import com.rajchenbergstudios.hoytask.databinding.FragmentTasksListBinding
-import com.rajchenbergstudios.hoytask.util.OnQueryTextChanged
-import com.rajchenbergstudios.hoytask.util.exhaustive
+import com.rajchenbergstudios.hoytask.utils.OnQueryTextChanged
+import com.rajchenbergstudios.hoytask.utils.HoytaskAnimationUtils
+import com.rajchenbergstudios.hoytask.utils.HoytaskViewStateUtils
+import com.rajchenbergstudios.hoytask.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -36,6 +41,12 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
 
     private lateinit var searchView: SearchView
 
+    private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open_anim) }
+    private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close_anim) }
+    private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.from_bottom_anim) }
+    private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.to_bottom_anim) }
+    private var clicked: Boolean = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -46,6 +57,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
         binding.apply {
 
             todayDateDisplay(binding)
+            initFabs(binding)
 
             tasksListRecyclerview.layoutTasksListRecyclerview.apply {
 
@@ -71,9 +83,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                 }
             }).attachToRecyclerView(tasksListRecyclerview.layoutTasksListRecyclerview)
 
-            tasksListFab.setOnClickListener {
-                viewModel.onAddNewTaskClick()
-            }
+            // TODO: Write down what happened in notebook (how you solved the expandable fab issue. That little attribute)
         }
 
         viewModel.tasks.observe(viewLifecycleOwner){ tasksList ->
@@ -109,13 +119,15 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                         findNavController().navigate(action)
                     }
                     is TasksListViewModel.TaskEvent.NavigateToAddTaskToSetBottomSheet -> {
-                        val action = TasksListFragmentDirections.actionTasksListFragmentToTaskToSetBottomSheetDialogFragment(task = event.task)
+                        val action = TasksListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = event.task, origin = 1)
+                        findNavController().navigate(action)
+                    }
+                    is TasksListViewModel.TaskEvent.NavigateToAddTasksFromSetBottomSheet -> {
+                        val action = TasksListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = null, origin = 2)
                         findNavController().navigate(action)
                     }
                     is TasksListViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {
-                        Snackbar
-                            .make(requireView(), event.msg, Snackbar.LENGTH_LONG)
-                            .show()
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                     }
                     is TasksListViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen -> {
                         val action = TasksListFragmentDirections
@@ -125,10 +137,14 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                     is TasksListViewModel.TaskEvent.ShowTaskSavedInNewOrOldSetConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
                     }
+                    is TasksListViewModel.TaskEvent.ShowTaskAddedFromSetConfirmationMessage -> {
+                        Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
+                        clicked = true
+                        setAnimationsAndViewStates(binding)
+                    }
                 }.exhaustive
             }
         }
-
         loadMenu()
         getFragmentResultListeners()
         onSetDaysSaving()
@@ -194,15 +210,18 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
             val result = bundle.getInt("add_edit_result")
             onFragmentResult(result)
         }
-
         setFragmentResultListener("create_set_request_2"){_, bundle ->
             val result = bundle.getInt("create_set_result_2")
             onFragmentResult(result)
         }
-
         setFragmentResultListener("task_added_to_set_request"){_, bundle ->
             val result = bundle.getInt("task_added_to_set_result")
             val message = bundle.getString("task_added_to_set_message")
+            onFragmentResult(result, message)
+        }
+        setFragmentResultListener("task_added_from_set_request"){_, bundle ->
+            val result = bundle.getInt("task_added_from_set_result")
+            val message = bundle.getString("task_added_from_set_message")
             onFragmentResult(result, message)
         }
     }
@@ -222,6 +241,72 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
         }
     }
 
+    private fun initFabs(binding: FragmentTasksListBinding) {
+        binding.apply {
+            tasksListFab.setOnClickListener {
+                onMainFabClick(binding)
+            }
+            tasksListSubFab1.setOnClickListener {
+                viewModel.onAddTasksFromSetClick()
+            }
+            tasksListSubFab2.setOnClickListener {
+                viewModel.onAddNewTaskClick()
+            }
+        }
+    }
+
+    private fun onMainFabClick(binding: FragmentTasksListBinding) {
+        setAnimationsAndViewStates(binding)
+    }
+
+    private fun setAnimationsAndViewStates(binding: FragmentTasksListBinding) {
+        setAnimation(binding, clicked)
+        setVisibility(binding, clicked)
+        setClickable(binding, clicked)
+        clicked = !clicked
+    }
+
+    private fun setAnimation(binding: FragmentTasksListBinding, clicked: Boolean) {
+        binding.apply {
+            HoytaskAnimationUtils.apply {
+                if (!clicked) {
+                    setViewAnimation(v1 = tasksListFab, a = rotateOpen)
+                    setViewAnimation(v1 = tasksListSubFab1, v2 = tasksListSubFab2, a = fromBottom)
+                    setViewAnimation(v1 = tasksListSubFab1Tv, v2 = tasksListSubFab2Tv, a = fromBottom)
+                } else {
+                    setViewAnimation(v1 = tasksListFab, a = rotateClose)
+                    setViewAnimation(v1 = tasksListSubFab1, v2 = tasksListSubFab2, a = toBottom)
+                    setViewAnimation(v1 = tasksListSubFab1Tv, v2 = tasksListSubFab2Tv, a = toBottom)
+                }
+            }
+        }
+    }
+
+    private fun setVisibility(binding: FragmentTasksListBinding, clicked: Boolean) {
+        binding.apply {
+            HoytaskViewStateUtils.apply {
+                if (!clicked) {
+                    setViewVisibility(tasksListSubFab1, tasksListSubFab2
+                        , tasksListSubFab1Tv, tasksListSubFab2Tv, View.VISIBLE)
+                } else {
+                    setViewVisibility(tasksListSubFab1, tasksListSubFab2
+                        , tasksListSubFab1Tv, tasksListSubFab2Tv, View.INVISIBLE)
+                }
+            }
+        }
+    }
+
+    private fun setClickable(binding: FragmentTasksListBinding, clicked: Boolean) {
+        binding.apply {
+            HoytaskViewStateUtils.apply {
+                if (!clicked)
+                    setViewClickState(v1 = tasksListSubFab1, v2 = tasksListSubFab2, clickable = true)
+                else
+                    setViewClickState(v1 = tasksListSubFab1, v2 = tasksListSubFab2, clickable = false)
+            }
+        }
+    }
+
     private fun onSetDaysSaving() {
         viewModel.onSetDaySaving(requireContext())
     }
@@ -236,6 +321,11 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
 
     override fun onCheckboxClick(task: Task, isChecked: Boolean) {
         viewModel.onTaskCheckedChanged(task, isChecked)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        clicked = false
     }
 
     override fun onDestroyView() {
