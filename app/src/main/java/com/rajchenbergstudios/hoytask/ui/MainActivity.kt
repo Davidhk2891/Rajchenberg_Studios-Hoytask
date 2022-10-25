@@ -51,3 +51,6 @@ class MainActivity : AppCompatActivity() {
 
 const val ADD_TASK_RESULT_OK = Activity.RESULT_FIRST_USER
 const val EDIT_TASK_RESULT_OK = Activity.RESULT_FIRST_USER + 1
+const val CREATE_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 2
+const val EDIT_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 3
+const val ADD_TASK_FROM_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 4

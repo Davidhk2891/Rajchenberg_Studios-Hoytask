@@ -6,8 +6,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TaskSetDao {
 
-    @Query("SELECT * FROM set_table WHERE title LIKE '%' || :searchQuery || '%' ORDER BY title DESC")
+    @Query("SELECT * FROM set_table")
+    fun getSets(): Flow<List<TaskSet>>
+
+    @Query("SELECT * FROM set_table WHERE title LIKE '%' || :searchQuery || '%' ORDER BY id ASC")
     fun getSets(searchQuery: String): Flow<List<TaskSet>>
+
+    @Query("SELECT * FROM set_table WHERE chosen = :isChecked")
+    suspend fun getChosenSets(isChecked: Boolean): List<TaskSet>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(set: TaskSet)

@@ -2,13 +2,14 @@ package com.rajchenbergstudios.hoytask.ui.tasksset
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.databinding.SingleItemTasksSetBinding
 
-class TaskSetsListAdapter : ListAdapter<TaskSet, TaskSetsListAdapter.TaskSetsListViewHolder>(DiffCallback()){
+class TaskSetsListAdapter(private val listener: OnItemClickListener) : ListAdapter<TaskSet, TaskSetsListAdapter.TaskSetsListViewHolder>(DiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskSetsListViewHolder {
 
@@ -21,13 +22,31 @@ class TaskSetsListAdapter : ListAdapter<TaskSet, TaskSetsListAdapter.TaskSetsLis
         holder.bind(currentItem)
     }
 
-    class TaskSetsListViewHolder(private val binding: SingleItemTasksSetBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class TaskSetsListViewHolder(private val binding: SingleItemTasksSetBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.apply {
+                root.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION){
+                        val taskSet = getItem(position)
+                        listener.onItemClick(taskSet)
+                    }
+                }
+            }
+        }
 
         fun bind(set: TaskSet) {
             binding.apply {
                 itemSetTitle.text = set.title
+                itemSetAddToCheckbox.isClickable = false
+                itemSetAddToCheckbox.isVisible = false
             }
         }
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(taskSet: TaskSet)
     }
 
     class DiffCallback : DiffUtil.ItemCallback<TaskSet>() {

@@ -18,4 +18,15 @@
     <string name="add_new_set">add new set</string>
     <string name="set_icon_in_list">Set icon in list</string>
     <string name="delete_all_sets">Delete all sets</string>
+    <string name="new_set">New set</string>
+    <string name="title">title</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">Create</string>
+    <string name="save_task_to">Save task to…</string>
+    <string name="today_add_new_set">new set</string>
+    <string name="done">done</string>
+    <string name="dummy_view">dummy view</string>
+    <string name="add_set">Add set</string>
+    <string name="add_task">Add task</string>
+    <string name="select_set">Select set</string>
 </resources>

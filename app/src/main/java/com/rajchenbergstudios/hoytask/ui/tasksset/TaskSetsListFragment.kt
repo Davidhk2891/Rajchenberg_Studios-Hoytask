@@ -11,16 +11,23 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.rajchenbergstudios.hoytask.R
+import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.databinding.FragmentTasksSetBinding
-import com.rajchenbergstudios.hoytask.util.OnQueryTextChanged
+import com.rajchenbergstudios.hoytask.ui.createtaskset.CreateTaskSetDialogFragmentDirections
+import com.rajchenbergstudios.hoytask.utils.OnQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set){
+class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsListAdapter.OnItemClickListener{
 
     private val viewModel: TasksSetsListViewModel by viewModels()
 
@@ -31,7 +38,7 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set){
 
         val binding = FragmentTasksSetBinding.bind(view)
 
-        val tasksSetListAdapter = TaskSetsListAdapter()
+        val tasksSetListAdapter = TaskSetsListAdapter(this)
 
         binding.apply {
             tasksSetRecyclerview.apply {
@@ -41,10 +48,54 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set){
                     setHasFixedSize(true)
                 }
             }
+
+            tasksSetFab.setOnClickListener {
+                val action = CreateTaskSetDialogFragmentDirections.actionGlobalCreateTaskSetDialogFragment(task = null, origin = 1)
+                findNavController().navigate(action)
+            }
+
+            ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val set = tasksSetListAdapter.currentList[viewHolder.adapterPosition]
+                    viewModel.onSetSwiped(set)
+                }
+            }).attachToRecyclerView(tasksSetRecyclerview.layoutTasksListRecyclerview)
         }
 
         viewModel.taskSets.observe(viewLifecycleOwner) { taskSetsList ->
             tasksSetListAdapter.submitList(taskSetsList)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.taskSetEvent.collect{ event ->
+                when (event) {
+                    is TasksSetsListViewModel.TaskSetEvent.NavigateToDeleteAllSetsScreen -> {
+
+                    }
+                    is TasksSetsListViewModel.TaskSetEvent.NavigateToEditTaskSet -> {
+                        val action = TaskSetsListFragmentDirections
+                            .actionTaskSetsListFragmentToTasksSetEditListFragment(settitle = event.taskSet.title)
+                        findNavController().navigate(action)
+                    }
+                    is TasksSetsListViewModel.TaskSetEvent.ShowUndoDeleteSetMessage -> {
+                        Snackbar
+                            .make(requireView(), "Set deleted", Snackbar.LENGTH_LONG)
+                            .setAction("UNDO"){
+                                viewModel.onUndoDeleteClick(event.taskSet, event.tasksInSetList)
+                            }
+                            .show()
+                    }
+                }
+            }
         }
 
         loadMenu()
@@ -64,7 +115,7 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set){
                 searchView = searchItem.actionView as SearchView
 
                 val pendingQuery = viewModel.searchQuery.value
-                if (pendingQuery != null && pendingQuery.isNotEmpty()) {
+                if (pendingQuery.isNotEmpty()) {
                     searchItem.expandActionView()
                     searchView.setQuery(pendingQuery, false)
                 }
@@ -85,6 +136,10 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set){
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    override fun onItemClick(taskSet: TaskSet) {
+        viewModel.onTaskSetSelected(taskSet)
     }
 
     override fun onDestroyView() {
