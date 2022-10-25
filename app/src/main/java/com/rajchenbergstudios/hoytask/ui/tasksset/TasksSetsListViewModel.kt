@@ -3,6 +3,8 @@ package com.rajchenbergstudios.hoytask.ui.tasksset
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.rajchenbergstudios.hoytask.data.taskinset.TaskInSet
+import com.rajchenbergstudios.hoytask.data.taskinset.TaskInSetDao
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSetDao
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,6 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TasksSetsListViewModel @Inject constructor(
     private val taskSetDao: TaskSetDao,
+    private val taskInSetDao: TaskInSetDao
 ) : ViewModel(){
 
     val searchQuery = MutableStateFlow("")
@@ -40,10 +43,27 @@ class TasksSetsListViewModel @Inject constructor(
         taskSetsEventChannel.send(TaskSetEvent.NavigateToEditTaskSet(taskSet))
     }
 
+    fun onSetSwiped(set: TaskSet) = viewModelScope.launch{
+        val tasksInSetList = taskInSetDao.getTasksFromSet(set.title)
+        for (taskInSet in tasksInSetList) {
+            taskInSetDao.delete(taskInSet)
+        }
+        taskSetDao.delete(set)
+        taskSetsEventChannel.send(TaskSetEvent.ShowUndoDeleteSetMessage(set, tasksInSetList))
+    }
+
+    fun onUndoDeleteClick(set: TaskSet, tasksInSetList: List<TaskInSet>) = viewModelScope.launch {
+        taskSetDao.insert(set)
+        for (taskInSet in tasksInSetList) {
+            taskInSetDao.insert(TaskInSet(taskInSet.taskInSet, taskInSet.taskInSetBigTitle))
+        }
+    }
+
     val taskSets = setsFlow.asLiveData()
 
     sealed class TaskSetEvent {
         object NavigateToDeleteAllSetsScreen : TaskSetEvent()
         data class NavigateToEditTaskSet(val taskSet: TaskSet) : TaskSetEvent()
+        data class ShowUndoDeleteSetMessage(val taskSet: TaskSet, val tasksInSetList: List<TaskInSet>) : TaskSetEvent()
     }
 }
