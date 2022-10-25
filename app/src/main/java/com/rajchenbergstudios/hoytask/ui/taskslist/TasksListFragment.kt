@@ -82,7 +82,6 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                     viewModel.onTaskSwiped(task)
                 }
             }).attachToRecyclerView(tasksListRecyclerview.layoutTasksListRecyclerview)
-
             // TODO: Write down what happened in notebook (how you solved the expandable fab issue. That little attribute)
         }
 

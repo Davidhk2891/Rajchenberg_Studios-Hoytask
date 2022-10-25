@@ -13,7 +13,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.databinding.FragmentTasksSetBinding
@@ -50,6 +53,22 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
                 val action = CreateTaskSetDialogFragmentDirections.actionGlobalCreateTaskSetDialogFragment(task = null, origin = 1)
                 findNavController().navigate(action)
             }
+
+            ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val set = tasksSetListAdapter.currentList[viewHolder.adapterPosition]
+                    viewModel.onSetSwiped(set)
+                }
+            }).attachToRecyclerView(tasksSetRecyclerview.layoutTasksListRecyclerview)
         }
 
         viewModel.taskSets.observe(viewLifecycleOwner) { taskSetsList ->
@@ -66,6 +85,14 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
                         val action = TaskSetsListFragmentDirections
                             .actionTaskSetsListFragmentToTasksSetEditListFragment(settitle = event.taskSet.title)
                         findNavController().navigate(action)
+                    }
+                    is TasksSetsListViewModel.TaskSetEvent.ShowUndoDeleteSetMessage -> {
+                        Snackbar
+                            .make(requireView(), "Set deleted", Snackbar.LENGTH_LONG)
+                            .setAction("UNDO"){
+                                viewModel.onUndoDeleteClick(event.taskSet, event.tasksInSetList)
+                            }
+                            .show()
                     }
                 }
             }
