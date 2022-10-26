@@ -63,10 +63,10 @@ class TaskToSetBottomSheetDialogViewModel @Inject constructor(
             navigateBackWithNoSetsSelected()
             return
         }
-        if (origin == 1)
-            onSaveTaskToSets()
-        else
-            onFetchTasksFromSets()
+        when (origin) {
+            1 -> {onSaveTaskToSets()}
+            2 -> {onFetchTasksFromSets()}
+        }
     }
 
     private fun onSaveTaskToSets() = viewModelScope.launch {

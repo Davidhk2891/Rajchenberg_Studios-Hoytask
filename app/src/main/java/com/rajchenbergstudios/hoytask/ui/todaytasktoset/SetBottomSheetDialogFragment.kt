@@ -16,6 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.databinding.FragmentSetBottomSheetBinding
+import com.rajchenbergstudios.hoytask.utils.HoytaskViewStateUtils
 import com.rajchenbergstudios.hoytask.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -67,7 +68,20 @@ class SetBottomSheetDialogFragment : BottomSheetDialogFragment(), SetBottomSheet
         }
 
         viewModel.taskSets.observe(viewLifecycleOwner) { taskSetsList ->
-            bottomSheetDialogAdapter.submitList(taskSetsList)
+            binding.apply {
+                HoytaskViewStateUtils.apply {
+                    if (taskSetsList.isEmpty()) {
+                        setViewVisibility(v1 = taskTodayAddToSetSetsRecyclerview.layoutTasksListRecyclerview, visibility = View.INVISIBLE)
+                        setViewVisibility(v1 = taskTodayAddToSetNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)
+                        setViewVisibility(v1 = taskTodayAddToSetNoData.layoutNoDataImageview, visibility = View.GONE)
+                        taskTodayAddToSetNoData.layoutNoDataTextview.text = getString(R.string.you_don_t_have_any_sets)
+                    } else {
+                        setViewVisibility(v1 = taskTodayAddToSetSetsRecyclerview.layoutTasksListRecyclerview, visibility = View.VISIBLE)
+                        setViewVisibility(v1 = taskTodayAddToSetNoData.layoutNoDataLinearlayout, visibility = View.INVISIBLE)
+                        bottomSheetDialogAdapter.submitList(taskSetsList)
+                    }
+                }
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
