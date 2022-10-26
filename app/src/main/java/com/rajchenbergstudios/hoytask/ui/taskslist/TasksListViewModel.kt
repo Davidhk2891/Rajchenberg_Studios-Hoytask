@@ -106,6 +106,10 @@ class TasksListViewModel @Inject constructor(
         tasksEventChannel.send(TaskEvent.NavigateToDeleteAllCompletedScreen)
     }
 
+    fun onDeleteAllClick() = viewModelScope.launch {
+        tasksEventChannel.send(TaskEvent.NavigateToDeleteAllScreen)
+    }
+
     fun getCurrentDayOfMonth(): String {
         return CurrentDate.currentDayOfMonthFormatted
     }
@@ -139,6 +143,7 @@ class TasksListViewModel @Inject constructor(
     val tasks = tasksFlow.asLiveData()
 
     sealed class TaskEvent {
+        object NavigateToDeleteAllScreen : TaskEvent()
         object NavigateToDeleteAllCompletedScreen : TaskEvent()
         object NavigateToAddTaskScreen : TaskEvent()
         object NavigateToAddTasksFromSetBottomSheet : TaskEvent()

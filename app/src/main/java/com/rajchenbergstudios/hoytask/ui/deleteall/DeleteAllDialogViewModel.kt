@@ -26,11 +26,16 @@ class DeleteAllDialogViewModel @Inject constructor(
         when (origin) {
             1 -> {deleteAllCompletedTasks()}
             2 -> {deleteAllSetsWithTasks()}
+            3 -> {deleteAllTasks()}
         }
     }
 
     private fun deleteAllCompletedTasks() = applicationScope.launch{
         taskDao.deleteAllCompleted()
+    }
+
+    private fun deleteAllTasks() = applicationScope.launch {
+        taskDao.nukeTaskTable()
     }
 
     private fun deleteAllSetsWithTasks() = applicationScope.launch {
@@ -42,7 +47,8 @@ class DeleteAllDialogViewModel @Inject constructor(
         var message = ""
         when (origin) {
             1 -> {message = "Do you really want to delete all completed tasks?"}
-            2 -> {message = "Do you really want to delete all sets"}
+            2 -> {message = "Do you really want to delete all sets?"}
+            3 -> {message = "Do you really want to delete all tasks?"}
         }
         return message
     }
