@@ -76,10 +76,10 @@ class TaskAddEditViewModel @Inject constructor(
     }
 
     fun deduceFlow() = viewModelScope.launch {
-        if (origin == 1)
-            addEditEventChannel.send(AddEditEvent.ShowFlowFromTaskList)
-        else
-            addEditEventChannel.send(AddEditEvent.ShowFlowFromTaskInSetList)
+        when (origin) {
+            1 -> {addEditEventChannel.send(AddEditEvent.ShowFlowFromTaskList)}
+            2 -> {addEditEventChannel.send(AddEditEvent.ShowFlowFromTaskInSetList)}
+        }
     }
 
     private fun createOrUpdateTask() {

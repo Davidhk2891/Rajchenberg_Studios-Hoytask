@@ -39,8 +39,12 @@
     </fragment>
     <dialog
         android:id="@+id/tasksDeleteAllCompletedDialogFragment"
-        android:name="com.rajchenbergstudios.hoytask.ui.tasksdeleteallcompleted.TasksDeleteAllCompletedDialogFragment"
-        android:label="TasksDeleteAllCompletedDialogFragment" />
+        android:name="com.rajchenbergstudios.hoytask.ui.deleteall.DeleteAllDialogFragment"
+        android:label="TasksDeleteAllCompletedDialogFragment" >
+        <argument
+            android:name="origin"
+            app:argType="integer" />
+    </dialog>
     <action android:id="@+id/action_global_tasksDeleteAllCompletedDialogFragment" app:destination="@id/tasksDeleteAllCompletedDialogFragment" />
     <fragment
         android:id="@+id/daysListFragment"

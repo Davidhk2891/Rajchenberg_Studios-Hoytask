@@ -7,7 +7,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -82,17 +81,20 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                     viewModel.onTaskSwiped(task)
                 }
             }).attachToRecyclerView(tasksListRecyclerview.layoutTasksListRecyclerview)
-            // TODO: Write down what happened in notebook (how you solved the expandable fab issue. That little attribute)
         }
 
         viewModel.tasks.observe(viewLifecycleOwner){ tasksList ->
-            if (tasksList.isEmpty()) {
-                binding.tasksListLayoutNoData.layoutNoDataLinearlayout.visibility = View.VISIBLE
-                binding.tasksListRecyclerview.layoutTasksListRecyclerview.visibility = View.INVISIBLE
-            } else {
-                binding.tasksListLayoutNoData.layoutNoDataLinearlayout.visibility = View.INVISIBLE
-                binding.tasksListRecyclerview.layoutTasksListRecyclerview.visibility = View.VISIBLE
-                tasksListAdapter.submitList(tasksList)
+            binding.apply {
+                HoytaskViewStateUtils.apply {
+                    if (tasksList.isEmpty()) {
+                        setViewVisibility(tasksListRecyclerview.layoutTasksListRecyclerview, visibility = View.INVISIBLE)
+                        setViewVisibility(tasksListLayoutNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)
+                    } else {
+                        setViewVisibility(tasksListRecyclerview.layoutTasksListRecyclerview, visibility = View.VISIBLE)
+                        setViewVisibility(tasksListLayoutNoData.layoutNoDataLinearlayout, visibility = View.INVISIBLE)
+                        tasksListAdapter.submitList(tasksList)
+                    }
+                }
             }
         }
 
@@ -130,7 +132,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                     }
                     is TasksListViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen -> {
                         val action = TasksListFragmentDirections
-                            .actionGlobalTasksDeleteAllCompletedDialogFragment()
+                            .actionGlobalTasksDeleteAllCompletedDialogFragment(origin = 1)
                         findNavController().navigate(action)
                     }
                     is TasksListViewModel.TaskEvent.ShowTaskSavedInNewOrOldSetConfirmationMessage -> {

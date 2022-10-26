@@ -54,6 +54,17 @@
         app:layout_constraintTop_toBottomOf="@id/task_today_add_to_set_top_divider"
         android:layout_marginTop="10dp"/>
 
+    <include
+        android:id="@+id/task_today_add_to_set_no_data"
+        layout="@layout/layout_no_data_with_image"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/task_today_add_to_set_top_divider"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible" />
+
     <View
         android:id="@+id/task_today_add_to_set_bottom_divider"
         android:layout_width="match_parent"

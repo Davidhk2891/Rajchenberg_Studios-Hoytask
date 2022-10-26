@@ -17,10 +17,12 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.rajchenbergstudios.hoytask.Hoytask
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.databinding.FragmentTasksSetBinding
 import com.rajchenbergstudios.hoytask.ui.createtaskset.CreateTaskSetDialogFragmentDirections
+import com.rajchenbergstudios.hoytask.utils.HoytaskViewStateUtils
 import com.rajchenbergstudios.hoytask.utils.OnQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -72,14 +74,29 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
         }
 
         viewModel.taskSets.observe(viewLifecycleOwner) { taskSetsList ->
-            tasksSetListAdapter.submitList(taskSetsList)
+            binding.apply {
+                HoytaskViewStateUtils.apply {
+                    if (taskSetsList.isEmpty()) {
+                        setViewVisibility(tasksSetRecyclerview.layoutTasksListRecyclerview, visibility = View.INVISIBLE)
+                        setViewVisibility(tasksSetLayoutNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)
+                        setViewVisibility(tasksSetLayoutNoData.layoutNoDataImageview, visibility = View.GONE)
+                        tasksSetLayoutNoData.layoutNoDataTextview.text = getString(R.string.you_don_t_have_any_sets)
+                    } else {
+                        setViewVisibility(tasksSetRecyclerview.layoutTasksListRecyclerview, visibility = View.VISIBLE)
+                        setViewVisibility(tasksSetLayoutNoData.layoutNoDataLinearlayout, visibility = View.INVISIBLE)
+                        tasksSetListAdapter.submitList(taskSetsList)
+                    }
+                }
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.taskSetEvent.collect{ event ->
                 when (event) {
                     is TasksSetsListViewModel.TaskSetEvent.NavigateToDeleteAllSetsScreen -> {
-
+                        val action = TaskSetsListFragmentDirections
+                            .actionGlobalTasksDeleteAllCompletedDialogFragment(origin = 2)
+                        findNavController().navigate(action)
                     }
                     is TasksSetsListViewModel.TaskSetEvent.NavigateToEditTaskSet -> {
                         val action = TaskSetsListFragmentDirections
