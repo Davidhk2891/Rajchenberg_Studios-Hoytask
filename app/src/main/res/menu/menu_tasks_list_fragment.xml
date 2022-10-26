@@ -35,4 +35,9 @@
         android:id="@+id/tasks_list_menu_delete_completed"
         android:title="@string/delete_all_completed"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/tasks_list_menu_delete_all"
+        android:title="@string/delete_all"
+        app:showAsAction="never"/>
 </menu>

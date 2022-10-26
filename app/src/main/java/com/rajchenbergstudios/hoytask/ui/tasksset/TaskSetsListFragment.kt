@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.rajchenbergstudios.hoytask.Hoytask
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.databinding.FragmentTasksSetBinding
@@ -95,7 +94,7 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
                 when (event) {
                     is TasksSetsListViewModel.TaskSetEvent.NavigateToDeleteAllSetsScreen -> {
                         val action = TaskSetsListFragmentDirections
-                            .actionGlobalTasksDeleteAllCompletedDialogFragment(origin = 2)
+                            .actionGlobalTasksDeleteAllDialogFragment(origin = 2)
                         findNavController().navigate(action)
                     }
                     is TasksSetsListViewModel.TaskSetEvent.NavigateToEditTaskSet -> {

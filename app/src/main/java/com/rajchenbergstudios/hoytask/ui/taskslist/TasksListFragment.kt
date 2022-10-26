@@ -50,13 +50,9 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentTasksListBinding.bind(view)
-
         val tasksListAdapter = TasksListAdapter(this)
 
         binding.apply {
-
-            todayDateDisplay(binding)
-            initFabs(binding)
 
             tasksListRecyclerview.layoutTasksListRecyclerview.apply {
 
@@ -83,69 +79,10 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
             }).attachToRecyclerView(tasksListRecyclerview.layoutTasksListRecyclerview)
         }
 
-        viewModel.tasks.observe(viewLifecycleOwner){ tasksList ->
-            binding.apply {
-                HoytaskViewStateUtils.apply {
-                    if (tasksList.isEmpty()) {
-                        setViewVisibility(tasksListRecyclerview.layoutTasksListRecyclerview, visibility = View.INVISIBLE)
-                        setViewVisibility(tasksListLayoutNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)
-                    } else {
-                        setViewVisibility(tasksListRecyclerview.layoutTasksListRecyclerview, visibility = View.VISIBLE)
-                        setViewVisibility(tasksListLayoutNoData.layoutNoDataLinearlayout, visibility = View.INVISIBLE)
-                        tasksListAdapter.submitList(tasksList)
-                    }
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.tasksEvent.collect { event ->
-                when (event) {
-                    is TasksListViewModel.TaskEvent.ShowUndoDeleteTaskMessage -> {
-                        Snackbar
-                            .make(requireView(), "Task deleted", Snackbar.LENGTH_LONG)
-                            .setAction("UNDO"){
-                                viewModel.onUndoDeleteClick(event.task)
-                            }
-                            .show()
-                    }
-                    is TasksListViewModel.TaskEvent.NavigateToAddTaskScreen -> {
-                        val action = TasksListFragmentDirections
-                            .actionTasksListFragmentToTaskAddEditFragment(task = null, title = "Add task", taskinset = null, origin = 1)
-                        findNavController().navigate(action)
-                    }
-                    is TasksListViewModel.TaskEvent.NavigateToEditTaskScreen -> {
-                        val action = TasksListFragmentDirections
-                            .actionTasksListFragmentToTaskAddEditFragment(task = event.task, title = "Edit task", taskinset = null, origin = 1)
-                        findNavController().navigate(action)
-                    }
-                    is TasksListViewModel.TaskEvent.NavigateToAddTaskToSetBottomSheet -> {
-                        val action = TasksListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = event.task, origin = 1)
-                        findNavController().navigate(action)
-                    }
-                    is TasksListViewModel.TaskEvent.NavigateToAddTasksFromSetBottomSheet -> {
-                        val action = TasksListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = null, origin = 2)
-                        findNavController().navigate(action)
-                    }
-                    is TasksListViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {
-                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
-                    }
-                    is TasksListViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen -> {
-                        val action = TasksListFragmentDirections
-                            .actionGlobalTasksDeleteAllCompletedDialogFragment(origin = 1)
-                        findNavController().navigate(action)
-                    }
-                    is TasksListViewModel.TaskEvent.ShowTaskSavedInNewOrOldSetConfirmationMessage -> {
-                        Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
-                    }
-                    is TasksListViewModel.TaskEvent.ShowTaskAddedFromSetConfirmationMessage -> {
-                        Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
-                        clicked = true
-                        setAnimationsAndViewStates(binding)
-                    }
-                }.exhaustive
-            }
-        }
+        todayDateDisplay(binding)
+        initFabs(binding)
+        loadObservable(binding, tasksListAdapter)
+        loadTasksEventCollector(binding)
         loadMenu()
         getFragmentResultListeners()
         onSetDaysSaving()
@@ -200,10 +137,87 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                         viewModel.onDeleteAllCompletedClick()
                         true
                     }
+                    R.id.tasks_list_menu_delete_all -> {
+                        viewModel.onDeleteAllClick()
+                        true
+                    }
                     else -> false
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun loadObservable(binding: FragmentTasksListBinding, tasksListAdapter: TasksListAdapter) {
+        viewModel.tasks.observe(viewLifecycleOwner){ tasksList ->
+            binding.apply {
+                HoytaskViewStateUtils.apply {
+                    if (tasksList.isEmpty()) {
+                        setViewVisibility(tasksListRecyclerview.layoutTasksListRecyclerview, visibility = View.INVISIBLE)
+                        setViewVisibility(tasksListLayoutNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)
+                    } else {
+                        setViewVisibility(tasksListRecyclerview.layoutTasksListRecyclerview, visibility = View.VISIBLE)
+                        setViewVisibility(tasksListLayoutNoData.layoutNoDataLinearlayout, visibility = View.INVISIBLE)
+                        tasksListAdapter.submitList(tasksList)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun loadTasksEventCollector(binding: FragmentTasksListBinding) {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.tasksEvent.collect { event ->
+                when (event) {
+                    is TasksListViewModel.TaskEvent.ShowUndoDeleteTaskMessage -> {
+                        Snackbar
+                            .make(requireView(), "Task deleted", Snackbar.LENGTH_LONG)
+                            .setAction("UNDO"){
+                                viewModel.onUndoDeleteClick(event.task)
+                            }
+                            .show()
+                    }
+                    is TasksListViewModel.TaskEvent.NavigateToAddTaskScreen -> {
+                        val action = TasksListFragmentDirections
+                            .actionTasksListFragmentToTaskAddEditFragment(task = null, title = "Add task", taskinset = null, origin = 1)
+                        findNavController().navigate(action)
+                    }
+                    is TasksListViewModel.TaskEvent.NavigateToEditTaskScreen -> {
+                        val action = TasksListFragmentDirections
+                            .actionTasksListFragmentToTaskAddEditFragment(task = event.task, title = "Edit task", taskinset = null, origin = 1)
+                        findNavController().navigate(action)
+                    }
+                    is TasksListViewModel.TaskEvent.NavigateToAddTaskToSetBottomSheet -> {
+                        val action = TasksListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = event.task, origin = 1)
+                        findNavController().navigate(action)
+                    }
+                    is TasksListViewModel.TaskEvent.NavigateToAddTasksFromSetBottomSheet -> {
+                        val action = TasksListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = null, origin = 2)
+                        findNavController().navigate(action)
+                    }
+                    is TasksListViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
+                    }
+                    is TasksListViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen -> {
+                        val action = TasksListFragmentDirections
+                            .actionGlobalTasksDeleteAllDialogFragment(origin = 1)
+                        findNavController().navigate(action)
+                    }
+                    is TasksListViewModel.TaskEvent.NavigateToDeleteAllScreen -> {
+                        val action = TasksListFragmentDirections
+                            .actionGlobalTasksDeleteAllDialogFragment(origin = 3)
+                        findNavController().navigate(action)
+                    }
+                    is TasksListViewModel.TaskEvent.ShowTaskSavedInNewOrOldSetConfirmationMessage -> {
+                        Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
+                    }
+                    is TasksListViewModel.TaskEvent.ShowTaskAddedFromSetConfirmationMessage -> {
+                        Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
+                        clicked = true
+                        setAnimationsAndViewStates(binding)
+                    }
+                }.exhaustive
+            }
+        }
     }
 
     private fun getFragmentResultListeners() {
