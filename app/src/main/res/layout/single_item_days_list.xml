@@ -6,8 +6,8 @@
     android:id="@+id/item_day_tasks_cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    days_card_view:cardBackgroundColor="@color/hoytask_card_view_light_purple"
-    days_card_view:cardCornerRadius="24dp"
+    app:cardElevation="6dp"
+    days_card_view:cardCornerRadius="16dp"
     android:background="?android:attr/selectableItemBackground"
     android:layout_margin="16dp">
 
@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="?android:attr/selectableItemBackground"
+        android:background="@drawable/color_gradient_background_two"
         android:padding="12dp">
 
         <include
