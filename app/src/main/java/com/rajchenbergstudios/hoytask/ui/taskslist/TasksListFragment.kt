@@ -85,7 +85,6 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
         loadTasksEventCollector(binding)
         loadMenu()
         getFragmentResultListeners()
-        onSetDaysSaving()
     }
 
     private fun loadMenu(){
@@ -320,10 +319,6 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                     setViewClickState(v1 = tasksListSubFab1, v2 = tasksListSubFab2, clickable = false)
             }
         }
-    }
-
-    private fun onSetDaysSaving() {
-        viewModel.onSetDaySaving(requireContext())
     }
 
     override fun onItemClick(task: Task) {

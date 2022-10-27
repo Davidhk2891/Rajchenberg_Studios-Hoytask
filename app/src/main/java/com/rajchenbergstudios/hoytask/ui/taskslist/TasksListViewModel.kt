@@ -1,15 +1,12 @@
 package com.rajchenbergstudios.hoytask.ui.taskslist
 
-import android.content.Context
 import androidx.lifecycle.*
-import com.rajchenbergstudios.hoytask.br.SavedDayAlarm
 import com.rajchenbergstudios.hoytask.data.prefs.PreferencesManager
 import com.rajchenbergstudios.hoytask.data.prefs.SortOrder
 import com.rajchenbergstudios.hoytask.data.task.Task
 import com.rajchenbergstudios.hoytask.data.task.TaskDao
 import com.rajchenbergstudios.hoytask.ui.*
 import com.rajchenbergstudios.hoytask.utils.CurrentDate
-import com.rajchenbergstudios.hoytask.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -17,7 +14,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val TAG = "TasksListViewModel"
+// private const val TAG = "TasksListViewModel"
 
 @ExperimentalCoroutinesApi
 @HiltViewModel
@@ -124,16 +121,6 @@ class TasksListViewModel @Inject constructor(
 
     fun getCurrentDayOfWeek(): String {
         return CurrentDate.currentDayOfWeekFormatted
-    }
-
-    fun onSetDaySaving(context: Context) = viewModelScope.launch {
-        if (preferencesManager.getDaySavingSetting() == null){
-            Logger.i(TAG, "onSetDaySaving", "alarm to be set")
-            SavedDayAlarm.setDaySavingAlarm(context)
-            preferencesManager.setDaySavingSetting()
-        } else {
-            Logger.i(TAG, "onSetDaySaving", "alarm already set")
-        }
     }
 
     fun onTaskLongSelected(task: Task) = viewModelScope.launch {
