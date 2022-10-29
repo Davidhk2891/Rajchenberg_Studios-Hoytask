@@ -7,7 +7,6 @@ import androidx.room.TypeConverter
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.rajchenbergstudios.hoytask.data.taskinset.TaskInSet
 import kotlinx.parcelize.Parcelize
 import java.text.DateFormat
 

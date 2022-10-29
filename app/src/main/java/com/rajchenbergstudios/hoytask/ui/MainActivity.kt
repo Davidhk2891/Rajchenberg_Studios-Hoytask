@@ -3,6 +3,7 @@ package com.rajchenbergstudios.hoytask.ui
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        loadSplashScreen()
         setupCustomActionBar()
         setupNavControllerWithNavHostFrag()
         setupBottomNavigationView()
@@ -42,6 +44,10 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.hoytask_bottom_nav)
         appBarConfiguration = AppBarConfiguration(setOf(R.id.tasksListFragment, R.id.daysListFragment, R.id.taskSetsListFragment))
         bottomNavigationView.setupWithNavController(navController)
+    }
+
+    private fun loadSplashScreen(){
+        installSplashScreen()
     }
 
     override fun onSupportNavigateUp(): Boolean {
