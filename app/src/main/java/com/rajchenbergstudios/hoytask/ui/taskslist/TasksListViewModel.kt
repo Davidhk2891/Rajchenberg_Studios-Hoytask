@@ -5,8 +5,8 @@ import com.rajchenbergstudios.hoytask.data.prefs.PreferencesManager
 import com.rajchenbergstudios.hoytask.data.prefs.SortOrder
 import com.rajchenbergstudios.hoytask.data.task.Task
 import com.rajchenbergstudios.hoytask.data.task.TaskDao
-import com.rajchenbergstudios.hoytask.ui.*
-import com.rajchenbergstudios.hoytask.utils.CurrentDate
+import com.rajchenbergstudios.hoytask.ui.activity.*
+import com.rajchenbergstudios.hoytask.utils.HTSKDateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -108,19 +108,19 @@ class TasksListViewModel @Inject constructor(
     }
 
     fun getCurrentDayOfMonth(): String {
-        return CurrentDate.currentDayOfMonthFormatted
+        return HTSKDateUtils.currentDayOfMonthFormatted
     }
 
     fun getCurrentMonth(): String {
-        return CurrentDate.currentMonthFormatted
+        return HTSKDateUtils.currentMonthFormatted
     }
 
     fun getCurrentYear(): String {
-        return CurrentDate.currentYearFormatted
+        return HTSKDateUtils.currentYearFormatted
     }
 
     fun getCurrentDayOfWeek(): String {
-        return CurrentDate.currentDayOfWeekFormatted
+        return HTSKDateUtils.currentDayOfWeekFormatted
     }
 
     fun onTaskLongSelected(task: Task) = viewModelScope.launch {

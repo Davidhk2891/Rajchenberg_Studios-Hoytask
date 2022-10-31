@@ -15,6 +15,4 @@ data class Day(
     val year: String,
     val listOfDays: List<Task> = emptyList(),
     @PrimaryKey(autoGenerate = true) val id: Long = 0
-) : Parcelable {
-
-}
+) : Parcelable

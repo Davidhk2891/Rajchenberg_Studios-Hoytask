@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface TaskDao {
 
     @Query("SELECT * FROM task_table")
-    fun getTasks(): List<Task>
+    suspend fun getTasks(): List<Task>
 
     fun getTasks(searchQuery: String, sortOrder: SortOrder, hideCompleted: Boolean): Flow<List<Task>> =
         when (sortOrder) {

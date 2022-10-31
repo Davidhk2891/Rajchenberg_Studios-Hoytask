@@ -7,8 +7,8 @@ import com.rajchenbergstudios.hoytask.data.task.Task
 import com.rajchenbergstudios.hoytask.data.task.TaskDao
 import com.rajchenbergstudios.hoytask.data.taskinset.TaskInSet
 import com.rajchenbergstudios.hoytask.data.taskinset.TaskInSetDao
-import com.rajchenbergstudios.hoytask.ui.ADD_TASK_RESULT_OK
-import com.rajchenbergstudios.hoytask.ui.EDIT_TASK_RESULT_OK
+import com.rajchenbergstudios.hoytask.ui.activity.ADD_TASK_RESULT_OK
+import com.rajchenbergstudios.hoytask.ui.activity.EDIT_TASK_RESULT_OK
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow

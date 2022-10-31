@@ -26,6 +26,7 @@ class DaysDetailsTasksAdapter : ListAdapter<Task, DaysDetailsTasksAdapter.DaysDe
         fun bind(task: Task) {
             binding.apply {
                 itemTaskTitleTextview.text = task.name
+                itemTaskCompletedCheckbox.isClickable = false
                 itemTaskCompletedCheckbox.isChecked = task.completed
                 itemTaskTitleTextview.paint.isStrikeThruText = task.completed
                 itemTaskImportantImageview.isVisible = task.important

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.data.day.Day
 import com.rajchenbergstudios.hoytask.databinding.FragmentDaysHistoryBinding
-import com.rajchenbergstudios.hoytask.utils.HoytaskViewStateUtils
+import com.rajchenbergstudios.hoytask.utils.HTSKViewStateUtils
 import com.rajchenbergstudios.hoytask.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,7 +35,7 @@ class DaysListFragment : Fragment(R.layout.fragment_days_history), DaysListAdapt
 
         viewModel.days.observe(viewLifecycleOwner){ daysList ->
             binding.apply {
-                HoytaskViewStateUtils.apply {
+                HTSKViewStateUtils.apply {
                     if (daysList.isEmpty()) {
                         setViewVisibility(daysListRecyclerview, visibility = View.INVISIBLE)
                         setViewVisibility(daysListLayoutNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)

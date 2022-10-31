@@ -2,7 +2,7 @@ package com.rajchenbergstudios.hoytask.di
 
 import android.app.Application
 import androidx.room.Room
-import com.rajchenbergstudios.hoytask.data.HoytaskDatabase
+import com.rajchenbergstudios.hoytask.data.HTSKDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,23 +20,23 @@ object AppModule {
     @Singleton
     fun provideDatabase(
         app: Application,
-        callback: HoytaskDatabase.Callback
-    ) = Room.databaseBuilder(app, HoytaskDatabase::class.java, "hoytask_database")
+        callback: HTSKDatabase.Callback
+    ) = Room.databaseBuilder(app, HTSKDatabase::class.java, "hoytask_database")
         .fallbackToDestructiveMigration()
         .addCallback(callback)
         .build()
 
     @Provides
-    fun provideTaskDao(db: HoytaskDatabase) = db.taskDao()
+    fun provideTaskDao(db: HTSKDatabase) = db.taskDao()
 
     @Provides
-    fun provideDayDao(db: HoytaskDatabase) = db.dayDao()
+    fun provideDayDao(db: HTSKDatabase) = db.dayDao()
 
     @Provides
-    fun provideTaskSetDao(db: HoytaskDatabase) = db.taskSetDao()
+    fun provideTaskSetDao(db: HTSKDatabase) = db.taskSetDao()
 
     @Provides
-    fun provideTaskInSetDao(db: HoytaskDatabase) = db.taskInSetDao()
+    fun provideTaskInSetDao(db: HTSKDatabase) = db.taskInSetDao()
 
     @ApplicationScope
     @Provides

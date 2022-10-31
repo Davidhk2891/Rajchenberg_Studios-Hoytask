@@ -3,7 +3,7 @@ package com.rajchenbergstudios.hoytask.utils
 import android.view.View
 import android.view.animation.Animation
 
-class HoytaskAnimationUtils {
+class HTSKAnimationUtils {
 
     companion object {
         fun setViewAnimation(

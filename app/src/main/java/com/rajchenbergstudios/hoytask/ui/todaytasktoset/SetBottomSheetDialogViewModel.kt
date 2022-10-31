@@ -11,9 +11,9 @@ import com.rajchenbergstudios.hoytask.data.taskinset.TaskInSetDao
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSetDao
 import com.rajchenbergstudios.hoytask.di.ApplicationScope
-import com.rajchenbergstudios.hoytask.ui.ADD_TASK_FROM_SET_RESULT_OK
-import com.rajchenbergstudios.hoytask.ui.CREATE_SET_RESULT_OK
-import com.rajchenbergstudios.hoytask.ui.EDIT_SET_RESULT_OK
+import com.rajchenbergstudios.hoytask.ui.activity.ADD_TASK_FROM_SET_RESULT_OK
+import com.rajchenbergstudios.hoytask.ui.activity.CREATE_SET_RESULT_OK
+import com.rajchenbergstudios.hoytask.ui.activity.EDIT_SET_RESULT_OK
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
