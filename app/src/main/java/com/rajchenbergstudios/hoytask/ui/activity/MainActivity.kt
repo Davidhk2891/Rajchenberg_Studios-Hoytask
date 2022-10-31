@@ -1,8 +1,9 @@
-package com.rajchenbergstudios.hoytask.ui
+package com.rajchenbergstudios.hoytask.ui.activity
 
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -18,12 +19,13 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen().apply {setKeepOnScreenCondition{viewModel.isLoading.value}}
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        loadSplashScreen()
         setupCustomActionBar()
         setupNavControllerWithNavHostFrag()
         setupBottomNavigationView()
@@ -44,10 +46,6 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.hoytask_bottom_nav)
         appBarConfiguration = AppBarConfiguration(setOf(R.id.tasksListFragment, R.id.daysListFragment, R.id.taskSetsListFragment))
         bottomNavigationView.setupWithNavController(navController)
-    }
-
-    private fun loadSplashScreen(){
-        installSplashScreen()
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -39,10 +39,10 @@ class DaysDetailsFragment : Fragment(R.layout.fragment_days_details) {
                 }
             }
         }
-//        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-//            withContext(Dispatchers.IO) {
-//                daysDetailsTasksAdapter.submitList(viewModel.tasks)
-//            }
-//        }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            withContext(Dispatchers.IO) {
+                daysDetailsTasksAdapter.submitList(viewModel.tasks)
+            }
+        }
     }
 }

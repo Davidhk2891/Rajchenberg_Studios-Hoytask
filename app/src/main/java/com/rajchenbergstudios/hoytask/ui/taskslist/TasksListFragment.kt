@@ -25,8 +25,8 @@ import com.rajchenbergstudios.hoytask.data.prefs.SortOrder
 import com.rajchenbergstudios.hoytask.data.task.Task
 import com.rajchenbergstudios.hoytask.databinding.FragmentTasksListBinding
 import com.rajchenbergstudios.hoytask.utils.OnQueryTextChanged
-import com.rajchenbergstudios.hoytask.utils.HoytaskAnimationUtils
-import com.rajchenbergstudios.hoytask.utils.HoytaskViewStateUtils
+import com.rajchenbergstudios.hoytask.utils.HTSKAnimationUtils
+import com.rajchenbergstudios.hoytask.utils.HTSKViewStateUtils
 import com.rajchenbergstudios.hoytask.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -149,7 +149,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
     private fun loadObservable(binding: FragmentTasksListBinding, tasksListAdapter: TasksListAdapter) {
         viewModel.tasks.observe(viewLifecycleOwner){ tasksList ->
             binding.apply {
-                HoytaskViewStateUtils.apply {
+                HTSKViewStateUtils.apply {
                     if (tasksList.isEmpty()) {
                         setViewVisibility(tasksListRecyclerview.layoutTasksListRecyclerview, visibility = View.INVISIBLE)
                         setViewVisibility(tasksListLayoutNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)
@@ -282,7 +282,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
 
     private fun setAnimation(binding: FragmentTasksListBinding, clicked: Boolean) {
         binding.apply {
-            HoytaskAnimationUtils.apply {
+            HTSKAnimationUtils.apply {
                 if (!clicked) {
                     setViewAnimation(v1 = tasksListFab, a = rotateOpen)
                     setViewAnimation(v1 = tasksListSubFab1, v2 = tasksListSubFab2, a = fromBottom)
@@ -298,7 +298,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
 
     private fun setVisibility(binding: FragmentTasksListBinding, clicked: Boolean) {
         binding.apply {
-            HoytaskViewStateUtils.apply {
+            HTSKViewStateUtils.apply {
                 if (!clicked) {
                     setViewVisibility(tasksListSubFab1, tasksListSubFab2
                         , tasksListSubFab1Tv, tasksListSubFab2Tv, View.VISIBLE)
@@ -312,7 +312,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
 
     private fun setClickable(binding: FragmentTasksListBinding, clicked: Boolean) {
         binding.apply {
-            HoytaskViewStateUtils.apply {
+            HTSKViewStateUtils.apply {
                 if (!clicked)
                     setViewClickState(v1 = tasksListSubFab1, v2 = tasksListSubFab2, clickable = true)
                 else

@@ -2,7 +2,7 @@ package com.rajchenbergstudios.hoytask.utils
 
 import java.time.LocalDate
 
-object CurrentDate {
+object HTSKDateUtils {
 
     val today = LocalDate.now()
     val currentDayOfWeekFormatted: String

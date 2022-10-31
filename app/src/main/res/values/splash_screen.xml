@@ -2,7 +2,7 @@
 <resources>
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/hoytask_purple</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logoforeground</item>
-        <item name="postSplashScreenTheme">Theme.Hoytask.main</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splashscreen_app_logo_sized</item>
+        <item name="postSplashScreenTheme">@style/Theme.Hoytask.main</item>
     </style>>
 </resources>
