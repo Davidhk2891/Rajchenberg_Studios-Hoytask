@@ -16,7 +16,13 @@ import java.time.LocalDate
 import java.time.ZoneId
 import javax.inject.Inject
 
-// const val TAG = "MainViewModel.kt"
+/*
+ For testing only!
+ const val TAG = "MainViewModel.kt"
+ val localDateTest: LocalDate = LocalDate.of(2022, 11, 1)
+ Logger.i(TAG, "pullListAndCompareDate", "Local date is: $localDateTest")
+ Logger.i(TAG, "pullListAndCompareDate", "Local last task date is: $localLastTaskDate")
+*/
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -41,9 +47,6 @@ class MainViewModel @Inject constructor(
             val lastTaskDateInMillis = tasksList.last().created
             val localDate = LocalDate.now()
             val localLastTaskDate = Instant.ofEpochMilli(lastTaskDateInMillis).atZone(ZoneId.systemDefault()).toLocalDate()
-            // val localDateTest: LocalDate = LocalDate.of(2022, 11, 1)
-            // Logger.i(TAG, "pullListAndCompareDate", "Local date is: $localDateTest")
-            // Logger.i(TAG, "pullListAndCompareDate", "Local last task date is: $localLastTaskDate")
             if (localDate.isAfter(localLastTaskDate)) {
                 saveTasksToDay(tasksList, localLastTaskDate)
                 nukeTodayTasks()
