@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DaysListViewModel @Inject constructor(
-    private val dayDao: DayDao
+    dayDao: DayDao
 ) : ViewModel(){
 
     // Days channel

@@ -16,21 +16,27 @@
         <EditText
             android:id="@+id/fragment_add_edit_title_edittext"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
+            android:background="@drawable/edittext_custom"
             android:hint="@string/task_title"
+            android:layout_marginTop="12dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             android:inputType="text"
-            tools:ignore="Autofill" />
+            tools:ignore="Autofill,RtlSymmetry" />
 
         <CheckBox
             android:id="@+id/fragment_add_edit_important_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:text="@string/important_task"/>
 
         <TextView
             android:id="@+id/fragment_add_edit_created_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             tools:text="Date created:"/>
 
     </LinearLayout>

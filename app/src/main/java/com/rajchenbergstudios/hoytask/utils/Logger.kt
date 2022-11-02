@@ -20,7 +20,7 @@ object Logger {
 //        }
 //    }
 
-    fun i(classTag: String, methodTag: String, message: String?) {
+    fun i(classTag: String = "DEFAULT", methodTag: String, message: String?) {
         val logMessage = "[$classTag::$methodTag] -> $message"
         Log.i(APPLICATION_LOG_TAG, logMessage)
     }

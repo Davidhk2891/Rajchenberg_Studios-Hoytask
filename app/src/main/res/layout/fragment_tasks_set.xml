@@ -13,6 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <include
+        android:id="@+id/tasks_set_layout_no_data"
+        layout="@layout/layout_no_data_with_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/tasks_set_fab"
         android:layout_width="wrap_content"

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.data.day.Day
 import com.rajchenbergstudios.hoytask.databinding.FragmentDaysHistoryBinding
+import com.rajchenbergstudios.hoytask.utils.HTSKViewStateUtils
 import com.rajchenbergstudios.hoytask.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,15 +34,19 @@ class DaysListFragment : Fragment(R.layout.fragment_days_history), DaysListAdapt
         }
 
         viewModel.days.observe(viewLifecycleOwner){ daysList ->
-            if (daysList.isEmpty()) {
-                binding.daysListRecyclerview.visibility = View.INVISIBLE
-                binding.daysListLayoutNoData.layoutNoDataLinearlayout.visibility = View.VISIBLE
-                binding.daysListLayoutNoData.layoutNoDataTextview.text = getString(R.string.you_don_t_have_any_days)
-                binding.daysListLayoutNoData.layoutNoDataImageview.visibility = View.GONE
-            } else {
-                binding.daysListRecyclerview.visibility = View.VISIBLE
-                binding.daysListLayoutNoData.layoutNoDataLinearlayout.visibility = View.INVISIBLE
-                daysListAdapter.submitList(daysList)
+            binding.apply {
+                HTSKViewStateUtils.apply {
+                    if (daysList.isEmpty()) {
+                        setViewVisibility(daysListRecyclerview, visibility = View.INVISIBLE)
+                        setViewVisibility(daysListLayoutNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)
+                        setViewVisibility(daysListLayoutNoData.layoutNoDataImageview, visibility = View.GONE)
+                        daysListLayoutNoData.layoutNoDataTextview.text = getString(R.string.you_don_t_have_any_days)
+                    } else {
+                        setViewVisibility(daysListRecyclerview, visibility = View.VISIBLE)
+                        setViewVisibility(daysListLayoutNoData.layoutNoDataLinearlayout, visibility = View.INVISIBLE)
+                        daysListAdapter.submitList(daysList)
+                    }
+                }
             }
         }
 

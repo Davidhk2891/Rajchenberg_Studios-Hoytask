@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/hoytask_purple</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splashscreen_app_logo_sized</item>
+        <item name="postSplashScreenTheme">@style/Theme.Hoytask.main</item>
+    </style>
+</resources>

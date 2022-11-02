@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DayDao {
 
-    @Query("SELECT * FROM day_table")
+    @Query("SELECT * FROM day_table ORDER BY id DESC")
     fun getDays(): Flow<List<Day>>
 
     @Insert

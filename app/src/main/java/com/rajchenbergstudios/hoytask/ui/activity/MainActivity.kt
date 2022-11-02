@@ -1,8 +1,10 @@
-package com.rajchenbergstudios.hoytask.ui
+package com.rajchenbergstudios.hoytask.ui.activity
 
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -17,8 +19,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen().apply {setKeepOnScreenCondition{viewModel.isLoading.value}}
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -54,3 +58,5 @@ const val EDIT_TASK_RESULT_OK = Activity.RESULT_FIRST_USER + 1
 const val CREATE_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 2
 const val EDIT_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 3
 const val ADD_TASK_FROM_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 4
+
+// TODO: Write down what happened in notebook (how you solved the expandable fab issue. That little attribute)
