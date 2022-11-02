@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.taskslist.TasksListFragment"
-    android:background="@color/hoytask_white"
     android:padding="16dp">
 
     <androidx.cardview.widget.CardView

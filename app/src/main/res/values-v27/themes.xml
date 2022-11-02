@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Hoytask main theme -->
     <style name="Theme.Hoytask.main" parent="HoytaskBaseTheme">
         <!-- Primary brand color -->
         <item name="colorPrimary">@color/hoytask_white</item>
@@ -13,8 +14,18 @@
         <!-- Status bar -->
         <item name="android:statusBarColor">@color/hoytask_white</item>
         <item name="android:windowLightStatusBar">true</item>
-        <!-- Navigation bar -->
+        <!-- Navigation bar (phone) -->
         <item name="android:navigationBarColor">@color/hoytask_white</item>
         <item name="android:windowLightNavigationBar">true</item>
     </style>
+
+    <style name="CustomActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorSecondary">@color/hoytask_grey</item>
+        <item name="actionOverflowButtonStyle">@style/Threedotscolor</item>
+    </style>
+
+    <style name="Threedotscolor" parent="Widget.AppCompat.Light.ActionButton.Overflow">
+        <item name="tint">@color/hoytask_grey</item>
+    </style>
+
 </resources>
