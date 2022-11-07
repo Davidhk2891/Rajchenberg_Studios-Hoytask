@@ -3,6 +3,7 @@ package com.rajchenbergstudios.hoytask.ui.activity
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
@@ -13,12 +14,16 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rajchenbergstudios.hoytask.R
+import com.rajchenbergstudios.hoytask.utils.HTSKViewStateUtils
 import dagger.hilt.android.AndroidEntryPoint
+
+// private const val TAG = "MainActivity.kt"
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var bottomNavigationView: BottomNavigationView
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         setupNavControllerWithNavHostFrag()
         setupBottomNavigationView()
         setupActionBarWithNavController(navController, appBarConfiguration)
+        setupBottomNavStateConfig()
     }
 
     private fun setupCustomActionBar(){
@@ -43,9 +49,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigationView(){
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.hoytask_bottom_nav)
+        bottomNavigationView = findViewById(R.id.hoytask_bottom_nav)
         appBarConfiguration = AppBarConfiguration(setOf(R.id.tasksListFragment, R.id.daysListFragment, R.id.taskSetsListFragment))
         bottomNavigationView.setupWithNavController(navController)
+    }
+
+    private fun setupBottomNavStateConfig(){
+        navController.addOnDestinationChangedListener{ _, destination, _ ->
+            when (destination.id) {
+                R.id.tasksListFragment -> HTSKViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
+                R.id.taskSetsListFragment -> HTSKViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
+                R.id.daysListFragment -> HTSKViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
+                R.id.taskAddEditFragment -> HTSKViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.GONE)
+                R.id.tasksSetEditListFragment -> HTSKViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.GONE)
+                R.id.daysDetailsFragment -> HTSKViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.GONE)
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
