@@ -37,15 +37,20 @@
         <entry key="app/src/main/res/layout/fragment_tasks_set_details.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_tasks_set_edit.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_today_task_save_to_set.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_top_past_days.xml" value="0.40260416666666665" />
+        <entry key="app/src/main/res/layout/fragment_top_sets_of_tasks.xml" value="0.40260416666666665" />
+        <entry key="app/src/main/res/layout/fragment_top_today.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_days_list.xml" value="0.22" />
         <entry key="app/src/main/res/layout/item_tasks_list.xml" value="0.25" />
         <entry key="app/src/main/res/layout/layout_action_fabs.xml" value="0.40260416666666665" />
         <entry key="app/src/main/res/layout/layout_date_header.xml" value="0.24954710144927536" />
         <entry key="app/src/main/res/layout/layout_no_data_with_image.xml" value="0.23076923076923078" />
         <entry key="app/src/main/res/layout/layout_tasks_list.xml" value="0.25815217391304346" />
-        <entry key="app/src/main/res/layout/single_item_days_list.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/single_item_days_list.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/single_item_shimmer_days_list.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/single_item_shimmer_tasks_set.xml" value="0.33" />
         <entry key="app/src/main/res/layout/single_item_tasks_list.xml" value="0.24954710144927536" />
-        <entry key="app/src/main/res/layout/single_item_tasks_set.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/single_item_tasks_set.xml" value="0.33" />
         <entry key="app/src/main/res/menu/menu_bottom_navigation.xml" value="0.40260416666666665" />
         <entry key="app/src/main/res/menu/menu_tasks_list_fragment.xml" value="0.33" />
         <entry key="app/src/main/res/menu/menu_tasks_set_fragment.xml" value="0.5" />

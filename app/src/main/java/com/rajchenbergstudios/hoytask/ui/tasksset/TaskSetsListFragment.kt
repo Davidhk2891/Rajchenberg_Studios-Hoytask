@@ -21,6 +21,7 @@ import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.databinding.FragmentTasksSetBinding
 import com.rajchenbergstudios.hoytask.ui.createtaskset.CreateTaskSetDialogFragmentDirections
+import com.rajchenbergstudios.hoytask.utils.HTSKAnimationUtils
 import com.rajchenbergstudios.hoytask.utils.HTSKViewStateUtils
 import com.rajchenbergstudios.hoytask.utils.OnQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,8 +38,8 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        startShimmerView()
         val binding = FragmentTasksSetBinding.bind(view)
-
         val tasksSetListAdapter = TaskSetsListAdapter(this)
 
         binding.apply {
@@ -81,6 +82,7 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
                         setViewVisibility(tasksSetLayoutNoData.layoutNoDataImageview, visibility = View.GONE)
                         tasksSetLayoutNoData.layoutNoDataTextview.text = getString(R.string.you_don_t_have_any_sets)
                     } else {
+                        stopShimmerView()
                         setViewVisibility(tasksSetRecyclerview.layoutTasksListRecyclerview, visibility = View.VISIBLE)
                         setViewVisibility(tasksSetLayoutNoData.layoutNoDataLinearlayout, visibility = View.INVISIBLE)
                         tasksSetListAdapter.submitList(taskSetsList)
@@ -153,6 +155,10 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
+
+    private fun startShimmerView() { HTSKAnimationUtils.startShimmerView(requireActivity(), R.id.task_set_shimmerframelayout) }
+
+    private fun stopShimmerView() { HTSKAnimationUtils.stopShimmerView(requireActivity(), R.id.task_set_shimmerframelayout) }
 
     override fun onItemClick(taskSet: TaskSet) {
         viewModel.onTaskSetSelected(taskSet)

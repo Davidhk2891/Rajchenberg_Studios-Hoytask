@@ -1,7 +1,10 @@
 package com.rajchenbergstudios.hoytask.utils
 
+import android.app.Activity
+import android.app.Dialog
 import android.view.View
 import android.view.animation.Animation
+import com.facebook.shimmer.ShimmerFrameLayout
 
 class HTSKAnimationUtils {
 
@@ -25,6 +28,28 @@ class HTSKAnimationUtils {
                     v2.startAnimation(a)
                 }
             }
+        }
+
+        fun startShimmerView(activity: Activity, shimmerLayout: Int) {
+            val shimmerFrameLayout = activity.findViewById<ShimmerFrameLayout>(shimmerLayout)
+            shimmerFrameLayout.startShimmer()
+        }
+
+        fun startShimmerView(dialog: Dialog, shimmerLayout: Int) {
+            val shimmerFrameLayout = dialog.findViewById<ShimmerFrameLayout>(shimmerLayout)
+            shimmerFrameLayout.startShimmer()
+        }
+
+        fun stopShimmerView(activity: Activity, shimmerLayout: Int) {
+            val shimmerFrameLayout = activity.findViewById<ShimmerFrameLayout>(shimmerLayout)
+            shimmerFrameLayout.stopShimmer()
+            shimmerFrameLayout.visibility = View.GONE
+        }
+
+        fun stopShimmerView(dialog: Dialog, shimmerLayout: Int) {
+            val shimmerFrameLayout = dialog.findViewById<ShimmerFrameLayout>(shimmerLayout)
+            shimmerFrameLayout.stopShimmer()
+            shimmerFrameLayout.visibility = View.GONE
         }
     }
 }
