@@ -24,6 +24,7 @@ import com.rajchenbergstudios.hoytask.ui.createtaskset.CreateTaskSetDialogFragme
 import com.rajchenbergstudios.hoytask.utils.HTSKAnimationUtils
 import com.rajchenbergstudios.hoytask.utils.HTSKViewStateUtils
 import com.rajchenbergstudios.hoytask.utils.OnQueryTextChanged
+import com.rajchenbergstudios.hoytask.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -77,6 +78,7 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
             binding.apply {
                 HTSKViewStateUtils.apply {
                     if (taskSetsList.isEmpty()) {
+                        stopShimmerView()
                         setViewVisibility(tasksSetRecyclerview.layoutTasksListRecyclerview, visibility = View.INVISIBLE)
                         setViewVisibility(tasksSetLayoutNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)
                         setViewVisibility(tasksSetLayoutNoData.layoutNoDataImageview, visibility = View.GONE)
@@ -112,7 +114,7 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
                             }
                             .show()
                     }
-                }
+                }.exhaustive
             }
         }
 

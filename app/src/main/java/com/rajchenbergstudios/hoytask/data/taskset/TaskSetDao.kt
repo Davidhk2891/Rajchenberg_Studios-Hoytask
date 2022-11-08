@@ -18,6 +18,9 @@ interface TaskSetDao {
     @Query("DELETE FROM set_table")
     suspend fun deleteAllSets()
 
+    @Query("SELECT * FROM set_table LIMIT 1")
+    suspend fun firstItemFromList(): List<TaskSet>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(set: TaskSet)
 
