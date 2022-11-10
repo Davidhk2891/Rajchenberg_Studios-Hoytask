@@ -4,6 +4,8 @@ import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
@@ -16,14 +18,18 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.utils.HTSKViewStateUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 // private const val TAG = "MainActivity.kt"
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var bottomNavigationView: BottomNavigationView
+    private val fadeIn: Animation by lazy { AnimationUtils.loadAnimation(baseContext, R.anim.fade_in) }
+    private val fadeOut: Animation by lazy { AnimationUtils.loadAnimation(baseContext, R.anim.fade_out) }
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +49,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavControllerWithNavHostFrag(){
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.hoytask_nav_host_fragment_container)
                 as NavHostFragment
         navController = navHostFragment.findNavController()
     }
@@ -70,6 +76,8 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
+
+    // Logger.i(TAG, "onTodayFabClicked", "Today Fab clicked")
 }
 
 const val ADD_TASK_RESULT_OK = Activity.RESULT_FIRST_USER

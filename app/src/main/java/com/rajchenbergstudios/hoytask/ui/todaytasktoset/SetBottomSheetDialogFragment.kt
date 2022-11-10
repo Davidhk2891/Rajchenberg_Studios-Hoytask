@@ -72,6 +72,7 @@ class SetBottomSheetDialogFragment : BottomSheetDialogFragment(), SetBottomSheet
             binding.apply {
                 HTSKViewStateUtils.apply {
                     if (taskSetsList.isEmpty()) {
+                        stopShimmerView()
                         setViewVisibility(v1 = taskTodayAddToSetSetsRecyclerview.layoutTasksListRecyclerview, visibility = View.INVISIBLE)
                         setViewVisibility(v1 = taskTodayAddToSetNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)
                         setViewVisibility(v1 = taskTodayAddToSetNoData.layoutNoDataImageview, visibility = View.GONE)

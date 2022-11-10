@@ -44,6 +44,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
     private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close_anim) }
     private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.from_bottom_anim) }
     private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.to_bottom_anim) }
+
     private var clicked: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -212,7 +213,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                     is TasksListViewModel.TaskEvent.ShowTaskAddedFromSetConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
                         clicked = true
-                        setAnimationsAndViewStates(binding)
+                        setFabAnimationsAndViewStates(binding)
                     }
                 }.exhaustive
             }
@@ -259,6 +260,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
         binding.apply {
             tasksListFab.setOnClickListener {
                 onMainFabClick(binding)
+                //Need to add fab click event here to notify MainActivity
             }
             tasksListSubFab1.setOnClickListener {
                 viewModel.onAddTasksFromSetClick()
@@ -270,17 +272,17 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
     }
 
     private fun onMainFabClick(binding: FragmentTasksListBinding) {
-        setAnimationsAndViewStates(binding)
+        setFabAnimationsAndViewStates(binding)
     }
 
-    private fun setAnimationsAndViewStates(binding: FragmentTasksListBinding) {
-        setAnimation(binding, clicked)
-        setVisibility(binding, clicked)
-        setClickable(binding, clicked)
+    private fun setFabAnimationsAndViewStates(binding: FragmentTasksListBinding) {
+        setFabAnimation(binding, clicked)
+        setFabVisibility(binding, clicked)
+        setFabClickable(binding, clicked)
         clicked = !clicked
     }
 
-    private fun setAnimation(binding: FragmentTasksListBinding, clicked: Boolean) {
+    private fun setFabAnimation(binding: FragmentTasksListBinding, clicked: Boolean) {
         binding.apply {
             HTSKAnimationUtils.apply {
                 if (!clicked) {
@@ -296,7 +298,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
         }
     }
 
-    private fun setVisibility(binding: FragmentTasksListBinding, clicked: Boolean) {
+    private fun setFabVisibility(binding: FragmentTasksListBinding, clicked: Boolean) {
         binding.apply {
             HTSKViewStateUtils.apply {
                 if (!clicked) {
@@ -310,7 +312,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
         }
     }
 
-    private fun setClickable(binding: FragmentTasksListBinding, clicked: Boolean) {
+    private fun setFabClickable(binding: FragmentTasksListBinding, clicked: Boolean) {
         binding.apply {
             HTSKViewStateUtils.apply {
                 if (!clicked)
