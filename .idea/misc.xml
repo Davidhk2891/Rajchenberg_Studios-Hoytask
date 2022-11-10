@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/drawable/bottom_nav_selector.xml" value="0.1245" />
         <entry key="app/src/main/res/drawable/color_gradient_background.xml" value="0.1085" />
         <entry key="app/src/main/res/drawable/color_gradient_background_2.xml" value="0.1085" />
+        <entry key="app/src/main/res/drawable/custom_bottomsheetdialog.xml" value="0.18" />
         <entry key="app/src/main/res/drawable/edittext_custom.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.1235" />
         <entry key="app/src/main/res/drawable/ic_baseline_add_task_24.xml" value="0.1855" />
@@ -37,15 +38,21 @@
         <entry key="app/src/main/res/layout/fragment_tasks_set_details.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_tasks_set_edit.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_today_task_save_to_set.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_top_past_days.xml" value="0.40260416666666665" />
+        <entry key="app/src/main/res/layout/fragment_top_sets_of_tasks.xml" value="0.40260416666666665" />
+        <entry key="app/src/main/res/layout/fragment_top_today.xml" value="0.25" />
         <entry key="app/src/main/res/layout/item_days_list.xml" value="0.22" />
         <entry key="app/src/main/res/layout/item_tasks_list.xml" value="0.25" />
         <entry key="app/src/main/res/layout/layout_action_fabs.xml" value="0.40260416666666665" />
         <entry key="app/src/main/res/layout/layout_date_header.xml" value="0.24954710144927536" />
         <entry key="app/src/main/res/layout/layout_no_data_with_image.xml" value="0.23076923076923078" />
         <entry key="app/src/main/res/layout/layout_tasks_list.xml" value="0.25815217391304346" />
-        <entry key="app/src/main/res/layout/single_item_days_list.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/layout_transparent_white_view.xml" value="0.246875" />
+        <entry key="app/src/main/res/layout/single_item_days_list.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/single_item_shimmer_days_list.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/single_item_shimmer_tasks_set.xml" value="0.33" />
         <entry key="app/src/main/res/layout/single_item_tasks_list.xml" value="0.24954710144927536" />
-        <entry key="app/src/main/res/layout/single_item_tasks_set.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/single_item_tasks_set.xml" value="0.33" />
         <entry key="app/src/main/res/menu/menu_bottom_navigation.xml" value="0.40260416666666665" />
         <entry key="app/src/main/res/menu/menu_tasks_list_fragment.xml" value="0.33" />
         <entry key="app/src/main/res/menu/menu_tasks_set_fragment.xml" value="0.5" />

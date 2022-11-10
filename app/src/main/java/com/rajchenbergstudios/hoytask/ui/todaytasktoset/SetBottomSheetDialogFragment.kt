@@ -16,6 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSet
 import com.rajchenbergstudios.hoytask.databinding.FragmentSetBottomSheetBinding
+import com.rajchenbergstudios.hoytask.utils.HTSKAnimationUtils
 import com.rajchenbergstudios.hoytask.utils.HTSKViewStateUtils
 import com.rajchenbergstudios.hoytask.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,8 +34,8 @@ class SetBottomSheetDialogFragment : BottomSheetDialogFragment(), SetBottomSheet
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        startShimmerView()
         val binding = FragmentSetBottomSheetBinding.bind(view)
-
         val bottomSheetDialogAdapter = SetBottomSheetDialogAdapter(this)
 
         binding.apply {
@@ -71,11 +72,13 @@ class SetBottomSheetDialogFragment : BottomSheetDialogFragment(), SetBottomSheet
             binding.apply {
                 HTSKViewStateUtils.apply {
                     if (taskSetsList.isEmpty()) {
+                        stopShimmerView()
                         setViewVisibility(v1 = taskTodayAddToSetSetsRecyclerview.layoutTasksListRecyclerview, visibility = View.INVISIBLE)
                         setViewVisibility(v1 = taskTodayAddToSetNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)
                         setViewVisibility(v1 = taskTodayAddToSetNoData.layoutNoDataImageview, visibility = View.GONE)
                         taskTodayAddToSetNoData.layoutNoDataTextview.text = getString(R.string.you_don_t_have_any_sets)
                     } else {
+                        stopShimmerView()
                         setViewVisibility(v1 = taskTodayAddToSetSetsRecyclerview.layoutTasksListRecyclerview, visibility = View.VISIBLE)
                         setViewVisibility(v1 = taskTodayAddToSetNoData.layoutNoDataLinearlayout, visibility = View.INVISIBLE)
                         bottomSheetDialogAdapter.submitList(taskSetsList)
@@ -125,6 +128,10 @@ class SetBottomSheetDialogFragment : BottomSheetDialogFragment(), SetBottomSheet
             }
         }
     }
+
+    private fun startShimmerView() { HTSKAnimationUtils.startShimmerView(requireDialog(), R.id.task_today_add_to_set_shimmerframelayout) }
+
+    private fun stopShimmerView() { HTSKAnimationUtils.stopShimmerView(requireDialog(), R.id.task_today_add_to_set_shimmerframelayout) }
 
     override fun onTaskSetClick(taskSet: TaskSet, isChecked: Boolean) {
         viewModel.holdDataToSave(taskSet, isChecked)

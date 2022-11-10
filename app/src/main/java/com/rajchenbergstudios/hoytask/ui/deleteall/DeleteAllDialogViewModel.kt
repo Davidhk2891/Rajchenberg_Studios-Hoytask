@@ -2,12 +2,15 @@ package com.rajchenbergstudios.hoytask.ui.deleteall
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.rajchenbergstudios.hoytask.data.task.TaskDao
 import com.rajchenbergstudios.hoytask.data.taskinset.TaskInSetDao
 import com.rajchenbergstudios.hoytask.data.taskset.TaskSetDao
 import com.rajchenbergstudios.hoytask.di.ApplicationScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,26 +24,43 @@ class DeleteAllDialogViewModel @Inject constructor(
 ) : ViewModel(){
 
     private val origin = state.get<Int>("origin")
+    private val message = "Nothing to delete"
 
-    fun onConfirmClick() {
+    // DeleteAll channel
+    private val deleteAllEventChannel = Channel<DeleteAllEvent>()
+
+    // DeleteAll Event
+    val deleteAllEvent = deleteAllEventChannel.receiveAsFlow()
+
+    fun onConfirmClick(resultInterface: ResultInterface) {
         when (origin) {
-            1 -> {deleteAllCompletedTasks()}
-            2 -> {deleteAllSetsWithTasks()}
-            3 -> {deleteAllTasks()}
+            1 -> {deleteAllCompletedTasks(resultInterface)}
+            2 -> {deleteAllSetsWithTasks(resultInterface)}
+            3 -> {deleteAllTasks(resultInterface)}
         }
     }
 
-    private fun deleteAllCompletedTasks() = applicationScope.launch{
-        taskDao.deleteAllCompleted()
+    private fun deleteAllCompletedTasks(resultInterface: ResultInterface) = applicationScope.launch{
+        if (taskDao.firstItemFromList().isEmpty())
+            resultInterface.onShowEmptyListMessage(message)
+        else
+            taskDao.deleteAllCompleted()
     }
 
-    private fun deleteAllTasks() = applicationScope.launch {
-        taskDao.nukeTaskTable()
+    private fun deleteAllTasks(resultInterface: ResultInterface) = applicationScope.launch {
+        if (taskDao.firstItemFromList().isEmpty())
+            resultInterface.onShowEmptyListMessage(message)
+        else
+            taskDao.nukeTaskTable()
     }
 
-    private fun deleteAllSetsWithTasks() = applicationScope.launch {
-        taskInSetDao.deleteAllTasksInSets()
-        taskSetDao.deleteAllSets()
+    private fun deleteAllSetsWithTasks(resultInterface: ResultInterface) = applicationScope.launch {
+        if (taskSetDao.firstItemFromList().isEmpty())
+            resultInterface.onShowEmptyListMessage(message)
+        else {
+            taskInSetDao.deleteAllTasksInSets()
+            taskSetDao.deleteAllSets()
+        }
     }
 
     fun populateMessage(): String {
@@ -51,5 +71,17 @@ class DeleteAllDialogViewModel @Inject constructor(
             3 -> {message = "Do you really want to delete all tasks?"}
         }
         return message
+    }
+
+    fun showNothingToDeleteMessage(message: String) = viewModelScope.launch {
+        deleteAllEventChannel.send(DeleteAllEvent.ShowNothingToDeleteMessage(message))
+    }
+
+    interface ResultInterface {
+        fun onShowEmptyListMessage(message: String)
+    }
+
+    sealed class DeleteAllEvent {
+        data class ShowNothingToDeleteMessage(val message: String) : DeleteAllEvent()
     }
 }

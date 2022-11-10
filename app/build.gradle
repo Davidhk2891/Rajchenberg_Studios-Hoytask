@@ -44,7 +44,7 @@ dependencies {
     // androidx.core:core-ktx:1.9.0 causes a crash
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
@@ -54,7 +54,7 @@ dependencies {
     implementation 'androidx.core:core-splashscreen:1.0.0'
 
     // Fragment
-    implementation "androidx.fragment:fragment-ktx:1.5.2"
+    implementation "androidx.fragment:fragment-ktx:1.5.4"
 
     // LifeCycle + ViewModel & LiveData
     // androidx.lifecycle:lifecycle-viewmodel-ktx-:2.6.0-alpha02 causes a crash
@@ -63,8 +63,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.0-alpha01"
 
     // Navigation component
-    implementation "androidx.navigation:navigation-fragment-ktx:2.5.2"
-    implementation "androidx.navigation:navigation-ui-ktx:2.5.2"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
+    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
 
     // Room
     implementation "androidx.room:room-runtime:2.4.3"
@@ -92,6 +92,9 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.12.6'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.12.6'
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.12.6"
+
+    // Facebook Shimmer view
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 }
 
 kapt {
