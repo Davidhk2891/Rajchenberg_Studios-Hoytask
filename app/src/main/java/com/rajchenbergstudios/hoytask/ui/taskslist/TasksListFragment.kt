@@ -97,7 +97,6 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
     private fun loadMenu(){
 
         val menuHost: MenuHost = requireActivity()
-
         menuHost.addMenuProvider(object: MenuProvider{
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
