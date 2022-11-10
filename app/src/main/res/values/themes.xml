@@ -1,11 +1,11 @@
 <resources>
 
-    <!-- Hoytask base theme -->
+    <!-- Hoygenda base theme -->
     <style name="HoytaskBaseTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:textColorSecondary">@color/hoytask_grey</item>
     </style>
 
-    <!-- Hoytask main theme -->
+    <!-- Hoygenda main theme -->
     <style name="Theme.Hoytask.main" parent="HoytaskBaseTheme">
         <!-- Primary brand color -->
         <item name="colorPrimary">@color/hoytask_white</item>
@@ -22,6 +22,8 @@
         <item name="android:navigationBarColor">@color/hoytask_white</item>
         <!-- Overflow menu -->
         <item name="android:textColorSecondary">@color/hoytask_grey</item>
+        <!-- BottomSheetDialog -->
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
     <style name="CustomActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
@@ -31,6 +33,15 @@
 
     <style name="Threedotscolor" parent="Widget.AppCompat.Light.ActionButton.Overflow">
         <item name="tint">@color/hoytask_grey</item>
+    </style>
+
+    <!-- Hoygenda BottomSheetDialog theme -->
+    <style name="AppBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/custom_bottomsheetdialog</item>
     </style>
 
 </resources>
