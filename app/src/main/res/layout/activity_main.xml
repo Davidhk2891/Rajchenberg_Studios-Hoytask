@@ -22,7 +22,7 @@
         tools:ignore="MissingConstraints" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/nav_host_fragment_container"
+        android:id="@+id/hoytask_nav_host_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"

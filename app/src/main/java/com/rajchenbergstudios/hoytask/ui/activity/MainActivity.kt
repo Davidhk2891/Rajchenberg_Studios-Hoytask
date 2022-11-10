@@ -16,14 +16,18 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rajchenbergstudios.hoytask.R
 import com.rajchenbergstudios.hoytask.utils.HTSKViewStateUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 // private const val TAG = "MainActivity.kt"
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var bottomNavigationView: BottomNavigationView
+
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +47,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavControllerWithNavHostFrag(){
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.hoytask_nav_host_fragment_container)
                 as NavHostFragment
         navController = navHostFragment.findNavController()
     }

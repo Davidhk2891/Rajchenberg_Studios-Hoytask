@@ -39,6 +39,7 @@ class DaysListFragment : Fragment(R.layout.fragment_days_history), DaysListAdapt
             binding.apply {
                 HTSKViewStateUtils.apply {
                     if (daysList.isEmpty()) {
+                        stopShimmerView()
                         setViewVisibility(daysListRecyclerview, visibility = View.INVISIBLE)
                         setViewVisibility(daysListLayoutNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)
                         setViewVisibility(daysListLayoutNoData.layoutNoDataImageview, visibility = View.GONE)

@@ -25,4 +25,5 @@
     <color name="hoytask_card_view_light_beige">#FFF7F1</color>
     <color name="hoytask_card_view_light_purple">#D9D7EE</color>
     <color name="hoytask_card_view_light_orange">#F18725</color>
+    <color name="hoytask_75_transparent_white">#B3FFFFFF</color>
 </resources>
