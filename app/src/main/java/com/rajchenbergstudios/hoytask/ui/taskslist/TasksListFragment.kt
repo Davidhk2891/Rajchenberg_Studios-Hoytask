@@ -40,12 +40,14 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
 
     private lateinit var searchView: SearchView
 
+    private var fabClicked: Boolean = false
+
     private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open_anim) }
     private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close_anim) }
     private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.from_bottom_anim) }
     private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.to_bottom_anim) }
-
-    private var clicked: Boolean = false
+    private val fadeIn: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in) }
+    private val fadeOut: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,10 +58,14 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
         binding.apply {
 
             tasksListRecyclerview.layoutTasksListRecyclerview.apply {
-
                 adapter = tasksListAdapter
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
+            }
+
+            tasksListTransparentWhiteScreen.setOnClickListener {
+                fabAnimationsRollBack(binding)
+                fabClicked = !fabClicked
             }
 
             ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0,
@@ -212,7 +218,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
                     }
                     is TasksListViewModel.TaskEvent.ShowTaskAddedFromSetConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
-                        clicked = true
+                        fabClicked = true
                         setFabAnimationsAndViewStates(binding)
                     }
                 }.exhaustive
@@ -260,7 +266,6 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
         binding.apply {
             tasksListFab.setOnClickListener {
                 onMainFabClick(binding)
-                //Need to add fab click event here to notify MainActivity
             }
             tasksListSubFab1.setOnClickListener {
                 viewModel.onAddTasksFromSetClick()
@@ -276,49 +281,46 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
     }
 
     private fun setFabAnimationsAndViewStates(binding: FragmentTasksListBinding) {
-        setFabAnimation(binding, clicked)
-        setFabVisibility(binding, clicked)
-        setFabClickable(binding, clicked)
-        clicked = !clicked
+        setFabAnimationVisibilityAndClickability(binding, fabClicked)
+        fabClicked = !fabClicked
     }
 
-    private fun setFabAnimation(binding: FragmentTasksListBinding, clicked: Boolean) {
+    private fun setFabAnimationVisibilityAndClickability(binding: FragmentTasksListBinding, clicked: Boolean) {
+        if (!clicked) fabAnimationsRollIn(binding) else fabAnimationsRollBack(binding)
+    }
+
+    private fun fabAnimationsRollIn(binding: FragmentTasksListBinding) {
         binding.apply {
             HTSKAnimationUtils.apply {
-                if (!clicked) {
+                HTSKViewStateUtils.apply {
                     setViewAnimation(v1 = tasksListFab, a = rotateOpen)
                     setViewAnimation(v1 = tasksListSubFab1, v2 = tasksListSubFab2, a = fromBottom)
                     setViewAnimation(v1 = tasksListSubFab1Tv, v2 = tasksListSubFab2Tv, a = fromBottom)
-                } else {
+                    setViewAnimation(v1 = tasksListTransparentWhiteScreen, a = fadeIn)
+                    setViewVisibility(tasksListSubFab1, tasksListSubFab2
+                        , tasksListSubFab1Tv, tasksListSubFab2Tv, View.VISIBLE)
+                    setViewVisibility(v1 = tasksListTransparentWhiteScreen, visibility = View.VISIBLE)
+                    setViewClickState(v1 = tasksListSubFab1, v2 = tasksListSubFab2, clickable = true)
+                    setViewClickState(v1 = tasksListTransparentWhiteScreen, clickable = true)
+                }
+            }
+        }
+    }
+
+    private fun fabAnimationsRollBack(binding: FragmentTasksListBinding) {
+        binding.apply {
+            HTSKAnimationUtils.apply {
+                HTSKViewStateUtils.apply {
                     setViewAnimation(v1 = tasksListFab, a = rotateClose)
                     setViewAnimation(v1 = tasksListSubFab1, v2 = tasksListSubFab2, a = toBottom)
                     setViewAnimation(v1 = tasksListSubFab1Tv, v2 = tasksListSubFab2Tv, a = toBottom)
-                }
-            }
-        }
-    }
-
-    private fun setFabVisibility(binding: FragmentTasksListBinding, clicked: Boolean) {
-        binding.apply {
-            HTSKViewStateUtils.apply {
-                if (!clicked) {
-                    setViewVisibility(tasksListSubFab1, tasksListSubFab2
-                        , tasksListSubFab1Tv, tasksListSubFab2Tv, View.VISIBLE)
-                } else {
+                    setViewAnimation(v1 = tasksListTransparentWhiteScreen, a = fadeOut)
                     setViewVisibility(tasksListSubFab1, tasksListSubFab2
                         , tasksListSubFab1Tv, tasksListSubFab2Tv, View.INVISIBLE)
-                }
-            }
-        }
-    }
-
-    private fun setFabClickable(binding: FragmentTasksListBinding, clicked: Boolean) {
-        binding.apply {
-            HTSKViewStateUtils.apply {
-                if (!clicked)
-                    setViewClickState(v1 = tasksListSubFab1, v2 = tasksListSubFab2, clickable = true)
-                else
+                    setViewVisibility(v1 = tasksListTransparentWhiteScreen, visibility = View.INVISIBLE)
                     setViewClickState(v1 = tasksListSubFab1, v2 = tasksListSubFab2, clickable = false)
+                    setViewClickState(v1 = tasksListTransparentWhiteScreen, clickable = false)
+                }
             }
         }
     }
@@ -337,7 +339,7 @@ class TasksListFragment : Fragment(R.layout.fragment_tasks_list), TasksListAdapt
 
     override fun onPause() {
         super.onPause()
-        clicked = false
+        fabClicked = false
     }
 
     override fun onDestroyView() {

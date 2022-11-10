@@ -4,8 +4,6 @@ import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
@@ -25,11 +23,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var bottomNavigationView: BottomNavigationView
-    private val fadeIn: Animation by lazy { AnimationUtils.loadAnimation(baseContext, R.anim.fade_in) }
-    private val fadeOut: Animation by lazy { AnimationUtils.loadAnimation(baseContext, R.anim.fade_out) }
+
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,8 +74,6 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
-
-    // Logger.i(TAG, "onTodayFabClicked", "Today Fab clicked")
 }
 
 const val ADD_TASK_RESULT_OK = Activity.RESULT_FIRST_USER

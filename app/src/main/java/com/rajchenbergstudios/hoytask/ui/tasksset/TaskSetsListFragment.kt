@@ -36,8 +36,6 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
 
     private lateinit var searchView: SearchView
 
-    // TODO: Try latest method from Stackoverflow https://stackoverflow.com/questions/58196589/pass-click-event-on-a-view-in-a-fragment-to-the-activity
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
