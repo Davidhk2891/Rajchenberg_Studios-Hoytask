@@ -3,21 +3,21 @@ package com.rajchenbergstudios.hoygenda.utils
 import androidx.room.TypeConverter
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.rajchenbergstudios.hoygenda.data.task.Task
+import com.rajchenbergstudios.hoygenda.data.today.Today
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSet
 
-class HTSKTypeConvUtils {
+class HGDATypeConvUtils {
 
     // Serialize Task List
     @TypeConverter
-    fun fromTaskListToJson(list: List<Task>): String {
+    fun fromTaskListToJson(list: List<Today>): String {
         val mapper = jacksonObjectMapper()
         return mapper.writeValueAsString(list)
     }
 
     // Unserialize Task List
     @TypeConverter
-    fun fromJsonToTaskList(json: String): List<Task> {
+    fun fromJsonToTaskList(json: String): List<Today> {
         val mapper = jacksonObjectMapper()
         return mapper.readValue(json)
     }

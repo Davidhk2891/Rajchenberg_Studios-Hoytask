@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.rajchenbergstudios.hoygenda.data.task.Task
-import com.rajchenbergstudios.hoygenda.data.task.TaskDao
+import com.rajchenbergstudios.hoygenda.data.today.Today
+import com.rajchenbergstudios.hoygenda.data.today.TodayDao
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSet
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSetDao
 import com.rajchenbergstudios.hoygenda.data.taskset.TaskSet
@@ -25,18 +25,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TaskToSetBottomSheetDialogViewModel @Inject constructor(
-    private val taskDao: TaskDao,
+    private val todayDao: TodayDao,
     private val taskSetDao: TaskSetDao,
     private val taskInSetDao: TaskInSetDao,
     @ApplicationScope private val applicationScope: CoroutineScope,
     state: SavedStateHandle
 ) : ViewModel(){
 
-    val task = state.get<Task>("task")
+    val mToday = state.get<Today>("task")
 
     val origin = state.get<Int>("origin")
 
-    private val taskName = state.get<String>("taskName") ?: task?.name
+    private val taskName = state.get<String>("taskName") ?: mToday?.content
 
     private val setsTitles: ArrayList<String> = ArrayList()
 
@@ -49,7 +49,7 @@ class TaskToSetBottomSheetDialogViewModel @Inject constructor(
     val taskSets = taskSetDao.getSets().asLiveData()
 
     fun onCreateSetClicked() = viewModelScope.launch {
-        taskToSetChannel.send(TaskToSetEvent.NavigateToCreateTaskSetDialog(task))
+        taskToSetChannel.send(TaskToSetEvent.NavigateToCreateTaskSetDialog(mToday))
     }
 
     fun onCreateSetResult(result: Int) = viewModelScope.launch {
@@ -86,7 +86,7 @@ class TaskToSetBottomSheetDialogViewModel @Inject constructor(
         var conditionChecked = false
         for (setTitle in setsTitles) {
             for (task in taskInSetDao.getTasksFromSet(setTitle)) {
-                taskDao.insert(Task(task.taskInSet))
+                todayDao.insert(Today(task.taskInSet))
                 if (!conditionChecked){
                     if (taskInSetDao.getTasksFromSet(setTitle).size > 1) {
                         multipleTasks = true
@@ -148,7 +148,7 @@ class TaskToSetBottomSheetDialogViewModel @Inject constructor(
         object NavigateBackWithNoSetsSelected : TaskToSetEvent()
         data class NaigateBackWithResultUponSavingTaskToSet(val result: Int, val msg: String) : TaskToSetEvent()
         data class NavigateBackWithResultUponAddingTasksFromSet(val result: Int, val msg: String) : TaskToSetEvent()
-        data class NavigateToCreateTaskSetDialog(val task: Task?) : TaskToSetEvent()
+        data class NavigateToCreateTaskSetDialog(val today: Today?) : TaskToSetEvent()
         data class NavigateBackWithResultFromSetCreatedWithTask(val result: Int) : TaskToSetEvent()
     }
 }

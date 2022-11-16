@@ -1,12 +1,12 @@
-package com.rajchenbergstudios.hoygenda.ui.taskslist
+package com.rajchenbergstudios.hoygenda.ui.todaylist
 
 import androidx.lifecycle.*
 import com.rajchenbergstudios.hoygenda.data.prefs.PreferencesManager
 import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
-import com.rajchenbergstudios.hoygenda.data.task.Task
-import com.rajchenbergstudios.hoygenda.data.task.TaskDao
+import com.rajchenbergstudios.hoygenda.data.today.Today
+import com.rajchenbergstudios.hoygenda.data.today.TodayDao
 import com.rajchenbergstudios.hoygenda.ui.activity.*
-import com.rajchenbergstudios.hoygenda.utils.HTSKDateUtils
+import com.rajchenbergstudios.hoygenda.utils.HGDADateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -14,12 +14,12 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-// private const val TAG = "TasksListViewModel"
+// private const val TAG = "TodayListViewModel"
 
 @ExperimentalCoroutinesApi
 @HiltViewModel
-class TasksListViewModel @Inject constructor(
-    private val taskDao: TaskDao,
+class TodayListViewModel @Inject constructor(
+    private val todayDao: TodayDao,
     private val preferencesManager: PreferencesManager,
     state: SavedStateHandle
 ) : ViewModel(){
@@ -41,7 +41,7 @@ class TasksListViewModel @Inject constructor(
     ) { searchQuery, filterPreferences ->
         Pair(searchQuery, filterPreferences)
     }.flatMapLatest { (searchQuery, filterPreferences) ->
-        taskDao.getTasks(searchQuery, filterPreferences.sortOrder, filterPreferences.hideCompleted)
+        todayDao.getTodays(searchQuery, filterPreferences.sortOrder, filterPreferences.hideCompleted)
     }
 
     fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {
@@ -52,21 +52,21 @@ class TasksListViewModel @Inject constructor(
         preferencesManager.updateHideCompleted(hideCompleted)
     }
 
-    fun onTaskSelected(task: Task) = viewModelScope.launch {
-        tasksEventChannel.send(TaskEvent.NavigateToEditTaskScreen(task))
+    fun onTaskSelected(today: Today) = viewModelScope.launch {
+        tasksEventChannel.send(TaskEvent.NavigateToEditTaskScreen(today))
     }
 
-    fun onTaskCheckedChanged(task: Task, isChecked: Boolean) = viewModelScope.launch {
-        taskDao.update(task.copy(completed = isChecked))
+    fun onTaskCheckedChanged(today: Today, isChecked: Boolean) = viewModelScope.launch {
+        todayDao.update(today.copy(completed = isChecked))
     }
 
-    fun onTaskSwiped(task: Task) = viewModelScope.launch {
-        taskDao.delete(task)
-        tasksEventChannel.send(TaskEvent.ShowUndoDeleteTaskMessage(task))
+    fun onTaskSwiped(today: Today) = viewModelScope.launch {
+        todayDao.delete(today)
+        tasksEventChannel.send(TaskEvent.ShowUndoDeleteTaskMessage(today))
     }
 
-    fun onUndoDeleteClick(task: Task) = viewModelScope.launch {
-        taskDao.insert(task)
+    fun onUndoDeleteClick(today: Today) = viewModelScope.launch {
+        todayDao.insert(today)
     }
 
     fun onAddNewTaskClick() = viewModelScope.launch {
@@ -108,23 +108,23 @@ class TasksListViewModel @Inject constructor(
     }
 
     fun getCurrentDayOfMonth(): String {
-        return HTSKDateUtils.currentDayOfMonthFormatted
+        return HGDADateUtils.currentDayOfMonthFormatted
     }
 
     fun getCurrentMonth(): String {
-        return HTSKDateUtils.currentMonthFormatted
+        return HGDADateUtils.currentMonthFormatted
     }
 
     fun getCurrentYear(): String {
-        return HTSKDateUtils.currentYearFormatted
+        return HGDADateUtils.currentYearFormatted
     }
 
     fun getCurrentDayOfWeek(): String {
-        return HTSKDateUtils.currentDayOfWeekFormatted
+        return HGDADateUtils.currentDayOfWeekFormatted
     }
 
-    fun onTaskLongSelected(task: Task) = viewModelScope.launch {
-        tasksEventChannel.send(TaskEvent.NavigateToAddTaskToSetBottomSheet(task))
+    fun onTaskLongSelected(today: Today) = viewModelScope.launch {
+        tasksEventChannel.send(TaskEvent.NavigateToAddTaskToSetBottomSheet(today))
     }
 
     val tasks = tasksFlow.asLiveData()
@@ -134,9 +134,9 @@ class TasksListViewModel @Inject constructor(
         object NavigateToDeleteAllCompletedScreen : TaskEvent()
         object NavigateToAddTaskScreen : TaskEvent()
         object NavigateToAddTasksFromSetBottomSheet : TaskEvent()
-        data class NavigateToEditTaskScreen(val task: Task) : TaskEvent()
-        data class NavigateToAddTaskToSetBottomSheet(val task: Task) : TaskEvent()
-        data class ShowUndoDeleteTaskMessage(val task: Task) : TaskEvent()
+        data class NavigateToEditTaskScreen(val today: Today) : TaskEvent()
+        data class NavigateToAddTaskToSetBottomSheet(val today: Today) : TaskEvent()
+        data class ShowUndoDeleteTaskMessage(val today: Today) : TaskEvent()
         data class ShowTaskSavedConfirmationMessage(val msg: String) : TaskEvent()
         data class ShowTaskSavedInNewOrOldSetConfirmationMessage(val msg: String?) : TaskEvent()
         data class ShowTaskAddedFromSetConfirmationMessage(val msg: String?) : TaskEvent()

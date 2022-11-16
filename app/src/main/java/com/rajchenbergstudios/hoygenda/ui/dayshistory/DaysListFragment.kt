@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.data.day.Day
 import com.rajchenbergstudios.hoygenda.databinding.FragmentDaysHistoryBinding
-import com.rajchenbergstudios.hoygenda.utils.HTSKAnimationUtils
-import com.rajchenbergstudios.hoygenda.utils.HTSKViewStateUtils
+import com.rajchenbergstudios.hoygenda.utils.HGDAAnimationUtils
+import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,7 +37,7 @@ class DaysListFragment : Fragment(R.layout.fragment_days_history), DaysListAdapt
 
         viewModel.days.observe(viewLifecycleOwner){ daysList ->
             binding.apply {
-                HTSKViewStateUtils.apply {
+                HGDAViewStateUtils.apply {
                     if (daysList.isEmpty()) {
                         stopShimmerView()
                         setViewVisibility(daysListRecyclerview, visibility = View.INVISIBLE)
@@ -66,9 +66,9 @@ class DaysListFragment : Fragment(R.layout.fragment_days_history), DaysListAdapt
         }
     }
 
-    private fun startShimmerView() { HTSKAnimationUtils.startShimmerView(requireActivity(), R.id.days_list_shimmerframelayout) }
+    private fun startShimmerView() { HGDAAnimationUtils.startShimmerView(requireActivity(), R.id.days_list_shimmerframelayout) }
 
-    private fun stopShimmerView() { HTSKAnimationUtils.stopShimmerView(requireActivity(), R.id.days_list_shimmerframelayout) }
+    private fun stopShimmerView() { HGDAAnimationUtils.stopShimmerView(requireActivity(), R.id.days_list_shimmerframelayout) }
 
     override fun onItemClick(day: Day) {
         viewModel.onDaySelected(day)

@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rajchenbergstudios.hoygenda.data.day.Day
 import com.rajchenbergstudios.hoygenda.data.day.DayDao
-import com.rajchenbergstudios.hoygenda.data.task.Task
-import com.rajchenbergstudios.hoygenda.data.task.TaskDao
+import com.rajchenbergstudios.hoygenda.data.today.Today
+import com.rajchenbergstudios.hoygenda.data.today.TodayDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val taskDao: TaskDao,
+    private val todayDao: TodayDao,
     private val dayDao: DayDao
 ) : ViewModel(){
 
@@ -42,7 +42,7 @@ class MainViewModel @Inject constructor(
     }
 
     private suspend fun pullListAndCompareDate() {
-        val tasksList = taskDao.getTasks()
+        val tasksList = todayDao.getTodays()
         if (tasksList.isNotEmpty()) {
             val lastTaskDateInMillis = tasksList.last().created
             val localDate = LocalDate.now()
@@ -54,7 +54,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun saveTasksToDay(tasksList: List<Task>, tasksDate: LocalDate) = viewModelScope.launch {
+    private fun saveTasksToDay(tasksList: List<Today>, tasksDate: LocalDate) = viewModelScope.launch {
         dayDao.insert(Day(
             tasksDate.dayOfWeek.toString(),
             tasksDate.dayOfMonth.toString(),
@@ -65,6 +65,6 @@ class MainViewModel @Inject constructor(
     }
 
     private fun nukeTodayTasks() = viewModelScope.launch {
-        taskDao.nukeTaskTable()
+        todayDao.nukeTaskTable()
     }
 }

@@ -16,8 +16,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.data.taskset.TaskSet
 import com.rajchenbergstudios.hoygenda.databinding.FragmentSetBottomSheetBinding
-import com.rajchenbergstudios.hoygenda.utils.HTSKAnimationUtils
-import com.rajchenbergstudios.hoygenda.utils.HTSKViewStateUtils
+import com.rajchenbergstudios.hoygenda.utils.HGDAAnimationUtils
+import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -70,7 +70,7 @@ class SetBottomSheetDialogFragment : BottomSheetDialogFragment(), SetBottomSheet
 
         viewModel.taskSets.observe(viewLifecycleOwner) { taskSetsList ->
             binding.apply {
-                HTSKViewStateUtils.apply {
+                HGDAViewStateUtils.apply {
                     if (taskSetsList.isEmpty()) {
                         stopShimmerView()
                         setViewVisibility(v1 = taskTodayAddToSetSetsRecyclerview.layoutTasksListRecyclerview, visibility = View.INVISIBLE)
@@ -92,7 +92,7 @@ class SetBottomSheetDialogFragment : BottomSheetDialogFragment(), SetBottomSheet
                 when (event) {
                     is TaskToSetBottomSheetDialogViewModel.TaskToSetEvent.NavigateToCreateTaskSetDialog -> {
                         val action = SetBottomSheetDialogFragmentDirections
-                            .actionGlobalCreateTaskSetDialogFragment(task = event.task, origin = 2)
+                            .actionGlobalCreateTaskSetDialogFragment(task = event.today, origin = 2)
                         findNavController().navigate(action)
                     }
                     is TaskToSetBottomSheetDialogViewModel.TaskToSetEvent.NavigateBackWithResultFromSetCreatedWithTask -> {
@@ -129,9 +129,9 @@ class SetBottomSheetDialogFragment : BottomSheetDialogFragment(), SetBottomSheet
         }
     }
 
-    private fun startShimmerView() { HTSKAnimationUtils.startShimmerView(requireDialog(), R.id.task_today_add_to_set_shimmerframelayout) }
+    private fun startShimmerView() { HGDAAnimationUtils.startShimmerView(requireDialog(), R.id.task_today_add_to_set_shimmerframelayout) }
 
-    private fun stopShimmerView() { HTSKAnimationUtils.stopShimmerView(requireDialog(), R.id.task_today_add_to_set_shimmerframelayout) }
+    private fun stopShimmerView() { HGDAAnimationUtils.stopShimmerView(requireDialog(), R.id.task_today_add_to_set_shimmerframelayout) }
 
     override fun onTaskSetClick(taskSet: TaskSet, isChecked: Boolean) {
         viewModel.holdDataToSave(taskSet, isChecked)

@@ -6,13 +6,13 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.rajchenbergstudios.hoygenda.data.task.Task
-import com.rajchenbergstudios.hoygenda.databinding.SingleItemTasksListBinding
+import com.rajchenbergstudios.hoygenda.data.today.Today
+import com.rajchenbergstudios.hoygenda.databinding.SingleItemTodayBinding
 
-class DaysDetailsTasksAdapter : ListAdapter<Task, DaysDetailsTasksAdapter.DaysDetailsTasksViewHolder>(DiffCallback()){
+class DaysDetailsTasksAdapter : ListAdapter<Today, DaysDetailsTasksAdapter.DaysDetailsTasksViewHolder>(DiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DaysDetailsTasksViewHolder {
-        val binding = SingleItemTasksListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = SingleItemTodayBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return DaysDetailsTasksViewHolder(binding)
     }
 
@@ -21,25 +21,25 @@ class DaysDetailsTasksAdapter : ListAdapter<Task, DaysDetailsTasksAdapter.DaysDe
         holder.bind(currentItem)
     }
 
-    class DaysDetailsTasksViewHolder(private val binding: SingleItemTasksListBinding) : RecyclerView.ViewHolder(binding.root) {
+    class DaysDetailsTasksViewHolder(private val binding: SingleItemTodayBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(task: Task) {
+        fun bind(today: Today) {
             binding.apply {
-                itemTaskTitleTextview.text = task.name
+                itemTaskTitleTextview.text = today.content
                 itemTaskCompletedCheckbox.isClickable = false
-                itemTaskCompletedCheckbox.isChecked = task.completed
-                itemTaskTitleTextview.paint.isStrikeThruText = task.completed
-                itemTaskImportantImageview.isVisible = task.important
+                itemTaskCompletedCheckbox.isChecked = today.completed
+                itemTaskTitleTextview.paint.isStrikeThruText = today.completed
+                itemTaskImportantImageview.isVisible = today.important
             }
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<Task>() {
+    class DiffCallback : DiffUtil.ItemCallback<Today>() {
 
-        override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean
+        override fun areItemsTheSame(oldItem: Today, newItem: Today): Boolean
             = oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean
+        override fun areContentsTheSame(oldItem: Today, newItem: Today): Boolean
             = oldItem.id == newItem.id
     }
 }

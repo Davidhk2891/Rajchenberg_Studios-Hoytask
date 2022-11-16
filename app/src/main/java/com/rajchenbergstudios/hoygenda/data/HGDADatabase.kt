@@ -7,13 +7,13 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.rajchenbergstudios.hoygenda.data.day.Day
 import com.rajchenbergstudios.hoygenda.data.day.DayDao
 import com.rajchenbergstudios.hoygenda.data.taskset.TaskSetDao
-import com.rajchenbergstudios.hoygenda.data.task.Task
-import com.rajchenbergstudios.hoygenda.data.task.TaskDao
+import com.rajchenbergstudios.hoygenda.data.today.Today
+import com.rajchenbergstudios.hoygenda.data.today.TodayDao
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSet
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSetDao
 import com.rajchenbergstudios.hoygenda.data.taskset.TaskSet
 import com.rajchenbergstudios.hoygenda.di.ApplicationScope
-import com.rajchenbergstudios.hoygenda.utils.HTSKTypeConvUtils
+import com.rajchenbergstudios.hoygenda.utils.HGDATypeConvUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,30 +21,30 @@ import javax.inject.Provider
 
 // const val TAG = "HoytaskDatabase.kt"
 
-@Database(entities = [Task::class, Day::class, TaskSet::class, TaskInSet::class], version = 16, exportSchema = false)
-@TypeConverters(HTSKTypeConvUtils::class)
-abstract class HTSKDatabase : RoomDatabase(){
+@Database(entities = [Today::class, Day::class, TaskSet::class, TaskInSet::class], version = 19, exportSchema = false)
+@TypeConverters(HGDATypeConvUtils::class)
+abstract class HGDADatabase : RoomDatabase(){
 
-    abstract fun taskDao(): TaskDao
+    abstract fun todayDao(): TodayDao
     abstract fun taskSetDao(): TaskSetDao
     abstract fun taskInSetDao(): TaskInSetDao
     abstract fun dayDao(): DayDao
 
     class Callback @Inject constructor(
-        private val database: Provider<HTSKDatabase>,
+        private val database: Provider<HGDADatabase>,
         @ApplicationScope private val applicationScope: CoroutineScope
     ): RoomDatabase.Callback() {
 
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
 
-            val taskDao = database.get().taskDao()
+            val todayDao = database.get().todayDao()
             val taskSetDao = database.get().taskSetDao()
             val taskInSetDao = database.get().taskInSetDao()
 
             // Initial Task for current day
             applicationScope.launch {
-                taskDao.insert(Task("Start setting up your tasks", important = true))
+                todayDao.insert(Today("Start setting up your tasks", important = true))
             }
 
             //Initial set of tasks (testing)
@@ -81,7 +81,7 @@ abstract class HTSKDatabase : RoomDatabase(){
                     insert(set3)
 
                     var i = 0
-                    repeat(8){
+                    repeat(6){
                         i += 1
                         val testTask1 = TaskInSet("Do thing 1", "Set $i")
                         val testTask2 = TaskInSet("Do thing 2", "Set $i")

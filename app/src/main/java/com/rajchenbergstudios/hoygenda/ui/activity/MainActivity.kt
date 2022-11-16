@@ -14,7 +14,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rajchenbergstudios.hoygenda.R
-import com.rajchenbergstudios.hoygenda.utils.HTSKViewStateUtils
+import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -54,19 +54,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomNavigationView(){
         bottomNavigationView = findViewById(R.id.hoytask_bottom_nav)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.tasksListFragment, R.id.daysListFragment, R.id.taskSetsListFragment))
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.todayListFragment, R.id.daysListFragment, R.id.taskSetsListFragment))
         bottomNavigationView.setupWithNavController(navController)
     }
 
     private fun setupBottomNavStateConfig(){
         navController.addOnDestinationChangedListener{ _, destination, _ ->
             when (destination.id) {
-                R.id.tasksListFragment -> HTSKViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
-                R.id.taskSetsListFragment -> HTSKViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
-                R.id.daysListFragment -> HTSKViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
-                R.id.taskAddEditFragment -> HTSKViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.GONE)
-                R.id.tasksSetEditListFragment -> HTSKViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.GONE)
-                R.id.daysDetailsFragment -> HTSKViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.GONE)
+                R.id.todayListFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
+                R.id.taskSetsListFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
+                R.id.daysListFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
+                R.id.taskAddEditFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.GONE)
+                R.id.tasksSetEditListFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.GONE)
+                R.id.daysDetailsFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.GONE)
             }
         }
     }
@@ -82,4 +82,6 @@ const val CREATE_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 2
 const val EDIT_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 3
 const val ADD_TASK_FROM_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 4
 
+// TODO: 'Delete all completed' in Today when nothing is completed, doesn't trigger the 'nothing to delete'
+// TODO: Adding task to newly created set creates the set, but doesn't add the task to the set
 // TODO: Write down what happened in notebook (how you solved the expandable fab issue. That little attribute)

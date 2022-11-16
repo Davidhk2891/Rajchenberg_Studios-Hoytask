@@ -1,4 +1,4 @@
-package com.rajchenbergstudios.hoygenda.ui.taskslist
+package com.rajchenbergstudios.hoygenda.ui.todaylist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,14 +6,14 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.rajchenbergstudios.hoygenda.data.task.Task
-import com.rajchenbergstudios.hoygenda.databinding.SingleItemTasksListBinding
+import com.rajchenbergstudios.hoygenda.data.today.Today
+import com.rajchenbergstudios.hoygenda.databinding.SingleItemTodayBinding
 
-class TasksListAdapter(private val listener: OnItemClickListener) : ListAdapter<Task, TasksListAdapter.TasksListViewHolder>(DiffCallback()) {
+class TodayListAdapter(private val listener: OnItemClickListener) : ListAdapter<Today, TodayListAdapter.TasksListViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksListViewHolder {
 
-        val binding = SingleItemTasksListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = SingleItemTodayBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TasksListViewHolder(binding)
     }
 
@@ -23,7 +23,7 @@ class TasksListAdapter(private val listener: OnItemClickListener) : ListAdapter<
         holder.bind(currentItem)
     }
 
-    inner class TasksListViewHolder(private val binding: SingleItemTasksListBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class TasksListViewHolder(private val binding: SingleItemTodayBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.apply {
@@ -52,29 +52,29 @@ class TasksListAdapter(private val listener: OnItemClickListener) : ListAdapter<
             }
         }
 
-        fun bind(task: Task){
+        fun bind(today: Today){
 
             binding.apply {
-                itemTaskCompletedCheckbox.isChecked = task.completed
-                itemTaskTitleTextview.text = task.name
-                itemTaskTitleTextview.paint.isStrikeThruText = task.completed
-                itemTaskImportantImageview.isVisible = task.important
+                itemTaskCompletedCheckbox.isChecked = today.completed
+                itemTaskTitleTextview.text = today.content
+                itemTaskTitleTextview.paint.isStrikeThruText = today.completed
+                itemTaskImportantImageview.isVisible = today.important
             }
         }
     }
 
     interface OnItemClickListener {
-        fun onItemClick(task: Task)
-        fun onItemLongClick(task: Task)
-        fun onCheckboxClick(task: Task, isChecked: Boolean)
+        fun onItemClick(today: Today)
+        fun onItemLongClick(today: Today)
+        fun onCheckboxClick(today: Today, isChecked: Boolean)
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<Task>() {
+    class DiffCallback : DiffUtil.ItemCallback<Today>() {
 
-        override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean
+        override fun areItemsTheSame(oldItem: Today, newItem: Today): Boolean
             = oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean
+        override fun areContentsTheSame(oldItem: Today, newItem: Today): Boolean
             = oldItem == newItem
     }
 }

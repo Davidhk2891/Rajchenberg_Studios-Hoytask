@@ -2,7 +2,7 @@ package com.rajchenbergstudios.hoygenda.utils
 
 import android.view.View
 
-class HTSKViewStateUtils {
+class HGDAViewStateUtils {
 
     companion object {
         fun setViewVisibility(v1: View, v2: View? = null, v3: View? = null, v4: View? = null, visibility: Int){

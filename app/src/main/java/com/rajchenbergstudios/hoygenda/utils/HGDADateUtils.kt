@@ -2,7 +2,7 @@ package com.rajchenbergstudios.hoygenda.utils
 
 import java.time.LocalDate
 
-object HTSKDateUtils {
+object HGDADateUtils {
 
     val today = LocalDate.now()
     val currentDayOfWeekFormatted: String

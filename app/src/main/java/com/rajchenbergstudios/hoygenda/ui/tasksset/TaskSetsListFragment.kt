@@ -21,8 +21,8 @@ import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.data.taskset.TaskSet
 import com.rajchenbergstudios.hoygenda.databinding.FragmentTasksSetBinding
 import com.rajchenbergstudios.hoygenda.ui.createtaskset.CreateTaskSetDialogFragmentDirections
-import com.rajchenbergstudios.hoygenda.utils.HTSKAnimationUtils
-import com.rajchenbergstudios.hoygenda.utils.HTSKViewStateUtils
+import com.rajchenbergstudios.hoygenda.utils.HGDAAnimationUtils
+import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import com.rajchenbergstudios.hoygenda.utils.OnQueryTextChanged
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,7 +76,7 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
 
         viewModel.taskSets.observe(viewLifecycleOwner) { taskSetsList ->
             binding.apply {
-                HTSKViewStateUtils.apply {
+                HGDAViewStateUtils.apply {
                     if (taskSetsList.isEmpty()) {
                         stopShimmerView()
                         setViewVisibility(tasksSetRecyclerview.layoutTasksListRecyclerview, visibility = View.INVISIBLE)
@@ -158,9 +158,9 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun startShimmerView() { HTSKAnimationUtils.startShimmerView(requireActivity(), R.id.task_set_shimmerframelayout) }
+    private fun startShimmerView() { HGDAAnimationUtils.startShimmerView(requireActivity(), R.id.task_set_shimmerframelayout) }
 
-    private fun stopShimmerView() { HTSKAnimationUtils.stopShimmerView(requireActivity(), R.id.task_set_shimmerframelayout) }
+    private fun stopShimmerView() { HGDAAnimationUtils.stopShimmerView(requireActivity(), R.id.task_set_shimmerframelayout) }
 
     override fun onItemClick(taskSet: TaskSet) {
         viewModel.onTaskSetSelected(taskSet)
