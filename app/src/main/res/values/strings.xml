@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hoytask</string>
+    <string name="app_name">Hoygenda</string>
     <string name="high_priority_task">high priority task</string>
     <string name="task_title">Enter text…</string>
     <string name="important_task">Important task</string>
