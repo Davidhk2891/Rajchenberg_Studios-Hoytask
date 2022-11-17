@@ -81,7 +81,3 @@ const val EDIT_TASK_RESULT_OK = Activity.RESULT_FIRST_USER + 1
 const val CREATE_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 2
 const val EDIT_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 3
 const val ADD_TASK_FROM_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 4
-
-// TODO: 'Delete all completed' in Today when nothing is completed, doesn't trigger the 'nothing to delete'
-// TODO: Adding task to newly created set creates the set, but doesn't add the task to the set
-// TODO: Write down what happened in notebook (how you solved the expandable fab issue. That little attribute)
