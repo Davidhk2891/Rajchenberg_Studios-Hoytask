@@ -3,8 +3,8 @@ package com.rajchenbergstudios.hoygenda.ui.taskaddedit
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rajchenbergstudios.hoygenda.data.today.Today
-import com.rajchenbergstudios.hoygenda.data.today.TodayDao
+import com.rajchenbergstudios.hoygenda.data.today.task.Task
+import com.rajchenbergstudios.hoygenda.data.today.task.TaskDao
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSet
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSetDao
 import com.rajchenbergstudios.hoygenda.ui.activity.ADD_TASK_RESULT_OK
@@ -19,22 +19,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TaskAddEditViewModel @Inject constructor(
-    private val todayDao: TodayDao,
+    private val taskDao: TaskDao,
     private val taskInSetDao: TaskInSetDao,
     private val state: SavedStateHandle
 ) : ViewModel() {
 
     val origin = state.get<Int>("origin")
 
-    val mToday = state.get<Today>("task")
+    val mTask = state.get<Task>("task")
 
-    var taskName = state.get<String>("taskName") ?: mToday?.content ?: ""
+    var taskName = state.get<String>("taskName") ?: mTask?.title ?: ""
         set(value) {
             field = value
             state["taskName"] = value
         }
 
-    var taskImportance = state.get<Boolean>("taskImportance") ?: mToday?.important ?: false
+    var taskImportance = state.get<Boolean>("taskImportance") ?: mTask?.important ?: false
         set(value) {
             field = value
             state["taskName"] = value
@@ -87,12 +87,12 @@ class TaskAddEditViewModel @Inject constructor(
             showInvalidInputMessage()
             return
         }
-        if (mToday != null) {
-            val updatedTask = mToday.copy(content = taskName, important = taskImportance)
+        if (mTask != null) {
+            val updatedTask = mTask.copy(title = taskName, important = taskImportance)
             updateTask(updatedTask)
         } else {
-            val newToday = Today(content = taskName, important = taskImportance)
-            createTask(newToday)
+            val newTask = Task(title = taskName, important = taskImportance)
+            createTask(newTask)
         }
     }
 
@@ -114,13 +114,13 @@ class TaskAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun createTask(today: Today) = viewModelScope.launch {
-        todayDao.insert(today)
+    private fun createTask(task: Task) = viewModelScope.launch {
+        taskDao.insert(task)
         addEditEventChannel.send(AddEditEvent.NavigateBackWithResult(ADD_TASK_RESULT_OK))
     }
 
-    private fun updateTask(today: Today) = viewModelScope.launch {
-        todayDao.update(today)
+    private fun updateTask(task: Task) = viewModelScope.launch {
+        taskDao.update(task)
         addEditEventChannel.send(AddEditEvent.NavigateBackWithResult(EDIT_TASK_RESULT_OK))
     }
 

@@ -6,10 +6,10 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.rajchenbergstudios.hoygenda.data.today.Today
+import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.databinding.SingleItemTodayBinding
 
-class DaysDetailsTasksAdapter : ListAdapter<Today, DaysDetailsTasksAdapter.DaysDetailsTasksViewHolder>(DiffCallback()){
+class DaysDetailsTasksAdapter : ListAdapter<Task, DaysDetailsTasksAdapter.DaysDetailsTasksViewHolder>(DiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DaysDetailsTasksViewHolder {
         val binding = SingleItemTodayBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -23,23 +23,23 @@ class DaysDetailsTasksAdapter : ListAdapter<Today, DaysDetailsTasksAdapter.DaysD
 
     class DaysDetailsTasksViewHolder(private val binding: SingleItemTodayBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(today: Today) {
+        fun bind(task: Task) {
             binding.apply {
-                itemTaskTitleTextview.text = today.content
+                itemTaskTitleTextview.text = task.title
                 itemTaskCompletedCheckbox.isClickable = false
-                itemTaskCompletedCheckbox.isChecked = today.completed
-                itemTaskTitleTextview.paint.isStrikeThruText = today.completed
-                itemTaskImportantImageview.isVisible = today.important
+                itemTaskCompletedCheckbox.isChecked = task.completed
+                itemTaskTitleTextview.paint.isStrikeThruText = task.completed
+                itemTaskImportantImageview.isVisible = task.important
             }
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<Today>() {
+    class DiffCallback : DiffUtil.ItemCallback<Task>() {
 
-        override fun areItemsTheSame(oldItem: Today, newItem: Today): Boolean
+        override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean
             = oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: Today, newItem: Today): Boolean
+        override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean
             = oldItem.id == newItem.id
     }
 }

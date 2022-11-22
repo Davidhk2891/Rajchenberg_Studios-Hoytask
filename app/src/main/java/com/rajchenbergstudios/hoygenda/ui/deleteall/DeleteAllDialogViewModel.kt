@@ -3,7 +3,7 @@ package com.rajchenbergstudios.hoygenda.ui.deleteall
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rajchenbergstudios.hoygenda.data.today.TodayDao
+import com.rajchenbergstudios.hoygenda.data.today.task.TaskDao
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSetDao
 import com.rajchenbergstudios.hoygenda.data.taskset.TaskSetDao
 import com.rajchenbergstudios.hoygenda.di.ApplicationScope
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DeleteAllDialogViewModel @Inject constructor(
-    private val todayDao: TodayDao,
+    private val taskDao: TaskDao,
     private val taskSetDao: TaskSetDao,
     private val taskInSetDao: TaskInSetDao,
     state: SavedStateHandle,
@@ -41,17 +41,17 @@ class DeleteAllDialogViewModel @Inject constructor(
     }
 
     private fun deleteAllCompletedTasks(resultInterface: ResultInterface) = applicationScope.launch{
-        if (todayDao.firstItemFromList().isEmpty())
+        if (taskDao.firstItemFromList().isEmpty())
             resultInterface.onShowEmptyListMessage(message)
         else
-            todayDao.deleteAllCompleted()
+            taskDao.deleteAllCompleted()
     }
 
     private fun deleteAllTasks(resultInterface: ResultInterface) = applicationScope.launch {
-        if (todayDao.firstItemFromList().isEmpty())
+        if (taskDao.firstItemFromList().isEmpty())
             resultInterface.onShowEmptyListMessage(message)
         else
-            todayDao.nukeTaskTable()
+            taskDao.nukeTaskTable()
     }
 
     private fun deleteAllSetsWithTasks(resultInterface: ResultInterface) = applicationScope.launch {

@@ -3,8 +3,8 @@ package com.rajchenbergstudios.hoygenda.ui.todaylist
 import androidx.lifecycle.*
 import com.rajchenbergstudios.hoygenda.data.prefs.PreferencesManager
 import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
-import com.rajchenbergstudios.hoygenda.data.today.Today
-import com.rajchenbergstudios.hoygenda.data.today.TodayDao
+import com.rajchenbergstudios.hoygenda.data.today.task.Task
+import com.rajchenbergstudios.hoygenda.data.today.task.TaskDao
 import com.rajchenbergstudios.hoygenda.ui.activity.*
 import com.rajchenbergstudios.hoygenda.utils.HGDADateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +19,7 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @HiltViewModel
 class TodayListViewModel @Inject constructor(
-    private val todayDao: TodayDao,
+    private val taskDao: TaskDao,
     private val preferencesManager: PreferencesManager,
     state: SavedStateHandle
 ) : ViewModel(){
@@ -41,7 +41,7 @@ class TodayListViewModel @Inject constructor(
     ) { searchQuery, filterPreferences ->
         Pair(searchQuery, filterPreferences)
     }.flatMapLatest { (searchQuery, filterPreferences) ->
-        todayDao.getTodays(searchQuery, filterPreferences.sortOrder, filterPreferences.hideCompleted)
+        taskDao.getTodays(searchQuery, filterPreferences.sortOrder, filterPreferences.hideCompleted)
     }
 
     fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {
@@ -52,21 +52,21 @@ class TodayListViewModel @Inject constructor(
         preferencesManager.updateHideCompleted(hideCompleted)
     }
 
-    fun onTaskSelected(today: Today) = viewModelScope.launch {
-        tasksEventChannel.send(TaskEvent.NavigateToEditTaskScreen(today))
+    fun onTaskSelected(task: Task) = viewModelScope.launch {
+        tasksEventChannel.send(TaskEvent.NavigateToEditTaskScreen(task))
     }
 
-    fun onTaskCheckedChanged(today: Today, isChecked: Boolean) = viewModelScope.launch {
-        todayDao.update(today.copy(completed = isChecked))
+    fun onTaskCheckedChanged(task: Task, isChecked: Boolean) = viewModelScope.launch {
+        taskDao.update(task.copy(completed = isChecked))
     }
 
-    fun onTaskSwiped(today: Today) = viewModelScope.launch {
-        todayDao.delete(today)
-        tasksEventChannel.send(TaskEvent.ShowUndoDeleteTaskMessage(today))
+    fun onTaskSwiped(task: Task) = viewModelScope.launch {
+        taskDao.delete(task)
+        tasksEventChannel.send(TaskEvent.ShowUndoDeleteTaskMessage(task))
     }
 
-    fun onUndoDeleteClick(today: Today) = viewModelScope.launch {
-        todayDao.insert(today)
+    fun onUndoDeleteClick(task: Task) = viewModelScope.launch {
+        taskDao.insert(task)
     }
 
     fun onAddNewTaskClick() = viewModelScope.launch {
@@ -123,8 +123,8 @@ class TodayListViewModel @Inject constructor(
         return HGDADateUtils.currentDayOfWeekFormatted
     }
 
-    fun onTaskLongSelected(today: Today) = viewModelScope.launch {
-        tasksEventChannel.send(TaskEvent.NavigateToAddTaskToSetBottomSheet(today))
+    fun onTaskLongSelected(task: Task) = viewModelScope.launch {
+        tasksEventChannel.send(TaskEvent.NavigateToAddTaskToSetBottomSheet(task))
     }
 
     val tasks = tasksFlow.asLiveData()
@@ -134,9 +134,9 @@ class TodayListViewModel @Inject constructor(
         object NavigateToDeleteAllCompletedScreen : TaskEvent()
         object NavigateToAddTaskScreen : TaskEvent()
         object NavigateToAddTasksFromSetBottomSheet : TaskEvent()
-        data class NavigateToEditTaskScreen(val today: Today) : TaskEvent()
-        data class NavigateToAddTaskToSetBottomSheet(val today: Today) : TaskEvent()
-        data class ShowUndoDeleteTaskMessage(val today: Today) : TaskEvent()
+        data class NavigateToEditTaskScreen(val task: Task) : TaskEvent()
+        data class NavigateToAddTaskToSetBottomSheet(val task: Task) : TaskEvent()
+        data class ShowUndoDeleteTaskMessage(val task: Task) : TaskEvent()
         data class ShowTaskSavedConfirmationMessage(val msg: String) : TaskEvent()
         data class ShowTaskSavedInNewOrOldSetConfirmationMessage(val msg: String?) : TaskEvent()
         data class ShowTaskAddedFromSetConfirmationMessage(val msg: String?) : TaskEvent()

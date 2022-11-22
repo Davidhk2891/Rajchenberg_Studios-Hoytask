@@ -7,8 +7,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.rajchenbergstudios.hoygenda.data.day.Day
 import com.rajchenbergstudios.hoygenda.data.day.DayDao
 import com.rajchenbergstudios.hoygenda.data.taskset.TaskSetDao
-import com.rajchenbergstudios.hoygenda.data.today.Today
-import com.rajchenbergstudios.hoygenda.data.today.TodayDao
+import com.rajchenbergstudios.hoygenda.data.today.task.Task
+import com.rajchenbergstudios.hoygenda.data.today.task.TaskDao
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSet
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSetDao
 import com.rajchenbergstudios.hoygenda.data.taskset.TaskSet
@@ -21,11 +21,11 @@ import javax.inject.Provider
 
 // const val TAG = "HoytaskDatabase.kt"
 
-@Database(entities = [Today::class, Day::class, TaskSet::class, TaskInSet::class], version = 19, exportSchema = false)
+@Database(entities = [Task::class, Day::class, TaskSet::class, TaskInSet::class], version = 20, exportSchema = false)
 @TypeConverters(HGDATypeConvUtils::class)
 abstract class HGDADatabase : RoomDatabase(){
 
-    abstract fun todayDao(): TodayDao
+    abstract fun todayDao(): TaskDao
     abstract fun taskSetDao(): TaskSetDao
     abstract fun taskInSetDao(): TaskInSetDao
     abstract fun dayDao(): DayDao
@@ -44,7 +44,7 @@ abstract class HGDADatabase : RoomDatabase(){
 
             // Initial Task for current day
             applicationScope.launch {
-                todayDao.insert(Today("Start setting up your tasks", important = true))
+                todayDao.insert(Task("Start setting up your tasks", important = true))
             }
 
             //Initial set of tasks (testing)

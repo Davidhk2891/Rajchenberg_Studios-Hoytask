@@ -3,7 +3,7 @@ package com.rajchenbergstudios.hoygenda.ui.daysdetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.rajchenbergstudios.hoygenda.data.day.Day
-import com.rajchenbergstudios.hoygenda.data.today.Today
+import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -22,5 +22,5 @@ class DaysDetailsViewModel @Inject constructor(
 
     val dayMonthDay = stateHandle["monthDay"] ?: day?.dayOfMonth ?: "null"
 
-    val mTodays: List<Today>? = day?.listOfDays
+    val mTasks: List<Task>? = day?.listOfDays
 }

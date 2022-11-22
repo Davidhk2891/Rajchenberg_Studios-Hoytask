@@ -22,8 +22,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
-import com.rajchenbergstudios.hoygenda.data.today.Today
-import com.rajchenbergstudios.hoygenda.databinding.FragmentTodayListBinding
+import com.rajchenbergstudios.hoygenda.data.today.task.Task
+import com.rajchenbergstudios.hoygenda.databinding.FragmentParentTodayBinding
 import com.rajchenbergstudios.hoygenda.utils.OnQueryTextChanged
 import com.rajchenbergstudios.hoygenda.utils.HGDAAnimationUtils
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.first
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class TodayListFragment : Fragment(R.layout.fragment_today_list), TodayListAdapter.OnItemClickListener{
+class TodayParentFragment : Fragment(R.layout.fragment_parent_today), TodayListAdapter.OnItemClickListener{
 
     private val viewModel: TodayListViewModel by viewModels()
 
@@ -52,7 +52,7 @@ class TodayListFragment : Fragment(R.layout.fragment_today_list), TodayListAdapt
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val binding = FragmentTodayListBinding.bind(view)
+        val binding = FragmentParentTodayBinding.bind(view)
         val todayListAdapter = TodayListAdapter(this)
 
         binding.apply {
@@ -152,7 +152,7 @@ class TodayListFragment : Fragment(R.layout.fragment_today_list), TodayListAdapt
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun loadObservable(binding: FragmentTodayListBinding, todayListAdapter: TodayListAdapter) {
+    private fun loadObservable(binding: FragmentParentTodayBinding, todayListAdapter: TodayListAdapter) {
         viewModel.tasks.observe(viewLifecycleOwner){ tasksList ->
             binding.apply {
                 HGDAViewStateUtils.apply {
@@ -169,7 +169,7 @@ class TodayListFragment : Fragment(R.layout.fragment_today_list), TodayListAdapt
         }
     }
 
-    private fun loadTasksEventCollector(binding: FragmentTodayListBinding) {
+    private fun loadTasksEventCollector(binding: FragmentParentTodayBinding) {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.tasksEvent.collect { event ->
                 when (event) {
@@ -177,38 +177,38 @@ class TodayListFragment : Fragment(R.layout.fragment_today_list), TodayListAdapt
                         Snackbar
                             .make(requireView(), "Task deleted", Snackbar.LENGTH_LONG)
                             .setAction("UNDO"){
-                                viewModel.onUndoDeleteClick(event.today)
+                                viewModel.onUndoDeleteClick(event.task)
                             }
                             .show()
                     }
                     is TodayListViewModel.TaskEvent.NavigateToAddTaskScreen -> {
-                        val action = TodayListFragmentDirections
+                        val action = TodayParentFragmentDirections
                             .actionTasksListFragmentToTaskAddEditFragment(task = null, title = "Add task", taskinset = null, origin = 1)
                         findNavController().navigate(action)
                     }
                     is TodayListViewModel.TaskEvent.NavigateToEditTaskScreen -> {
-                        val action = TodayListFragmentDirections
-                            .actionTasksListFragmentToTaskAddEditFragment(task = event.today, title = "Edit task", taskinset = null, origin = 1)
+                        val action = TodayParentFragmentDirections
+                            .actionTasksListFragmentToTaskAddEditFragment(task = event.task, title = "Edit task", taskinset = null, origin = 1)
                         findNavController().navigate(action)
                     }
                     is TodayListViewModel.TaskEvent.NavigateToAddTaskToSetBottomSheet -> {
-                        val action = TodayListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = event.today, origin = 1)
+                        val action = TodayParentFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = event.task, origin = 1)
                         findNavController().navigate(action)
                     }
                     is TodayListViewModel.TaskEvent.NavigateToAddTasksFromSetBottomSheet -> {
-                        val action = TodayListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = null, origin = 2)
+                        val action = TodayParentFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = null, origin = 2)
                         findNavController().navigate(action)
                     }
                     is TodayListViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                     }
                     is TodayListViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen -> {
-                        val action = TodayListFragmentDirections
+                        val action = TodayParentFragmentDirections
                             .actionGlobalTasksDeleteAllDialogFragment(origin = 1)
                         findNavController().navigate(action)
                     }
                     is TodayListViewModel.TaskEvent.NavigateToDeleteAllScreen -> {
-                        val action = TodayListFragmentDirections
+                        val action = TodayParentFragmentDirections
                             .actionGlobalTasksDeleteAllDialogFragment(origin = 3)
                         findNavController().navigate(action)
                     }
@@ -250,7 +250,7 @@ class TodayListFragment : Fragment(R.layout.fragment_today_list), TodayListAdapt
         viewModel.onFragmentResult(result, message)
     }
 
-    private fun todayDateDisplay(binding: FragmentTodayListBinding) {
+    private fun todayDateDisplay(binding: FragmentParentTodayBinding) {
         binding.apply {
             tasksListDateheader.apply {
                 dateHeaderDayofmonth.text = viewModel.getCurrentDayOfMonth()
@@ -261,7 +261,7 @@ class TodayListFragment : Fragment(R.layout.fragment_today_list), TodayListAdapt
         }
     }
 
-    private fun initFabs(binding: FragmentTodayListBinding) {
+    private fun initFabs(binding: FragmentParentTodayBinding) {
         binding.apply {
             tasksListFab.setOnClickListener {
                 onMainFabClick(binding)
@@ -275,20 +275,20 @@ class TodayListFragment : Fragment(R.layout.fragment_today_list), TodayListAdapt
         }
     }
 
-    private fun onMainFabClick(binding: FragmentTodayListBinding) {
+    private fun onMainFabClick(binding: FragmentParentTodayBinding) {
         setFabAnimationsAndViewStates(binding)
     }
 
-    private fun setFabAnimationsAndViewStates(binding: FragmentTodayListBinding) {
+    private fun setFabAnimationsAndViewStates(binding: FragmentParentTodayBinding) {
         setFabAnimationVisibilityAndClickability(binding, fabClicked)
         fabClicked = !fabClicked
     }
 
-    private fun setFabAnimationVisibilityAndClickability(binding: FragmentTodayListBinding, clicked: Boolean) {
+    private fun setFabAnimationVisibilityAndClickability(binding: FragmentParentTodayBinding, clicked: Boolean) {
         if (!clicked) fabAnimationsRollIn(binding) else fabAnimationsRollBack(binding)
     }
 
-    private fun fabAnimationsRollIn(binding: FragmentTodayListBinding) {
+    private fun fabAnimationsRollIn(binding: FragmentParentTodayBinding) {
         binding.apply {
             HGDAAnimationUtils.apply {
                 HGDAViewStateUtils.apply {
@@ -306,7 +306,7 @@ class TodayListFragment : Fragment(R.layout.fragment_today_list), TodayListAdapt
         }
     }
 
-    private fun fabAnimationsRollBack(binding: FragmentTodayListBinding) {
+    private fun fabAnimationsRollBack(binding: FragmentParentTodayBinding) {
         binding.apply {
             HGDAAnimationUtils.apply {
                 HGDAViewStateUtils.apply {
@@ -324,16 +324,16 @@ class TodayListFragment : Fragment(R.layout.fragment_today_list), TodayListAdapt
         }
     }
 
-    override fun onItemClick(today: Today) {
-        viewModel.onTaskSelected(today)
+    override fun onItemClick(task: Task) {
+        viewModel.onTaskSelected(task)
     }
 
-    override fun onItemLongClick(today: Today) {
-        viewModel.onTaskLongSelected(today)
+    override fun onItemLongClick(task: Task) {
+        viewModel.onTaskLongSelected(task)
     }
 
-    override fun onCheckboxClick(today: Today, isChecked: Boolean) {
-        viewModel.onTaskCheckedChanged(today, isChecked)
+    override fun onCheckboxClick(task: Task, isChecked: Boolean) {
+        viewModel.onTaskCheckedChanged(task, isChecked)
     }
 
     override fun onPause() {
