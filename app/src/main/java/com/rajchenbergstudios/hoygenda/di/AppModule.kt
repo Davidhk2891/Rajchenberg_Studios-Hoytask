@@ -38,6 +38,9 @@ object AppModule {
     @Provides
     fun provideTaskInSetDao(db: HGDADatabase) = db.taskInSetDao()
 
+    @Provides
+    fun provideJournalEntryDao(db: HGDADatabase) = db.journalEntryDao()
+
     @ApplicationScope
     @Provides
     @Singleton

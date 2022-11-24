@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSet
-import com.rajchenbergstudios.hoygenda.databinding.SingleItemTodayBinding
+import com.rajchenbergstudios.hoygenda.databinding.SingleItemTaskBinding
 
 class TasksInSetListAdapter(private val listener: OnItemClickListener) : ListAdapter<TaskInSet, TasksInSetListAdapter.TaskInSetEditListViewHolder>(DiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskInSetEditListViewHolder {
 
-        val binding = SingleItemTodayBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = SingleItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TaskInSetEditListViewHolder(binding)
     }
 
@@ -23,7 +23,7 @@ class TasksInSetListAdapter(private val listener: OnItemClickListener) : ListAda
         holder.bind(currentItem)
     }
 
-    inner class TaskInSetEditListViewHolder(private val binding: SingleItemTodayBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class TaskInSetEditListViewHolder(private val binding: SingleItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
 

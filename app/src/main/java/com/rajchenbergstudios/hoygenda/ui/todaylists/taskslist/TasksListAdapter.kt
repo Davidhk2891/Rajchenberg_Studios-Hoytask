@@ -1,4 +1,4 @@
-package com.rajchenbergstudios.hoygenda.ui.todaylist
+package com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
-import com.rajchenbergstudios.hoygenda.databinding.SingleItemTodayBinding
+import com.rajchenbergstudios.hoygenda.databinding.SingleItemTaskBinding
 
-class TodayListAdapter(private val listener: OnItemClickListener) : ListAdapter<Task, TodayListAdapter.TasksListViewHolder>(DiffCallback()) {
+class TasksListAdapter(private val listener: OnItemClickListener) : ListAdapter<Task, TasksListAdapter.TasksListViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksListViewHolder {
 
-        val binding = SingleItemTodayBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = SingleItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TasksListViewHolder(binding)
     }
 
@@ -23,7 +23,7 @@ class TodayListAdapter(private val listener: OnItemClickListener) : ListAdapter<
         holder.bind(currentItem)
     }
 
-    inner class TasksListViewHolder(private val binding: SingleItemTodayBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class TasksListViewHolder(private val binding: SingleItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.apply {

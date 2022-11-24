@@ -17,7 +17,7 @@
         android:minHeight="0dp"/>
 
     <TextView
-        android:id="@+id/item_journal_entry_title_textview"
+        android:id="@+id/item_task_title_textview"
         tools:text="Example text"
         android:ellipsize="end"
         android:maxLines="1"

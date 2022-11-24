@@ -12,6 +12,8 @@ import com.rajchenbergstudios.hoygenda.data.today.task.TaskDao
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSet
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSetDao
 import com.rajchenbergstudios.hoygenda.data.taskset.TaskSet
+import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
+import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntryDao
 import com.rajchenbergstudios.hoygenda.di.ApplicationScope
 import com.rajchenbergstudios.hoygenda.utils.HGDATypeConvUtils
 import kotlinx.coroutines.CoroutineScope
@@ -21,7 +23,7 @@ import javax.inject.Provider
 
 // const val TAG = "HoytaskDatabase.kt"
 
-@Database(entities = [Task::class, Day::class, TaskSet::class, TaskInSet::class], version = 20, exportSchema = false)
+@Database(entities = [Task::class, Day::class, TaskSet::class, TaskInSet::class, JournalEntry::class], version = 21, exportSchema = false)
 @TypeConverters(HGDATypeConvUtils::class)
 abstract class HGDADatabase : RoomDatabase(){
 
@@ -29,6 +31,7 @@ abstract class HGDADatabase : RoomDatabase(){
     abstract fun taskSetDao(): TaskSetDao
     abstract fun taskInSetDao(): TaskInSetDao
     abstract fun dayDao(): DayDao
+    abstract fun journalEntryDao(): JournalEntryDao
 
     class Callback @Inject constructor(
         private val database: Provider<HGDADatabase>,
@@ -41,10 +44,13 @@ abstract class HGDADatabase : RoomDatabase(){
             val todayDao = database.get().todayDao()
             val taskSetDao = database.get().taskSetDao()
             val taskInSetDao = database.get().taskInSetDao()
+            val journalEntryDao = database.get().journalEntryDao()
 
             // Initial Task for current day
             applicationScope.launch {
                 todayDao.insert(Task("Start setting up your tasks", important = true))
+                journalEntryDao.insert(JournalEntry("Today I woke up feeling a bit better than yesterday" +
+                        " and decided to get to work. I really hope I do better today than I did yesterday"))
             }
 
             //Initial set of tasks (testing)

@@ -7,12 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
-import com.rajchenbergstudios.hoygenda.databinding.SingleItemTodayBinding
+import com.rajchenbergstudios.hoygenda.databinding.SingleItemTaskBinding
 
 class DaysDetailsTasksAdapter : ListAdapter<Task, DaysDetailsTasksAdapter.DaysDetailsTasksViewHolder>(DiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DaysDetailsTasksViewHolder {
-        val binding = SingleItemTodayBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = SingleItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return DaysDetailsTasksViewHolder(binding)
     }
 
@@ -21,7 +21,7 @@ class DaysDetailsTasksAdapter : ListAdapter<Task, DaysDetailsTasksAdapter.DaysDe
         holder.bind(currentItem)
     }
 
-    class DaysDetailsTasksViewHolder(private val binding: SingleItemTodayBinding) : RecyclerView.ViewHolder(binding.root) {
+    class DaysDetailsTasksViewHolder(private val binding: SingleItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(task: Task) {
             binding.apply {

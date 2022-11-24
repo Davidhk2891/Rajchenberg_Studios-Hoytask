@@ -1,4 +1,4 @@
-package com.rajchenbergstudios.hoygenda.ui.todaylist
+package com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist
 
 import androidx.lifecycle.*
 import com.rajchenbergstudios.hoygenda.data.prefs.PreferencesManager
@@ -6,7 +6,6 @@ import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.data.today.task.TaskDao
 import com.rajchenbergstudios.hoygenda.ui.activity.*
-import com.rajchenbergstudios.hoygenda.utils.HGDADateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -14,11 +13,11 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-// private const val TAG = "TodayListViewModel"
+// private const val TAG = "TasksListViewModel"
 
 @ExperimentalCoroutinesApi
 @HiltViewModel
-class TodayListViewModel @Inject constructor(
+class TasksListViewModel @Inject constructor(
     private val taskDao: TaskDao,
     private val preferencesManager: PreferencesManager,
     state: SavedStateHandle
@@ -105,22 +104,6 @@ class TodayListViewModel @Inject constructor(
 
     fun onDeleteAllClick() = viewModelScope.launch {
         tasksEventChannel.send(TaskEvent.NavigateToDeleteAllScreen)
-    }
-
-    fun getCurrentDayOfMonth(): String {
-        return HGDADateUtils.currentDayOfMonthFormatted
-    }
-
-    fun getCurrentMonth(): String {
-        return HGDADateUtils.currentMonthFormatted
-    }
-
-    fun getCurrentYear(): String {
-        return HGDADateUtils.currentYearFormatted
-    }
-
-    fun getCurrentDayOfWeek(): String {
-        return HGDADateUtils.currentDayOfWeekFormatted
     }
 
     fun onTaskLongSelected(task: Task) = viewModelScope.launch {
