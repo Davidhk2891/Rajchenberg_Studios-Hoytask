@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomNavigationView(){
         bottomNavigationView = findViewById(R.id.hoytask_bottom_nav)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.todayFragment, R.id.daysListFragment, R.id.taskSetsListFragment))
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.todayFragment, R.id.taskSetsListFragment, R.id.daysListFragment))
         bottomNavigationView.setupWithNavController(navController)
     }
 
@@ -62,6 +62,8 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener{ _, destination, _ ->
             when (destination.id) {
                 R.id.todayFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
+                R.id.tasksListFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
+                R.id.jEntriesListFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
                 R.id.taskSetsListFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
                 R.id.daysListFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
                 R.id.taskAddEditFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.GONE)

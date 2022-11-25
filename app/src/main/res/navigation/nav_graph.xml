@@ -6,12 +6,12 @@
     app:startDestination="@id/todayFragment">
 
     <fragment
-        android:id="@+id/tasksListFragment"
-        android:name="com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListFragment"
-        android:label="Tasks"
-        tools:layout="@layout/fragment_parent_today" >
+        android:id="@+id/todayFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragment"
+        android:label="Today"
+        tools:layout="@layout/fragment_parent_today">
         <action
-            android:id="@+id/action_tasksListFragment_to_taskAddEditFragment"
+            android:id="@+id/action_todayFragment_to_taskAddEditFragment"
             app:destination="@id/taskAddEditFragment" />
     </fragment>
     <fragment
@@ -118,12 +118,13 @@
     </dialog>
     <action android:id="@+id/action_global_SetBottomSheetDialogFragment" app:destination="@id/SetBottomSheetDialogFragment" />
     <fragment
-        android:id="@+id/todayFragment"
-        android:name="com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragment"
-        android:label="Today"
-        tools:layout="@layout/fragment_parent_today" />
+        android:id="@+id/tasksListFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListFragment"
+        android:label="Tasks"
+        tools:layout="@layout/fragment_child_tasks_list" >
+    </fragment>
     <fragment
-        android:id="@+id/JEntriesListFragment"
+        android:id="@+id/jEntriesListFragment"
         android:name="com.rajchenbergstudios.hoygenda.ui.todaylists.journalentrieslist.JEntriesListFragment"
         android:label="fragment_child_journal_entries_list"
         tools:layout="@layout/fragment_child_journal_entries_list" />

@@ -1,11 +1,8 @@
 package com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -16,6 +13,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildTasksListBinding
+import com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragment
+import com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,7 +26,7 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list),
     TasksListAdapter.OnItemClickListener {
 
     private val viewModel: TasksListViewModel by viewModels()
-    private lateinit var callback: OnActionTakenFromListFragment
+    private lateinit var callback: TasksListFragListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,7 +62,6 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list),
 
         loadObservable(binding, tasksListAdapter)
         loadTasksEventCollector()
-        getFragmentResultListeners()
     }
 
     private fun loadObservable(binding: FragmentChildTasksListBinding, tasksListAdapter: TasksListAdapter) {
@@ -95,26 +93,14 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list),
                             }
                             .show()
                     }
-                    is TasksListViewModel.TaskEvent.NavigateToAddTaskScreen -> {
-                        val action = TasksListFragmentDirections
-                            .actionTasksListFragmentToTaskAddEditFragment(task = null, title = "Add task", taskinset = null, origin = 1)
-                        findNavController().navigate(action)
-                    }
                     is TasksListViewModel.TaskEvent.NavigateToEditTaskScreen -> {
-                        val action = TasksListFragmentDirections
-                            .actionTasksListFragmentToTaskAddEditFragment(task = event.task, title = "Edit task", taskinset = null, origin = 1)
+                        val action = TodayFragmentDirections
+                            .actionTodayFragmentToTaskAddEditFragment(task = event.task, title = "Edit task", taskinset = null, origin = 1)
                         findNavController().navigate(action)
                     }
                     is TasksListViewModel.TaskEvent.NavigateToAddTaskToSetBottomSheet -> {
                         val action = TasksListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = event.task, origin = 1)
                         findNavController().navigate(action)
-                    }
-                    is TasksListViewModel.TaskEvent.NavigateToAddTasksFromSetBottomSheet -> {
-                        val action = TasksListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = null, origin = 2)
-                        findNavController().navigate(action)
-                    }
-                    is TasksListViewModel.TaskEvent.ShowTaskSavedConfirmationMessage -> {
-                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                     }
                     is TasksListViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen -> {
                         val action = TasksListFragmentDirections
@@ -126,46 +112,32 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list),
                             .actionGlobalTasksDeleteAllDialogFragment(origin = 3)
                         findNavController().navigate(action)
                     }
-                    is TasksListViewModel.TaskEvent.ShowTaskSavedInNewOrOldSetConfirmationMessage -> {
-                        Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
-                    }
-                    is TasksListViewModel.TaskEvent.ShowTaskAddedFromSetConfirmationMessage -> {
-                        Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
-                        callback.onTaskAddedFromSetConfirmationMessage()
-                    }
                 }.exhaustive
             }
         }
     }
 
-    private fun getFragmentResultListeners() {
-        setFragmentResultListener("add_edit_request"){_, bundle ->
-            val result = bundle.getInt("add_edit_result")
-            onFragmentResult(result)
-        }
-        setFragmentResultListener("create_set_request_2"){_, bundle ->
-            val result = bundle.getInt("create_set_result_2")
-            onFragmentResult(result)
-        }
-        setFragmentResultListener("task_added_to_set_request"){_, bundle ->
-            val result = bundle.getInt("task_added_to_set_result")
-            val message = bundle.getString("task_added_to_set_message")
-            onFragmentResult(result, message)
-        }
-        setFragmentResultListener("task_added_from_set_request"){_, bundle ->
-            val result = bundle.getInt("task_added_from_set_result")
-            val message = bundle.getString("task_added_from_set_message")
-            onFragmentResult(result, message)
-        }
+    private fun getSearchQueryData() {
+        // Arrange search query data from viewModel, then pass
+        // that value to the interface which TodayFragment will implement in menu
+        // OR
+        // Try to add the searchItem menuItem from this fragment, to the TodayFragment menu
     }
 
-    private fun onFragmentResult(result: Int, message: String? = ""){
-        viewModel.onFragmentResult(result, message)
+    fun setListener(listener: TodayFragment) {
+        callback = listener
     }
 
-    interface OnActionTakenFromListFragment{
-        fun onTaskAddedFromSetConfirmationMessage()
-        fun onChildFragmentPaused(mainFabClicked: Boolean)
+    interface TasksListFragListener{
+//        fun onSearchViewEngaged(searchItem: MenuItem){
+//            val searchView: SearchView = searchItem.actionView as SearchView
+//
+//            val pendingQuery = viewModel.searchQuery.value
+//            if (pendingQuery != null && pendingQuery.isNotEmpty()) {
+//                searchItem.expandActionView()
+//                searchView.setQuery(pendingQuery, false)
+//            }
+//        }
     }
 
     override fun onItemClick(task: Task) {
@@ -178,14 +150,5 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list),
 
     override fun onCheckboxClick(task: Task, isChecked: Boolean) {
         viewModel.onTaskCheckedChanged(task, isChecked)
-    }
-
-    override fun onAttach(context: Context) {
-        callback  = context as OnActionTakenFromListFragment
-    }
-
-    override fun onPause() {
-        super.onPause()
-        callback.onChildFragmentPaused(false)
     }
 }

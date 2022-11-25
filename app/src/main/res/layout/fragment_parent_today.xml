@@ -25,7 +25,10 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tabTextColor="@color/hoytask_grey"
+            app:tabSelectedTextColor="@color/hoytask_purple"
+            app:tabIndicatorColor="@color/hoytask_purple"/>
 
         <FrameLayout
             android:layout_width="match_parent"
