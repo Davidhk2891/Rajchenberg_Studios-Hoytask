@@ -1,9 +1,16 @@
 package com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -11,22 +18,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.rajchenbergstudios.hoygenda.R
+import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildTasksListBinding
-import com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragment
 import com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
+import com.rajchenbergstudios.hoygenda.utils.OnQueryTextChanged
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list),
-    TasksListAdapter.OnItemClickListener {
+class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksListAdapter.OnItemClickListener {
 
     private val viewModel: TasksListViewModel by viewModels()
-    private lateinit var callback: TasksListFragListener
+    private lateinit var searchView: SearchView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,6 +70,7 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list),
 
         loadObservable(binding, tasksListAdapter)
         loadTasksEventCollector()
+        loadMenu()
     }
 
     private fun loadObservable(binding: FragmentChildTasksListBinding, tasksListAdapter: TasksListAdapter) {
@@ -81,6 +90,12 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list),
         }
     }
 
+    /**
+     * TasksListViewModel.TaskEvent.ShowUndoDeleteTaskMessage: Stays in this class. It asks for components relevant to this class.
+     * TasksListViewModel.TaskEvent.NavigateToEditTaskScreen: Stays in this class. The method it overrides comes from task list adapter.
+     * TasksListViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen: Stays in this class. Relevant to menu which is in this class.
+     * TasksListViewModel.TaskEvent.NavigateToDeleteAllScreen: Stays in this class. Relevant to menu which is in this class.
+     */
     private fun loadTasksEventCollector() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.tasksEvent.collect { event ->
@@ -117,27 +132,61 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list),
         }
     }
 
-    private fun getSearchQueryData() {
-        // Arrange search query data from viewModel, then pass
-        // that value to the interface which TodayFragment will implement in menu
-        // OR
-        // Try to add the searchItem menuItem from this fragment, to the TodayFragment menu
-    }
+    private fun loadMenu(){
 
-    fun setListener(listener: TodayFragment) {
-        callback = listener
-    }
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object: MenuProvider {
 
-    interface TasksListFragListener{
-//        fun onSearchViewEngaged(searchItem: MenuItem){
-//            val searchView: SearchView = searchItem.actionView as SearchView
-//
-//            val pendingQuery = viewModel.searchQuery.value
-//            if (pendingQuery != null && pendingQuery.isNotEmpty()) {
-//                searchItem.expandActionView()
-//                searchView.setQuery(pendingQuery, false)
-//            }
-//        }
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+
+                menuInflater.inflate(R.menu.menu_tasks_list_fragment, menu)
+
+                val searchItem = menu.findItem(R.id.tasks_list_menu_search)
+                searchView = searchItem.actionView as SearchView
+
+                val pendingQuery = viewModel.searchQuery.value
+                if (pendingQuery != null && pendingQuery.isNotEmpty()) {
+                    searchItem.expandActionView()
+                    searchView.setQuery(pendingQuery, false)
+                }
+
+                searchView.OnQueryTextChanged{ searchQuery ->
+                    viewModel.searchQuery.value = searchQuery
+                }
+
+                viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                    menu.findItem(R.id.tasks_list_menu_hide_completed).isChecked =
+                        viewModel.preferencesFlow.first().hideCompleted
+                }
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.tasks_list_menu_sort_by_date -> {
+                        viewModel.onSortOrderSelected(SortOrder.BY_DATE)
+                        true
+                    }
+                    R.id.tasks_list_menu_sort_by_name -> {
+                        viewModel.onSortOrderSelected(SortOrder.BY_NAME)
+                        true
+                    }
+                    R.id.tasks_list_menu_hide_completed -> {
+                        menuItem.isChecked = !menuItem.isChecked
+                        viewModel.onHideCompletedSelected(menuItem.isChecked)
+                        true
+                    }
+                    R.id.tasks_list_menu_delete_completed -> {
+                        viewModel.onDeleteAllCompletedClick()
+                        true
+                    }
+                    R.id.tasks_list_menu_delete_all -> {
+                        viewModel.onDeleteAllClick()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onItemClick(task: Task) {
@@ -150,5 +199,10 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list),
 
     override fun onCheckboxClick(task: Task, isChecked: Boolean) {
         viewModel.onTaskCheckedChanged(task, isChecked)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        searchView.setOnQueryTextListener(null)
     }
 }

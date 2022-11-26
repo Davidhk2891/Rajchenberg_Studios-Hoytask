@@ -1,11 +1,9 @@
 package com.rajchenbergstudios.hoygenda.ui.todaylists
 
-import android.view.MenuItem
-import androidx.fragment.app.viewModels
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rajchenbergstudios.hoygenda.ui.activity.*
-import com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListViewModel
 import com.rajchenbergstudios.hoygenda.utils.HGDADateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,6 +21,7 @@ class TodayViewModel @Inject constructor(
     // Today Channel
     private val todayEventChannel = Channel<TodayEvent>()
 
+    // Today Event
     val todayEvent = todayEventChannel.receiveAsFlow()
 
     fun getCurrentDayOfMonth(): String {
@@ -71,6 +70,7 @@ class TodayViewModel @Inject constructor(
         todayEventChannel.send(TodayEvent.ShowTaskSavedConfirmationMessage(msg))
     }
 
+    // Events wrapper class
     sealed class TodayEvent {
         object NavigateToAddTaskScreen : TodayEvent()
         object NavigateToAddTasksFromSetBottomSheet : TodayEvent()

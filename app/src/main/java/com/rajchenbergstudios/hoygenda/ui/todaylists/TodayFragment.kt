@@ -2,20 +2,12 @@ package com.rajchenbergstudios.hoygenda.ui.todaylists
 
 import android.content.res.Resources
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.appcompat.widget.SearchView
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -23,28 +15,21 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rajchenbergstudios.hoygenda.R
-import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
 import com.rajchenbergstudios.hoygenda.databinding.FragmentParentTodayBinding
-import com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListFragment
 import com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListFragmentDirections
-import com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListViewModel
 import com.rajchenbergstudios.hoygenda.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 
 private const val TAG = "TodayFragment"
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class TodayFragment : Fragment(R.layout.fragment_parent_today), TasksListFragment.TasksListFragListener {
+class TodayFragment : Fragment(R.layout.fragment_parent_today) {
 
     private val viewModel: TodayViewModel by viewModels()
-    private val tasksListViewModel: TasksListViewModel by viewModels()
     private lateinit var binding: FragmentParentTodayBinding
     private var fabClicked: Boolean = false
-    private lateinit var searchView: SearchView
-    private lateinit var searchViewData: MutableLiveData<String>
 
     private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open_anim) }
     private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close_anim) }
@@ -63,7 +48,6 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today), TasksListFragmen
                 fabClicked = !fabClicked
             }
         }
-        loadMenu()
         initViewPagerWithTabLayout(binding)
         todayDateDisplay(binding)
         initFabs(binding)
@@ -96,6 +80,13 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today), TasksListFragmen
         viewModel.onFragmentResult(result, message)
     }
 
+    /**
+     * TodayViewModel.TodayEvent.NavigateToAddTaskScreen: Relevant to this class. Belongs to Fab which are all in this class.
+     * TodayViewModel.TodayEvent.ShowTaskSavedConfirmationMessage: Relevant to this class. Belongs to onFragmentResultListener which is here.
+     * TodayViewModel.TodayEvent.ShowTaskSavedInNewOrOldSetConfirmationMessage: Relevant to this class. Belongs to onFragmentResultListener which is here.
+     * TodayViewModel.TodayEvent.ShowTaskAddedFromSetConfirmationMessage: Relevant to this class. Belongs to onFragmentResultListener which is here.
+     * TodayViewModel.TodayEvent.NavigateToAddTasksFromSetBottomSheet: Relevant to this class. Belongs to Fab which are all in this class.
+     */
     private fun loadTodayEventCollector() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.todayEvent.collect { event ->
@@ -127,63 +118,6 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today), TasksListFragmen
         }
     }
 
-    private fun loadMenu(){
-
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(object: MenuProvider {
-
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-
-                menuInflater.inflate(R.menu.menu_tasks_list_fragment, menu)
-
-                val searchItem = menu.findItem(R.id.tasks_list_menu_search)
-                searchView = searchItem.actionView as SearchView
-
-                val pendingQuery = tasksListViewModel.searchQuery.value
-                if (pendingQuery != null && pendingQuery.isNotEmpty()) {
-                    searchItem.expandActionView()
-                    searchView.setQuery(pendingQuery, false)
-                }
-
-                searchView.OnQueryTextChanged{ searchQuery ->
-                    tasksListViewModel.searchQuery.value = searchQuery // TODO: Doesn't work
-                }
-
-                viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                    menu.findItem(R.id.tasks_list_menu_hide_completed).isChecked =
-                        tasksListViewModel.preferencesFlow.first().hideCompleted
-                }
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.tasks_list_menu_sort_by_date -> {
-                        tasksListViewModel.onSortOrderSelected(SortOrder.BY_DATE)
-                        true
-                    }
-                    R.id.tasks_list_menu_sort_by_name -> {
-                        tasksListViewModel.onSortOrderSelected(SortOrder.BY_NAME)
-                        true
-                    }
-                    R.id.tasks_list_menu_hide_completed -> {
-                        menuItem.isChecked = !menuItem.isChecked
-                        tasksListViewModel.onHideCompletedSelected(menuItem.isChecked)
-                        true
-                    }
-                    R.id.tasks_list_menu_delete_completed -> {
-                        tasksListViewModel.onDeleteAllCompletedClick() // TODO: Doesn't work
-                        true
-                    }
-                    R.id.tasks_list_menu_delete_all -> {
-                        tasksListViewModel.onDeleteAllClick() // TODO: Doesn't work
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-    }
-
     private fun todayDateDisplay(binding: FragmentParentTodayBinding) {
         binding.apply {
             tasksListDateheader.apply {
@@ -196,8 +130,6 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today), TasksListFragmen
     }
 
     private fun initViewPagerWithTabLayout(binding: FragmentParentTodayBinding) {
-        val tasksListFragment = TasksListFragment()
-        tasksListFragment.setListener(this)
         val viewPager: ViewPager2 = binding.todayViewpager
         val tabLayout: TabLayout = binding.todayTablayout
         viewPager.adapter = activity?.let { TodayPagerAdapter(it) }
@@ -280,10 +212,5 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today), TasksListFragmen
                 }
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        searchView.setOnQueryTextListener(null)
     }
 }
