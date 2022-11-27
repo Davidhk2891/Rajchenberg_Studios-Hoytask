@@ -20,7 +20,7 @@
 
     <TextView
         android:id="@+id/item_journal_entry_title_textview"
-        tools:text="Entry 20:32 - "
+        tools:text="20:32 | "
         android:maxLines="1"
         android:textColor="@color/black"
         android:layout_width="0dp"
@@ -40,12 +40,12 @@
         app:layout_constraintStart_toEndOf="@id/item_journal_entry_title_textview"
         app:layout_constraintTop_toTopOf="@id/item_journal_entry_imageview"
         app:layout_constraintBottom_toBottomOf="@id/item_journal_entry_imageview"
-        app:layout_constraintEnd_toStartOf="@id/item_task_important_imageview"
+        app:layout_constraintEnd_toStartOf="@id/item_journal_entry_important_imageview"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="4dp"/>
 
     <ImageView
-        android:id="@+id/item_task_important_imageview"
+        android:id="@+id/item_journal_entry_important_imageview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_priority_high_24"
