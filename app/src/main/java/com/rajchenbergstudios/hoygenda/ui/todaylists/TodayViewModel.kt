@@ -3,11 +3,14 @@ package com.rajchenbergstudios.hoygenda.ui.todaylists
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rajchenbergstudios.hoygenda.di.MainThreadScope
 import com.rajchenbergstudios.hoygenda.ui.activity.*
 import com.rajchenbergstudios.hoygenda.utils.HGDADateUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,7 +18,7 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @HiltViewModel
 class TodayViewModel @Inject constructor(
-
+    @MainThreadScope private val mainThreadScope: CoroutineScope
 ) : ViewModel() {
 
     // Today Channel
@@ -68,6 +71,15 @@ class TodayViewModel @Inject constructor(
 
     private fun showTaskSavedConfirmationMessage(msg: String) = viewModelScope.launch {
         todayEventChannel.send(TodayEvent.ShowTaskSavedConfirmationMessage(msg))
+    }
+
+    fun postActionWithDelay(delay: Long, postActionCallback: PostActionListener) = mainThreadScope.launch {
+        delay(delay)
+        postActionCallback.onDelayFinished()
+    }
+
+    interface PostActionListener{
+        fun onDelayFinished()
     }
 
     // Events wrapper class

@@ -20,6 +20,9 @@ import com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListFragment
 import com.rajchenbergstudios.hoygenda.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlin.concurrent.timerTask
+import kotlin.concurrent.schedule
+import java.util.*
 
 private const val TAG = "TodayFragment"
 
@@ -30,6 +33,8 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
     private val viewModel: TodayViewModel by viewModels()
     private lateinit var binding: FragmentParentTodayBinding
     private var fabClicked: Boolean = false
+
+    private lateinit var viewPager: ViewPager2
 
     private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open_anim) }
     private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close_anim) }
@@ -99,6 +104,7 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
                     }
                     is TodayViewModel.TodayEvent.ShowTaskSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
+                        setViewPagerPage(0)
                     }
                     is TodayViewModel.TodayEvent.ShowTaskSavedInNewOrOldSetConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
@@ -107,6 +113,7 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
                         Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
                         fabClicked = true
                         setFabAnimationsAndViewStates(binding)
+                        setViewPagerPage(0)
                     }
                     is TodayViewModel.TodayEvent.NavigateToAddTasksFromSetBottomSheet -> {
                         val action = TasksListFragmentDirections
@@ -116,6 +123,14 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
                 }.exhaustive
             }
         }
+    }
+
+    private fun setViewPagerPage(index: Int){
+        viewModel.postActionWithDelay(300, object: TodayViewModel.PostActionListener{
+            override fun onDelayFinished() {
+                viewPager.setCurrentItem(index, true)
+            }
+        })
     }
 
     private fun todayDateDisplay(binding: FragmentParentTodayBinding) {
@@ -130,7 +145,7 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
     }
 
     private fun initViewPagerWithTabLayout(binding: FragmentParentTodayBinding) {
-        val viewPager: ViewPager2 = binding.todayViewpager
+        viewPager = binding.todayViewpager
         val tabLayout: TabLayout = binding.todayTablayout
         viewPager.adapter = activity?.let { TodayPagerAdapter(it) }
             Logger.i(TAG, "initViewPagerWithTabLayout", "viewPager is not null")
