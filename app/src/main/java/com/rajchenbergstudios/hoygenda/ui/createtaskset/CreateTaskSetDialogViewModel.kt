@@ -3,7 +3,7 @@ package com.rajchenbergstudios.hoygenda.ui.createtaskset
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rajchenbergstudios.hoygenda.data.today.Today
+import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSet
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSetDao
 import com.rajchenbergstudios.hoygenda.data.taskset.TaskSet
@@ -22,11 +22,11 @@ class CreateTaskSetDialogViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel(){
 
-    val mToday = state.get<Today>("today")
+    val mTask = state.get<Task>("task")
 
     val origin = state.get<Int>("origin")
 
-    private val taskName = state.get<String>("todayContent") ?: mToday?.content
+    private val taskName = state.get<String>("todayContent") ?: mTask?.title
 
     // createTaskSet Channel
     private val createTaskSetEventChannel = Channel<CreateTaskSetEvent>()

@@ -71,8 +71,8 @@ class TaskAddEditFragment : Fragment(R.layout.fragment_add_edit_task){
             fragmentAddEditTitleEdittext.setText(viewModel.taskName)
             fragmentAddEditImportantCheckbox.isChecked = viewModel.taskImportance
             fragmentAddEditImportantCheckbox.jumpDrawablesToCurrentState()
-            fragmentAddEditCreatedTextview.isVisible = viewModel.mToday != null
-            val dateCreated = "Date created: ${viewModel.mToday?.createdDateFormat}"
+            fragmentAddEditCreatedTextview.isVisible = viewModel.mTask != null
+            val dateCreated = "Date created: ${viewModel.mTask?.createdDateFormat}"
             fragmentAddEditCreatedTextview.text = dateCreated
 
             fragmentAddEditTitleEdittext.addTextChangedListener { newText ->
@@ -88,9 +88,9 @@ class TaskAddEditFragment : Fragment(R.layout.fragment_add_edit_task){
     private fun showFlowFromTaskInSetList(binding: FragmentAddEditTaskBinding) {
         binding.apply {
             fragmentAddEditTitleEdittext.setText(viewModel.taskInSetName)
-            fragmentAddEditImportantCheckbox.isVisible = viewModel.mToday != null
+            fragmentAddEditImportantCheckbox.isVisible = viewModel.mTask != null
             fragmentAddEditImportantCheckbox.isClickable = false
-            fragmentAddEditCreatedTextview.isVisible = viewModel.mToday != null
+            fragmentAddEditCreatedTextview.isVisible = viewModel.mTask != null
 
             fragmentAddEditTitleEdittext.addTextChangedListener { newText ->
                 viewModel.taskInSetName = newText.toString()

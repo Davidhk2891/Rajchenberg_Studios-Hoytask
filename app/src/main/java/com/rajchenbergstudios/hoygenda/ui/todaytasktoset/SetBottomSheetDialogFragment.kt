@@ -92,7 +92,7 @@ class SetBottomSheetDialogFragment : BottomSheetDialogFragment(), SetBottomSheet
                 when (event) {
                     is TaskToSetBottomSheetDialogViewModel.TaskToSetEvent.NavigateToCreateTaskSetDialog -> {
                         val action = SetBottomSheetDialogFragmentDirections
-                            .actionGlobalCreateTaskSetDialogFragment(task = event.today, origin = 2)
+                            .actionGlobalCreateTaskSetDialogFragment(task = event.task, origin = 2)
                         findNavController().navigate(action)
                     }
                     is TaskToSetBottomSheetDialogViewModel.TaskToSetEvent.NavigateBackWithResultFromSetCreatedWithTask -> {

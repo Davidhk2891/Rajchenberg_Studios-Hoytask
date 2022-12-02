@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/todayListFragment">
+    app:startDestination="@id/todayFragment">
 
     <fragment
-        android:id="@+id/todayListFragment"
-        android:name="com.rajchenbergstudios.hoygenda.ui.todaylist.TodayListFragment"
+        android:id="@+id/todayFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragment"
         android:label="Today"
-        tools:layout="@layout/fragment_today_list" >
+        tools:layout="@layout/fragment_parent_today">
         <action
-            android:id="@+id/action_tasksListFragment_to_taskAddEditFragment"
+            android:id="@+id/action_todayFragment_to_taskAddEditFragment"
             app:destination="@id/taskAddEditFragment" />
     </fragment>
     <fragment
@@ -21,7 +21,7 @@
         tools:layout="@layout/fragment_add_edit_task" >
         <argument
             android:name="task"
-            app:argType="com.rajchenbergstudios.hoygenda.data.today.Today"
+            app:argType="com.rajchenbergstudios.hoygenda.data.today.task.Task"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
@@ -95,7 +95,7 @@
             app:destination="@id/tasksSetEditListFragment" />
         <argument
             android:name="task"
-            app:argType="com.rajchenbergstudios.hoygenda.data.today.Today"
+            app:argType="com.rajchenbergstudios.hoygenda.data.today.task.Task"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
@@ -109,7 +109,7 @@
         tools:layout="@layout/fragment_set_bottom_sheet" >
         <argument
             android:name="task"
-            app:argType="com.rajchenbergstudios.hoygenda.data.today.Today"
+            app:argType="com.rajchenbergstudios.hoygenda.data.today.task.Task"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
@@ -117,4 +117,15 @@
             app:argType="integer" />
     </dialog>
     <action android:id="@+id/action_global_SetBottomSheetDialogFragment" app:destination="@id/SetBottomSheetDialogFragment" />
+    <fragment
+        android:id="@+id/tasksListFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListFragment"
+        android:label="Tasks"
+        tools:layout="@layout/fragment_child_tasks_list" >
+    </fragment>
+    <fragment
+        android:id="@+id/jEntriesListFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.todaylists.journalentrieslist.JEntriesListFragment"
+        android:label="fragment_child_journal_entries_list"
+        tools:layout="@layout/fragment_child_journal_entries_list" />
 </navigation>
