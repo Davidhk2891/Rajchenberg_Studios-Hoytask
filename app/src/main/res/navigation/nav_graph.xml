@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_todayFragment_to_taskAddEditFragment"
             app:destination="@id/taskAddEditFragment" />
+        <action
+            android:id="@+id/action_todayFragment_to_JEntryAddEditFragment"
+            app:destination="@id/JEntryAddEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/taskAddEditFragment"
@@ -128,4 +131,9 @@
         android:name="com.rajchenbergstudios.hoygenda.ui.todaylists.journalentrieslist.JEntriesListFragment"
         android:label="fragment_child_journal_entries_list"
         tools:layout="@layout/fragment_child_journal_entries_list" />
+    <fragment
+        android:id="@+id/JEntryAddEditFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.jentryaddedit.JEntryAddEditFragment"
+        android:label="fragment_add_edit_journal_entry"
+        tools:layout="@layout/fragment_add_edit_journal_entry" />
 </navigation>

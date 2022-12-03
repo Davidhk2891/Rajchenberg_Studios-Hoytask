@@ -23,11 +23,14 @@ import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildTasksListBinding
 import com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
+import com.rajchenbergstudios.hoygenda.utils.Logger
 import com.rajchenbergstudios.hoygenda.utils.OnQueryTextChanged
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+
+const val TAG = "TasksListFragment"
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -35,6 +38,7 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksLis
 
     private val viewModel: TasksListViewModel by viewModels()
     private lateinit var searchView: SearchView
+    private lateinit var childFragmentListener: ChildFragmentListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -139,6 +143,7 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksLis
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
 
+                childFragmentListener.onFragmentChanged(menu)
                 menuInflater.inflate(R.menu.menu_tasks_list_fragment, menu)
 
                 val searchItem = menu.findItem(R.id.tasks_list_menu_search)
@@ -189,6 +194,14 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksLis
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
+    interface ChildFragmentListener {
+        fun onFragmentChanged(menu: Menu)
+    }
+
+    fun setListener(listener: ChildFragmentListener) {
+        this.childFragmentListener = listener
+    }
+
     override fun onItemClick(task: Task) {
         viewModel.onTaskSelected(task)
     }
@@ -199,6 +212,11 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksLis
 
     override fun onCheckboxClick(task: Task, isChecked: Boolean) {
         viewModel.onTaskCheckedChanged(task, isChecked)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Logger.i(TAG, "onPause", "TasksListFragment paused")
     }
 
     override fun onDestroyView() {

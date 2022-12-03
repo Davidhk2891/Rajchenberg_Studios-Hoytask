@@ -2,6 +2,7 @@ package com.rajchenbergstudios.hoygenda.ui.todaylists
 
 import android.content.res.Resources
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -16,23 +17,22 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.databinding.FragmentParentTodayBinding
+import com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListFragment
 import com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlin.concurrent.timerTask
-import kotlin.concurrent.schedule
-import java.util.*
 
 private const val TAG = "TodayFragment"
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class TodayFragment : Fragment(R.layout.fragment_parent_today) {
+class TodayFragment : Fragment(R.layout.fragment_parent_today), TasksListFragment.ChildFragmentListener {
 
     private val viewModel: TodayViewModel by viewModels()
     private lateinit var binding: FragmentParentTodayBinding
     private var fabClicked: Boolean = false
+    private lateinit var tasksListMenu: Menu
 
     private lateinit var viewPager: ViewPager2
 
@@ -53,11 +53,18 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
                 fabClicked = !fabClicked
             }
         }
+        setChildFragmentMenus()
         initViewPagerWithTabLayout(binding)
         todayDateDisplay(binding)
         initFabs(binding)
         loadTodayEventCollector()
         getFragmentResultListeners()
+    }
+
+    private fun setChildFragmentMenus(){
+        val tasksListFragment = TasksListFragment()
+        tasksListFragment.setListener(this)
+        Logger.i(TAG, "setChildFragmentMenus", "TasksListFragment menu set")
     }
 
     private fun getFragmentResultListeners() {
@@ -125,6 +132,7 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
         }
     }
 
+    // This will soon be used to be 1
     private fun setViewPagerPage(index: Int){
         viewModel.postActionWithDelay(300, object: TodayViewModel.PostActionListener{
             override fun onDelayFinished() {
@@ -172,9 +180,12 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
                 onMainFabClick(binding)
             }
             tasksListSubFab1.setOnClickListener {
-                viewModel.onAddTasksFromSetClick()
+                Logger.i(TAG, "initFabs", "Coming soon")
             }
             tasksListSubFab2.setOnClickListener {
+                viewModel.onAddTasksFromSetClick()
+            }
+            tasksListSubFab3.setOnClickListener {
                 viewModel.onAddNewTaskClick()
             }
         }
@@ -198,13 +209,13 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
             HGDAAnimationUtils.apply {
                 HGDAViewStateUtils.apply {
                     setViewAnimation(v1 = tasksListFab, a = rotateOpen)
-                    setViewAnimation(v1 = tasksListSubFab1, v2 = tasksListSubFab2, a = fromBottom)
-                    setViewAnimation(v1 = tasksListSubFab1Tv, v2 = tasksListSubFab2Tv, a = fromBottom)
+                    setViewAnimation(v1 = tasksListSubFab1, v2 = tasksListSubFab2, v3 = tasksListSubFab3, a = fromBottom)
+                    setViewAnimation(v1 = tasksListSubFab1Tv, v2 = tasksListSubFab2Tv, v3 = tasksListSubFab3Tv, a = fromBottom)
                     setViewAnimation(v1 = tasksListTransparentWhiteScreen, a = fadeIn)
-                    setViewVisibility(tasksListSubFab1, tasksListSubFab2
-                        , tasksListSubFab1Tv, tasksListSubFab2Tv, View.VISIBLE)
+                    setViewVisibility(v1 = tasksListSubFab1, v2 = tasksListSubFab2, v3 = tasksListSubFab3
+                        , v4 = tasksListSubFab1Tv, v5 = tasksListSubFab2Tv, v6 = tasksListSubFab3Tv, visibility = View.VISIBLE)
                     setViewVisibility(v1 = tasksListTransparentWhiteScreen, visibility = View.VISIBLE)
-                    setViewClickState(v1 = tasksListSubFab1, v2 = tasksListSubFab2, clickable = true)
+                    setViewClickState(v1 = tasksListSubFab1, v2 = tasksListSubFab2, v3 = tasksListSubFab3, clickable = true)
                     setViewClickState(v1 = tasksListTransparentWhiteScreen, clickable = true)
                 }
             }
@@ -216,16 +227,25 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
             HGDAAnimationUtils.apply {
                 HGDAViewStateUtils.apply {
                     setViewAnimation(v1 = tasksListFab, a = rotateClose)
-                    setViewAnimation(v1 = tasksListSubFab1, v2 = tasksListSubFab2, a = toBottom)
-                    setViewAnimation(v1 = tasksListSubFab1Tv, v2 = tasksListSubFab2Tv, a = toBottom)
+                    setViewAnimation(v1 = tasksListSubFab1, v2 = tasksListSubFab2, v3 = tasksListSubFab3, a = toBottom)
+                    setViewAnimation(v1 = tasksListSubFab1Tv, v2 = tasksListSubFab2Tv, v3 = tasksListSubFab3Tv, a = toBottom)
                     setViewAnimation(v1 = tasksListTransparentWhiteScreen, a = fadeOut)
-                    setViewVisibility(tasksListSubFab1, tasksListSubFab2
-                        , tasksListSubFab1Tv, tasksListSubFab2Tv, View.INVISIBLE)
+                    setViewVisibility(v1 = tasksListSubFab1, v2 = tasksListSubFab2, v3 = tasksListSubFab3
+                        , v4 = tasksListSubFab1Tv, v5 = tasksListSubFab2Tv, v6 = tasksListSubFab3Tv, visibility = View.INVISIBLE)
                     setViewVisibility(v1 = tasksListTransparentWhiteScreen, visibility = View.INVISIBLE)
-                    setViewClickState(v1 = tasksListSubFab1, v2 = tasksListSubFab2, clickable = false)
+                    setViewClickState(v1 = tasksListSubFab1, v2 = tasksListSubFab2, v3 = tasksListSubFab3, clickable = false)
                     setViewClickState(v1 = tasksListTransparentWhiteScreen, clickable = false)
                 }
             }
         }
+    }
+
+    override fun onFragmentChanged(menu: Menu) {
+        tasksListMenu = menu
+    }
+
+    override fun onPause() {
+        super.onPause()
+        tasksListMenu.clear()
     }
 }

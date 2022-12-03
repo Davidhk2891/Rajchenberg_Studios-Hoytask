@@ -32,4 +32,8 @@
     <string name="select_set">Select set</string>
     <string name="delete_all">Delete all</string>
     <string name="journal_entry_icon">journal entry icon</string>
+    <string name="important_entry">Important entry</string>
+    <string name="tasks_set">Tasks set</string>
+    <string name="task">Task</string>
+    <string name="journal_entry">Journal entry</string>
 </resources>

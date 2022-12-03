@@ -16,7 +16,7 @@
             android:id="@+id/date_header_dayofmonth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10"
+            tools:text="10"
             android:textSize="32sp"
             android:textStyle="bold"
             android:minWidth="0dp"
@@ -26,7 +26,7 @@
             android:id="@+id/date_header_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="JUNE"
+            tools:text="JUNE"
             android:layout_marginStart="14dp"
             android:textSize="18sp"/>
 
@@ -34,7 +34,7 @@
             android:id="@+id/date_header_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2022"
+            tools:text="2022"
             android:layout_marginStart="14dp"
             android:textSize="18sp"/>
 
@@ -44,7 +44,7 @@
         android:id="@+id/date_header_dayofweek"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Wednesday"
+        tools:text="Wednesday"
         android:textSize="16sp"
         android:layout_marginStart="4dp"
         android:textStyle="italic" />

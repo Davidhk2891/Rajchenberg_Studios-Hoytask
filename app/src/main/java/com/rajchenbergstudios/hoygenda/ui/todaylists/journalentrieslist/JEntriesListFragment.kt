@@ -23,6 +23,7 @@ class JEntriesListFragment : Fragment(R.layout.fragment_child_journal_entries_li
 
     private val viewModel: JEntriesListViewModel by viewModels()
     private lateinit var searchView: SearchView
+    private lateinit var menuHost: MenuHost
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,14 +43,14 @@ class JEntriesListFragment : Fragment(R.layout.fragment_child_journal_entries_li
             jEntriesAdapter.submitList(jEntriesList)
         }
 
-        loadMenu()
+        //loadMenu()
     }
 
     private fun loadMenu(){
 
         // You can add different things to this menu and it will change when changing fragments
 
-        val menuHost: MenuHost = requireActivity()
+        menuHost = requireActivity()
         menuHost.addMenuProvider(object: MenuProvider {
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {

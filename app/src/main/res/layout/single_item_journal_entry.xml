@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="4dp"
         android:layout_marginStart="4dp"
-        android:src="@drawable/ic_baseline_menu_book_24"
+        android:src="@drawable/ic_baseline_library_books_24"
         android:contentDescription="@string/journal_entry_icon" />
 
     <TextView
