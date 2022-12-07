@@ -137,58 +137,58 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksLis
 
     private fun loadMenu(){
 
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(object: MenuProvider {
-
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-
-                menuInflater.inflate(R.menu.menu_tasks_list_fragment, menu)
-                val searchItem = menu.findItem(R.id.tasks_list_menu_search)
-                searchView = searchItem.actionView as SearchView
-
-                val pendingQuery = viewModel.searchQuery.value
-                if (pendingQuery != null && pendingQuery.isNotEmpty()) {
-                    searchItem.expandActionView()
-                    searchView.setQuery(pendingQuery, false)
-                }
-
-                searchView.OnQueryTextChanged{ searchQuery ->
-                    viewModel.searchQuery.value = searchQuery
-                }
-
-                viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                    menu.findItem(R.id.tasks_list_menu_hide_completed).isChecked =
-                        viewModel.preferencesFlow.first().hideCompleted
-                }
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.tasks_list_menu_sort_by_date -> {
-                        viewModel.onSortOrderSelected(SortOrder.BY_DATE)
-                        true
-                    }
-                    R.id.tasks_list_menu_sort_by_name -> {
-                        viewModel.onSortOrderSelected(SortOrder.BY_NAME)
-                        true
-                    }
-                    R.id.tasks_list_menu_hide_completed -> {
-                        menuItem.isChecked = !menuItem.isChecked
-                        viewModel.onHideCompletedSelected(menuItem.isChecked)
-                        true
-                    }
-                    R.id.tasks_list_menu_delete_completed -> {
-                        viewModel.onDeleteAllCompletedClick()
-                        true
-                    }
-                    R.id.tasks_list_menu_delete_all -> {
-                        viewModel.onDeleteAllClick()
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+//        val menuHost: MenuHost = requireActivity()
+//        menuHost.addMenuProvider(object: MenuProvider {
+//
+//            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+//
+//                menuInflater.inflate(R.menu.menu_tasks_list_fragment, menu)
+//                val searchItem = menu.findItem(R.id.tasks_list_menu_search)
+//                searchView = searchItem.actionView as SearchView
+//
+//                val pendingQuery = viewModel.searchQuery.value
+//                if (pendingQuery != null && pendingQuery.isNotEmpty()) {
+//                    searchItem.expandActionView()
+//                    searchView.setQuery(pendingQuery, false)
+//                }
+//
+//                searchView.OnQueryTextChanged{ searchQuery ->
+//                    viewModel.searchQuery.value = searchQuery
+//                }
+//
+//                viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+//                    menu.findItem(R.id.tasks_list_menu_hide_completed).isChecked =
+//                        viewModel.preferencesFlow.first().hideCompleted
+//                }
+//            }
+//
+//            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+//                return when (menuItem.itemId) {
+//                    R.id.tasks_list_menu_sort_by_date -> {
+//                        viewModel.onSortOrderSelected(SortOrder.BY_DATE)
+//                        true
+//                    }
+//                    R.id.tasks_list_menu_sort_by_name -> {
+//                        viewModel.onSortOrderSelected(SortOrder.BY_NAME)
+//                        true
+//                    }
+//                    R.id.tasks_list_menu_hide_completed -> {
+//                        menuItem.isChecked = !menuItem.isChecked
+//                        viewModel.onHideCompletedSelected(menuItem.isChecked)
+//                        true
+//                    }
+//                    R.id.tasks_list_menu_delete_completed -> {
+//                        viewModel.onDeleteAllCompletedClick()
+//                        true
+//                    }
+//                    R.id.tasks_list_menu_delete_all -> {
+//                        viewModel.onDeleteAllClick()
+//                        true
+//                    }
+//                    else -> false
+//                }
+//            }
+//        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onItemClick(task: Task) {

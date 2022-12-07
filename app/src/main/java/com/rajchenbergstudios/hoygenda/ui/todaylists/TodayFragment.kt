@@ -2,12 +2,19 @@ package com.rajchenbergstudios.hoygenda.ui.todaylists
 
 import android.content.res.Resources
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -15,11 +22,13 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rajchenbergstudios.hoygenda.R
+import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
 import com.rajchenbergstudios.hoygenda.databinding.FragmentParentTodayBinding
 import com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 
 private const val TAG = "TodayFragment"
 
@@ -55,6 +64,7 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
         initFabs(binding)
         loadTodayEventCollector()
         getFragmentResultListeners()
+        loadMenu()
     }
 
     private fun getFragmentResultListeners() {
@@ -179,6 +189,20 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
                 viewModel.onAddNewTaskClick()
             }
         }
+    }
+
+    private fun loadMenu(){
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object: MenuProvider {
+
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return true
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun onMainFabClick(binding: FragmentParentTodayBinding) {

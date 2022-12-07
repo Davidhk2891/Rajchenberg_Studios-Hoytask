@@ -122,39 +122,39 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
     }
 
     private fun loadMenu() {
-
         val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(object: MenuProvider{
+        menuHost.addMenuProvider(TaskSetsMenuProvide(), viewLifecycleOwner, Lifecycle.State.CREATED)
+    }
 
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+    private inner class TaskSetsMenuProvide: MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
 
-                menuInflater.inflate(R.menu.menu_tasks_set_fragment, menu)
+            menuInflater.inflate(R.menu.menu_tasks_set_fragment, menu)
 
-                val searchItem = menu.findItem(R.id.task_set_action_search)
-                searchView = searchItem.actionView as SearchView
+            val searchItem = menu.findItem(R.id.task_set_action_search)
+            searchView = searchItem.actionView as SearchView
 
-                val pendingQuery = viewModel.searchQuery.value
-                if (pendingQuery.isNotEmpty()) {
-                    searchItem.expandActionView()
-                    searchView.setQuery(pendingQuery, false)
-                }
-
-                searchView.OnQueryTextChanged { searchQuery ->
-
-                    viewModel.searchQuery.value = searchQuery
-                }
+            val pendingQuery = viewModel.searchQuery.value
+            if (pendingQuery.isNotEmpty()) {
+                searchItem.expandActionView()
+                searchView.setQuery(pendingQuery, false)
             }
 
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.task_set_action_delete_all_sets -> {
-                        viewModel.onDeleteAllSetsClick()
-                        true
-                    }
-                    else -> false
-                }
+            searchView.OnQueryTextChanged { searchQuery ->
+
+                viewModel.searchQuery.value = searchQuery
             }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            return when (menuItem.itemId) {
+                R.id.task_set_action_delete_all_sets -> {
+                    viewModel.onDeleteAllSetsClick()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun startShimmerView() { HGDAAnimationUtils.startShimmerView(requireActivity(), R.id.task_set_shimmerframelayout) }

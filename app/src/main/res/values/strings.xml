@@ -36,4 +36,10 @@
     <string name="tasks_set">Tasks set</string>
     <string name="task">Task</string>
     <string name="journal_entry">Journal entry</string>
+    <string name="today">Today</string>
+    <string name="my_history">My history</string>
+    <string name="tasks_sets">Task sets</string>
+    <string name="about">About</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
 </resources>
