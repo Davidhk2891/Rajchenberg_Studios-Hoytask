@@ -2,7 +2,6 @@ package com.rajchenbergstudios.hoygenda.ui.todaylists
 
 import android.content.res.Resources
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -17,7 +16,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.databinding.FragmentParentTodayBinding
-import com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListFragment
 import com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,12 +25,11 @@ private const val TAG = "TodayFragment"
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class TodayFragment : Fragment(R.layout.fragment_parent_today), TasksListFragment.ChildFragmentListener {
+class TodayFragment : Fragment(R.layout.fragment_parent_today) {
 
     private val viewModel: TodayViewModel by viewModels()
     private lateinit var binding: FragmentParentTodayBinding
     private var fabClicked: Boolean = false
-    private lateinit var tasksListMenu: Menu
 
     private lateinit var viewPager: ViewPager2
 
@@ -53,18 +50,11 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today), TasksListFragmen
                 fabClicked = !fabClicked
             }
         }
-        setChildFragmentMenus()
         initViewPagerWithTabLayout(binding)
         todayDateDisplay(binding)
         initFabs(binding)
         loadTodayEventCollector()
         getFragmentResultListeners()
-    }
-
-    private fun setChildFragmentMenus(){
-        val tasksListFragment = TasksListFragment()
-        tasksListFragment.setListener(this)
-        Logger.i(TAG, "setChildFragmentMenus", "TasksListFragment menu set")
     }
 
     private fun getFragmentResultListeners() {
@@ -238,14 +228,5 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today), TasksListFragmen
                 }
             }
         }
-    }
-
-    override fun onFragmentChanged(menu: Menu) {
-        tasksListMenu = menu
-    }
-
-    override fun onPause() {
-        super.onPause()
-        tasksListMenu.clear()
     }
 }

@@ -1,10 +1,10 @@
 package com.rajchenbergstudios.hoygenda.ui.activity
 
 import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -83,3 +83,7 @@ const val EDIT_TASK_RESULT_OK = Activity.RESULT_FIRST_USER + 1
 const val CREATE_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 2
 const val EDIT_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 3
 const val ADD_TASK_FROM_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 4
+
+// TODO: Commit
+// TODO: Create new branch for Drawer test
+// TODO: Build and test ToolBar menu with the fragmets
