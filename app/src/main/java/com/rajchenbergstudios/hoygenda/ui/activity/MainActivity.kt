@@ -84,6 +84,5 @@ const val CREATE_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 2
 const val EDIT_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 3
 const val ADD_TASK_FROM_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 4
 
-// TODO: Commit
 // TODO: Create new branch for Drawer test
 // TODO: Build and test ToolBar menu with the fragmets
