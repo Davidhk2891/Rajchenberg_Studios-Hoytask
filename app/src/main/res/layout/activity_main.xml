@@ -27,7 +27,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             tools:ignore="MissingConstraints" />
 
-        <androidx.fragment.app.FragmentContainerView
+        <fragment
             android:id="@+id/hoytask_nav_host_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -37,7 +37,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:name="androidx.navigation.fragment.NavHostFragment"
             app:defaultNavHost="true"
-            app:navGraph="@navigation/nav_graph"/>
+            app:navGraph="@navigation/nav_graph"
+            tools:ignore="FragmentTagUsage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -46,6 +47,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        app:itemIconTint="@color/nav_icon_colors"
+        app:itemTextColor="@color/nav_icon_colors"
+        app:itemBackground="@android:color/transparent"
         app:menu="@menu/menu_drawer_navigation" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

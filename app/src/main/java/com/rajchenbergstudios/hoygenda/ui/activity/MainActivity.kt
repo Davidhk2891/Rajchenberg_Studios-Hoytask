@@ -2,40 +2,36 @@ package com.rajchenbergstudios.hoygenda.ui.activity
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.rajchenbergstudios.hoygenda.R
-import com.rajchenbergstudios.hoygenda.ui.dayshistory.DaysListFragment
-import com.rajchenbergstudios.hoygenda.ui.tasksset.TaskSetsListFragment
-import com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragment
+import com.rajchenbergstudios.hoygenda.ui.dayshistory.DaysListFragmentDirections
+import com.rajchenbergstudios.hoygenda.ui.tasksset.TaskSetsListFragmentDirections
+import com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-
 
 private const val TAG = "MainActivity.kt"
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var drawerLayout: DrawerLayout
-    private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var navigationView: NavigationView
     private var toolBar:Toolbar? = null
+    private lateinit var currentFragName: String
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -44,63 +40,89 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        initializeObjects()
         setupCustomActionBar()
-        setupNavControllerWithNavHostFrag()
-        setupNavigationDrawer()
-
-//        if (savedInstanceState == null) {
-//            supportFragmentManager.beginTransaction().replace(R.id.hoytask_nav_host_fragment_container, TodayFragment()).commit()
-//            navigationView.setCheckedItem(R.id.todayFragment)
-//        }
+        setupNavController()
+        setupNavigationViewNavigation()
+        // setupNavigationDrawerListener()
+        setupActionBarWithNavController(navController, drawerLayout)
     }
 
-    private fun setupCustomActionBar(){
+    private fun initializeObjects(){
         toolBar = findViewById(R.id.hoytask_appbar)
+        drawerLayout = findViewById(R.id.hoytask_drawer_layout)
+        navigationView = findViewById(R.id.hoytask_navigationview)
+    }
+
+    private fun setupCustomActionBar() {
         setSupportActionBar(toolBar)
     }
 
-    private fun setupNavControllerWithNavHostFrag(){
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.hoytask_nav_host_fragment_container)
-                as NavHostFragment
-        navController = navHostFragment.findNavController()
-        setupActionBarWithNavController(navController)
+    private fun setupNavController() {
+        navController = Navigation.findNavController(this, R.id.hoytask_nav_host_fragment_container)
+        NavigationUI.setupWithNavController(navigationView, navController)
+        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
     }
 
-    private fun setupNavigationDrawer(){
-        drawerLayout = findViewById(R.id.hoytask_drawer_layout)
-        navigationView = findViewById(R.id.hoytask_navigationview)
-        navigationView.setNavigationItemSelectedListener(this)
-        actionBarDrawerToggle = ActionBarDrawerToggle(this, drawerLayout, toolBar, R.string.nav_open, R.string.nav_close)
-        drawerLayout.addDrawerListener(actionBarDrawerToggle)
-        actionBarDrawerToggle.syncState()
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        var fragment: Fragment? = null
-        when (item.itemId) {
-            R.id.todayFragment -> fragment = TodayFragment()
-            R.id.taskSetsListFragment -> {
-                fragment = TaskSetsListFragment()
-                Logger.i(TAG, "onNavigationItemSelect", "Tasks Sets Frag selected")
+    private fun setupNavigationViewNavigation() {
+        currentFragName = "TodayFragment"
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.taskSetsListFragment -> {
+                    when (currentFragName) {
+                        "TodayFragment" -> {
+                            navController.navigate(TodayFragmentDirections.actionGlobalTaskSetsListFragment())
+                        }
+                        "DaysListFragment" -> {
+                            navController.navigate(DaysListFragmentDirections.actionGlobalTaskSetsListFragment())
+                        }
+                    }
+                    drawerLayout.closeDrawer(GravityCompat.START, false)
+                    currentFragName = "TaskSetsListFragment"
+                }
+                R.id.daysListFragment -> {
+                    when (currentFragName) {
+                        "TodayFragment" -> {
+                            navController.navigate(TodayFragmentDirections.actionGlobalDaysListFragment())
+                        }
+                        "TaskSetsListFragment" -> {
+                            navController.navigate(TaskSetsListFragmentDirections.actionGlobalDaysListFragment())
+                        }
+                    }
+                    drawerLayout.closeDrawer(GravityCompat.START, false)
+                    currentFragName = "DaysListFragment"
+                }
             }
-            R.id.daysListFragment -> fragment = DaysListFragment()
+            true
         }
-        if (fragment != null) {
-            supportFragmentManager.beginTransaction().replace(R.id.hoytask_nav_host_fragment_container, fragment).commit()
-        }
-        drawerLayout.closeDrawer(GravityCompat.START, true)
-        return true
     }
+
+//    private fun setupNavigationDrawerListener() {
+//        drawerLayout.addDrawerListener(object: DrawerLayout.DrawerListener{
+//            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+//
+//            }
+//
+//            override fun onDrawerOpened(drawerView: View) {
+//
+//            }
+//
+//            override fun onDrawerClosed(drawerView: View) {
+//
+//            }
+//
+//            override fun onDrawerStateChanged(newState: Int) {
+//
+//            }
+//        })
+//    }
 
     override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || super.onSupportNavigateUp()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            true
-        } else super.onOptionsItemSelected(item)
+        if (currentFragName == "TaskSetsListFragment" || currentFragName == "DaysListFragment") {
+            drawerLayout.openDrawer(GravityCompat.START, false)
+        }
+        currentFragName = "TodayFragment"
+        return NavigationUI.navigateUp(navController, drawerLayout)
     }
 }
 const val ADD_TASK_RESULT_OK = Activity.RESULT_FIRST_USER

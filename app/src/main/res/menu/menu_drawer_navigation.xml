@@ -3,7 +3,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/todayFragment"
-            android:title="@string/home"
+            android:title="@string/today"
             android:icon="@drawable/ic_outline_home_24"/>
         <item
             android:id="@+id/taskSetsListFragment"
@@ -15,7 +15,11 @@
             android:icon="@drawable/ic_outline_history_24"/>
     </group>
 
-    <item
-        android:id="@+id/nav_about"
-        android:title="@string/about" />
+    <item android:title="@string/more">
+        <menu>
+            <item
+                android:id="@+id/nav_about"
+                android:title="@string/about" />
+        </menu>
+    </item>
 </menu>

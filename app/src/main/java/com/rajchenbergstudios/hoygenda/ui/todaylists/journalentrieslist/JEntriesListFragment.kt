@@ -28,6 +28,7 @@ class JEntriesListFragment : Fragment(R.layout.fragment_child_journal_entries_li
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        loadMenu()
         val binding = FragmentChildJournalEntriesListBinding.bind(view)
         val jEntriesAdapter = JEntriesListAdapter()
 
@@ -42,23 +43,20 @@ class JEntriesListFragment : Fragment(R.layout.fragment_child_journal_entries_li
         viewModel.entries.observe(viewLifecycleOwner){ jEntriesList ->
             jEntriesAdapter.submitList(jEntriesList)
         }
-
-        //loadMenu()
     }
 
     private fun loadMenu(){
-
-        // You can add different things to this menu and it will change when changing fragments
-
         menuHost = requireActivity()
-        menuHost.addMenuProvider(object: MenuProvider {
+        menuHost.addMenuProvider(JEntriesMenuProvider(), viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
 
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+    private inner class JEntriesMenuProvider : MenuProvider{
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menu.clear()
+            menuInflater.inflate(R.menu.menu_jentries_list_fragment, menu)
 
-                menuInflater.inflate(R.menu.menu_tasks_list_fragment, menu)
-
-                val searchItem = menu.findItem(R.id.tasks_list_menu_search)
-                searchView = searchItem.actionView as SearchView
+            val searchItem = menu.findItem(R.id.jentries_list_menu_search)
+            searchView = searchItem.actionView as SearchView
 
 //                val pendingQuery = viewModel.searchQuery.value
 //                if (pendingQuery != null && pendingQuery.isNotEmpty()) {
@@ -74,34 +72,24 @@ class JEntriesListFragment : Fragment(R.layout.fragment_child_journal_entries_li
 //                    menu.findItem(R.id.tasks_list_menu_hide_completed).isChecked =
 //                        viewModel.preferencesFlow.first().hideCompleted
 //                }
-            }
+        }
 
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.tasks_list_menu_sort_by_date -> {
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            return when (menuItem.itemId) {
+                R.id.jentries_list_menu_sort_by_date -> {
 //                        viewModel.onSortOrderSelected(SortOrder.BY_DATE)
-                        true
-                    }
-                    R.id.tasks_list_menu_sort_by_name -> {
-//                        viewModel.onSortOrderSelected(SortOrder.BY_NAME)
-                        true
-                    }
-                    R.id.tasks_list_menu_hide_completed -> {
-                        menuItem.isChecked = !menuItem.isChecked
-//                        viewModel.onHideCompletedSelected(menuItem.isChecked)
-                        true
-                    }
-                    R.id.tasks_list_menu_delete_completed -> {
-//                        viewModel.onDeleteAllCompletedClick()
-                        true
-                    }
-                    R.id.tasks_list_menu_delete_all -> {
-//                        viewModel.onDeleteAllClick()
-                        true
-                    }
-                    else -> false
+                    true
                 }
+                R.id.jentries_list_menu_sort_by_name -> {
+//                        viewModel.onSortOrderSelected(SortOrder.BY_NAME)
+                    true
+                }
+                R.id.jentries_list_menu_delete_all -> {
+//                        viewModel.onDeleteAllClick()
+                    true
+                }
+                else -> false
             }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        }
     }
 }

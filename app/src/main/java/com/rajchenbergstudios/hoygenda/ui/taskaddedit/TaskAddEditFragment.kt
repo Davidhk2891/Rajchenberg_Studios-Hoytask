@@ -1,13 +1,19 @@
 package com.rajchenbergstudios.hoygenda.ui.taskaddedit
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -35,8 +41,6 @@ class TaskAddEditFragment : Fragment(R.layout.fragment_add_edit_task){
             }
         }
 
-        deduceUserFlow()
-
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.addEditEvent.collect { event ->
                 when (event) {
@@ -60,10 +64,31 @@ class TaskAddEditFragment : Fragment(R.layout.fragment_add_edit_task){
                 }.exhaustive
             }
         }
+
+        loadMenu()
+        deduceUserFlow()
     }
 
     private fun deduceUserFlow() {
         viewModel.deduceFlow()
+    }
+
+    private fun loadMenu() {
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(AddEditTaskMenuProvide(), viewLifecycleOwner, Lifecycle.State.CREATED)
+    }
+
+    private inner class AddEditTaskMenuProvide: MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menu.clear()
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            return when (menuItem.itemId) {
+//                android.R.id.home -> findNavController().popBackStack()
+                else -> false
+            }
+        }
     }
 
     private fun showFlowFromTaskList(binding: FragmentAddEditTaskBinding) {

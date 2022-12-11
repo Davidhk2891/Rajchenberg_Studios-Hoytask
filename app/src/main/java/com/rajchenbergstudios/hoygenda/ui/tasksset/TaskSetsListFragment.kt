@@ -39,6 +39,7 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        loadMenu()
         startShimmerView()
         val binding = FragmentTasksSetBinding.bind(view)
         val tasksSetListAdapter = TaskSetsListAdapter(this)
@@ -117,8 +118,6 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
                 }.exhaustive
             }
         }
-
-        loadMenu()
     }
 
     private fun loadMenu() {
@@ -128,7 +127,7 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set), TaskSetsList
 
     private inner class TaskSetsMenuProvide: MenuProvider {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-
+            menu.clear()
             menuInflater.inflate(R.menu.menu_tasks_set_fragment, menu)
 
             val searchItem = menu.findItem(R.id.task_set_action_search)
