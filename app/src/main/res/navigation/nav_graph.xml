@@ -150,11 +150,9 @@
     <action
         android:id="@+id/action_global_taskSetsListFragment"
         app:destination="@id/taskSetsListFragment"
-        app:enterAnim="@anim/frag_start_from_bottom"
-        app:popExitAnim="@anim/frag_end_from_top" />
+        app:enterAnim="@anim/frag_start_from_bottom" />
     <action
         android:id="@+id/action_global_daysListFragment"
         app:destination="@id/daysListFragment"
-        app:enterAnim="@anim/frag_start_from_bottom"
-        app:popExitAnim="@anim/frag_end_from_top" />
+        app:enterAnim="@anim/frag_start_from_bottom" />
 </navigation>

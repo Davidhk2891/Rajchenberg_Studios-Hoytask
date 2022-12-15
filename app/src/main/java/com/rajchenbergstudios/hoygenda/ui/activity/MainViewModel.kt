@@ -7,9 +7,11 @@ import com.rajchenbergstudios.hoygenda.data.day.DayDao
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.data.today.task.TaskDao
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
@@ -32,6 +34,12 @@ class MainViewModel @Inject constructor(
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
+
+    // Channel
+    private val mainEventChannel = Channel<MainEvent>()
+
+    // Event
+    val mainEvent = mainEventChannel.receiveAsFlow()
 
     init {
         viewModelScope.launch {
@@ -66,5 +74,18 @@ class MainViewModel @Inject constructor(
 
     private fun nukeTodayTasks() = viewModelScope.launch {
         taskDao.nukeTaskTable()
+    }
+
+    fun onTaskSetsListFragmentClick() = viewModelScope.launch {
+        mainEventChannel.send(MainEvent.NavigateToTaskSetsListFragment)
+    }
+
+    fun onDaysListFragmentClick() = viewModelScope.launch {
+        mainEventChannel.send(MainEvent.NavigateToDaysListFragment)
+    }
+
+    sealed class MainEvent {
+        object NavigateToTaskSetsListFragment : MainEvent()
+        object NavigateToDaysListFragment : MainEvent()
     }
 }
