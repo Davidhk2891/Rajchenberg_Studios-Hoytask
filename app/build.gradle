@@ -55,7 +55,7 @@ dependencies {
     implementation 'androidx.core:core-splashscreen:1.0.0'
 
     // Fragment
-    implementation "androidx.fragment:fragment-ktx:1.5.4"
+    implementation "androidx.fragment:fragment-ktx:1.5.5"
 
     // LifeCycle + ViewModel & LiveData
     // androidx.lifecycle:lifecycle-viewmodel-ktx-:2.6.0-alpha02 caused a crash

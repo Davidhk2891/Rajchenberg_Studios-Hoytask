@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/my_hoygenda">
+        <menu>
+            <item
+                android:id="@+id/todayFragment"
+                android:title="@string/today"
+                android:icon="@drawable/ic_outline_home_24"/>
+            <item
+                android:id="@+id/taskSetsListFragment"
+                android:title="@string/sets"
+                android:icon="@drawable/ic_outline_checklist_24"/>
+            <item
+                android:id="@+id/daysListFragment"
+                android:title="@string/past_days"
+                android:icon="@drawable/ic_outline_history_24"/>
+            <item
+                android:id="@+id/nav_tutorial"
+                android:title="@string/tutorial"
+                android:icon="@drawable/ic_baseline_help_outline_24"/>
+        </menu>
+    </item>
+
+    <item android:title="@string/more">
+        <menu>
+            <item
+                android:id="@+id/nav_leave_a_review"
+                android:title="@string/leave_a_review"
+                android:icon="@drawable/ic_baseline_tag_faces_24"/>
+            <item
+                android:id="@+id/nav_get_in_touch"
+                android:title="@string/get_in_touch"
+                android:icon="@drawable/ic_baseline_message_24"/>
+            <item
+                android:id="@+id/nav_tell_your_friends"
+                android:title="@string/tell_your_friends"
+                android:icon="@drawable/ic_baseline_share_24"/>
+            <item
+                android:id="@+id/nav_changelog"
+                android:title="@string/changelog"
+                android:icon="@drawable/ic_baseline_assignment_24"/>
+            <item
+                android:id="@+id/nav_about"
+                android:title="@string/about"
+                android:icon="@drawable/ic_baseline_info_24"/>
+        </menu>
+    </item>
+</menu>

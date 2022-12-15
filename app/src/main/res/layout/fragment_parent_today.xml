@@ -86,33 +86,47 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:translationZ="4dp"
-        android:layout_margin="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_dodgeInsetEdges="bottom"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:padding="10dp"
+        android:paddingBottom="16dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="10dp"
         android:layout_gravity="bottom|end">
 
         <TextView
             android:id="@+id/tasks_list_sub_fab_1_tv"
-            android:text="@string/add_set"
+            android:text="@string/journal_entry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="invisible"
-            app:layout_constraintEnd_toStartOf="@id/tasks_list_sub_fab_1"
+            app:layout_constraintEnd_toEndOf="@id/tasks_list_sub_fab_3_tv"
             app:layout_constraintTop_toTopOf="@id/tasks_list_sub_fab_1"
             app:layout_constraintBottom_toBottomOf="@id/tasks_list_sub_fab_1"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="-10dp"/>
 
         <TextView
             android:id="@+id/tasks_list_sub_fab_2_tv"
-            android:text="@string/add_task"
+            android:text="@string/tasks_set"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="invisible"
-            app:layout_constraintEnd_toStartOf="@id/tasks_list_sub_fab_2"
+            app:layout_constraintEnd_toEndOf="@id/tasks_list_sub_fab_3_tv"
             app:layout_constraintTop_toTopOf="@id/tasks_list_sub_fab_2"
             app:layout_constraintBottom_toBottomOf="@id/tasks_list_sub_fab_2"
+            android:layout_marginEnd="-6dp"/>
+
+        <TextView
+            android:id="@+id/tasks_list_sub_fab_3_tv"
+            android:text="@string/task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@id/tasks_list_sub_fab_3"
+            app:layout_constraintTop_toTopOf="@id/tasks_list_sub_fab_3"
+            app:layout_constraintBottom_toBottomOf="@id/tasks_list_sub_fab_3"
             android:layout_marginEnd="8dp"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -123,7 +137,7 @@
             android:focusable="true"
             android:visibility="invisible"
             android:layout_marginBottom="10dp"
-            android:src="@drawable/ic_baseline_playlist_add_24"
+            android:src="@drawable/ic_baseline_menu_book_24"
             android:backgroundTint="@color/hoytask_orange"
             app:tint="@color/hoytask_white"
             tools:ignore="ContentDescription"
@@ -132,6 +146,21 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/tasks_list_sub_fab_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="invisible"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_baseline_playlist_add_24"
+            android:backgroundTint="@color/hoytask_orange"
+            app:tint="@color/hoytask_white"
+            tools:ignore="ContentDescription"
+            app:layout_constraintBottom_toTopOf="@id/tasks_list_sub_fab_3"
+            app:layout_constraintEnd_toEndOf="@id/tasks_list_fab"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/tasks_list_sub_fab_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"

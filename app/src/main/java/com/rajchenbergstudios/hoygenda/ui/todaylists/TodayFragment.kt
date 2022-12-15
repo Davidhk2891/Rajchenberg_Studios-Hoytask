@@ -20,9 +20,6 @@ import com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListFragment
 import com.rajchenbergstudios.hoygenda.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlin.concurrent.timerTask
-import kotlin.concurrent.schedule
-import java.util.*
 
 private const val TAG = "TodayFragment"
 
@@ -36,11 +33,11 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
 
     private lateinit var viewPager: ViewPager2
 
-    private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open_anim) }
-    private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close_anim) }
-    private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.from_bottom_anim) }
-    private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.to_bottom_anim) }
-    private val fadeIn: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in) }
+    private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.view_rotate_open_anim) }
+    private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.view_rotate_close_anim) }
+    private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.view_from_bottom_anim) }
+    private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.view_to_bottom_anim) }
+    private val fadeIn: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.view_fade_in) }
     private val fadeOut: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -125,6 +122,7 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
         }
     }
 
+    // This will soon be used to be 1
     private fun setViewPagerPage(index: Int){
         viewModel.postActionWithDelay(300, object: TodayViewModel.PostActionListener{
             override fun onDelayFinished() {
@@ -172,9 +170,12 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
                 onMainFabClick(binding)
             }
             tasksListSubFab1.setOnClickListener {
-                viewModel.onAddTasksFromSetClick()
+                Logger.i(TAG, "initFabs", "Coming soon")
             }
             tasksListSubFab2.setOnClickListener {
+                viewModel.onAddTasksFromSetClick()
+            }
+            tasksListSubFab3.setOnClickListener {
                 viewModel.onAddNewTaskClick()
             }
         }
@@ -198,13 +199,13 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
             HGDAAnimationUtils.apply {
                 HGDAViewStateUtils.apply {
                     setViewAnimation(v1 = tasksListFab, a = rotateOpen)
-                    setViewAnimation(v1 = tasksListSubFab1, v2 = tasksListSubFab2, a = fromBottom)
-                    setViewAnimation(v1 = tasksListSubFab1Tv, v2 = tasksListSubFab2Tv, a = fromBottom)
+                    setViewAnimation(v1 = tasksListSubFab1, v2 = tasksListSubFab2, v3 = tasksListSubFab3, a = fromBottom)
+                    setViewAnimation(v1 = tasksListSubFab1Tv, v2 = tasksListSubFab2Tv, v3 = tasksListSubFab3Tv, a = fromBottom)
                     setViewAnimation(v1 = tasksListTransparentWhiteScreen, a = fadeIn)
-                    setViewVisibility(tasksListSubFab1, tasksListSubFab2
-                        , tasksListSubFab1Tv, tasksListSubFab2Tv, View.VISIBLE)
+                    setViewVisibility(v1 = tasksListSubFab1, v2 = tasksListSubFab2, v3 = tasksListSubFab3
+                        , v4 = tasksListSubFab1Tv, v5 = tasksListSubFab2Tv, v6 = tasksListSubFab3Tv, visibility = View.VISIBLE)
                     setViewVisibility(v1 = tasksListTransparentWhiteScreen, visibility = View.VISIBLE)
-                    setViewClickState(v1 = tasksListSubFab1, v2 = tasksListSubFab2, clickable = true)
+                    setViewClickState(v1 = tasksListSubFab1, v2 = tasksListSubFab2, v3 = tasksListSubFab3, clickable = true)
                     setViewClickState(v1 = tasksListTransparentWhiteScreen, clickable = true)
                 }
             }
@@ -216,13 +217,13 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
             HGDAAnimationUtils.apply {
                 HGDAViewStateUtils.apply {
                     setViewAnimation(v1 = tasksListFab, a = rotateClose)
-                    setViewAnimation(v1 = tasksListSubFab1, v2 = tasksListSubFab2, a = toBottom)
-                    setViewAnimation(v1 = tasksListSubFab1Tv, v2 = tasksListSubFab2Tv, a = toBottom)
+                    setViewAnimation(v1 = tasksListSubFab1, v2 = tasksListSubFab2, v3 = tasksListSubFab3, a = toBottom)
+                    setViewAnimation(v1 = tasksListSubFab1Tv, v2 = tasksListSubFab2Tv, v3 = tasksListSubFab3Tv, a = toBottom)
                     setViewAnimation(v1 = tasksListTransparentWhiteScreen, a = fadeOut)
-                    setViewVisibility(tasksListSubFab1, tasksListSubFab2
-                        , tasksListSubFab1Tv, tasksListSubFab2Tv, View.INVISIBLE)
+                    setViewVisibility(v1 = tasksListSubFab1, v2 = tasksListSubFab2, v3 = tasksListSubFab3
+                        , v4 = tasksListSubFab1Tv, v5 = tasksListSubFab2Tv, v6 = tasksListSubFab3Tv, visibility = View.INVISIBLE)
                     setViewVisibility(v1 = tasksListTransparentWhiteScreen, visibility = View.INVISIBLE)
-                    setViewClickState(v1 = tasksListSubFab1, v2 = tasksListSubFab2, clickable = false)
+                    setViewClickState(v1 = tasksListSubFab1, v2 = tasksListSubFab2, v3 = tasksListSubFab3, clickable = false)
                     setViewClickState(v1 = tasksListTransparentWhiteScreen, clickable = false)
                 }
             }

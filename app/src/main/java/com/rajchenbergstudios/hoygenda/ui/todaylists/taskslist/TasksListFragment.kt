@@ -23,11 +23,14 @@ import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildTasksListBinding
 import com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
+import com.rajchenbergstudios.hoygenda.utils.Logger
 import com.rajchenbergstudios.hoygenda.utils.OnQueryTextChanged
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+
+const val TAG = "TasksListFragment"
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -39,6 +42,7 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksLis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        loadMenu()
         val binding = FragmentChildTasksListBinding.bind(view)
         val tasksListAdapter = TasksListAdapter(this)
 
@@ -70,7 +74,6 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksLis
 
         loadObservable(binding, tasksListAdapter)
         loadTasksEventCollector()
-        loadMenu()
     }
 
     private fun loadObservable(binding: FragmentChildTasksListBinding, tasksListAdapter: TasksListAdapter) {
@@ -133,60 +136,59 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksLis
     }
 
     private fun loadMenu(){
-
         val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(object: MenuProvider {
+        menuHost.addMenuProvider(TasksMenuProvider(), viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
 
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+    private inner class TasksMenuProvider : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menu.clear()
+            menuInflater.inflate(R.menu.menu_tasks_list_fragment, menu)
+            val searchItem = menu.findItem(R.id.tasks_list_menu_search)
+            searchView = searchItem.actionView as SearchView
 
-                menuInflater.inflate(R.menu.menu_tasks_list_fragment, menu)
-
-                val searchItem = menu.findItem(R.id.tasks_list_menu_search)
-                searchView = searchItem.actionView as SearchView
-
-                val pendingQuery = viewModel.searchQuery.value
-                if (pendingQuery != null && pendingQuery.isNotEmpty()) {
-                    searchItem.expandActionView()
-                    searchView.setQuery(pendingQuery, false)
-                }
-
-                searchView.OnQueryTextChanged{ searchQuery ->
-                    viewModel.searchQuery.value = searchQuery
-                }
-
-                viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                    menu.findItem(R.id.tasks_list_menu_hide_completed).isChecked =
-                        viewModel.preferencesFlow.first().hideCompleted
-                }
+            val pendingQuery = viewModel.searchQuery.value
+            if (pendingQuery != null && pendingQuery.isNotEmpty()) {
+                searchItem.expandActionView()
+                searchView.setQuery(pendingQuery, false)
             }
 
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.tasks_list_menu_sort_by_date -> {
-                        viewModel.onSortOrderSelected(SortOrder.BY_DATE)
-                        true
-                    }
-                    R.id.tasks_list_menu_sort_by_name -> {
-                        viewModel.onSortOrderSelected(SortOrder.BY_NAME)
-                        true
-                    }
-                    R.id.tasks_list_menu_hide_completed -> {
-                        menuItem.isChecked = !menuItem.isChecked
-                        viewModel.onHideCompletedSelected(menuItem.isChecked)
-                        true
-                    }
-                    R.id.tasks_list_menu_delete_completed -> {
-                        viewModel.onDeleteAllCompletedClick()
-                        true
-                    }
-                    R.id.tasks_list_menu_delete_all -> {
-                        viewModel.onDeleteAllClick()
-                        true
-                    }
-                    else -> false
-                }
+            searchView.OnQueryTextChanged{ searchQuery ->
+                viewModel.searchQuery.value = searchQuery
             }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                menu.findItem(R.id.tasks_list_menu_hide_completed).isChecked =
+                    viewModel.preferencesFlow.first().hideCompleted
+            }
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            return when (menuItem.itemId) {
+                R.id.tasks_list_menu_sort_by_date -> {
+                    viewModel.onSortOrderSelected(SortOrder.BY_DATE)
+                    true
+                }
+                R.id.tasks_list_menu_sort_by_name -> {
+                    viewModel.onSortOrderSelected(SortOrder.BY_NAME)
+                    true
+                }
+                R.id.tasks_list_menu_hide_completed -> {
+                    menuItem.isChecked = !menuItem.isChecked
+                    viewModel.onHideCompletedSelected(menuItem.isChecked)
+                    true
+                }
+                R.id.tasks_list_menu_delete_completed -> {
+                    viewModel.onDeleteAllCompletedClick()
+                    true
+                }
+                R.id.tasks_list_menu_delete_all -> {
+                    viewModel.onDeleteAllClick()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onItemClick(task: Task) {
@@ -204,5 +206,10 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksLis
     override fun onDestroyView() {
         super.onDestroyView()
         searchView.setOnQueryTextListener(null)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Logger.i(TAG, "onPause", "onPause CALLED")
     }
 }

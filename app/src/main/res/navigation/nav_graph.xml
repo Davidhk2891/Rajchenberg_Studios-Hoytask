@@ -12,7 +12,18 @@
         tools:layout="@layout/fragment_parent_today">
         <action
             android:id="@+id/action_todayFragment_to_taskAddEditFragment"
-            app:destination="@id/taskAddEditFragment" />
+            app:destination="@id/taskAddEditFragment"
+            app:enterAnim="@anim/frag_start_from_right"
+            app:exitAnim="@anim/frag_end_from_left"
+            app:popEnterAnim="@anim/frag_start_from_right"
+            app:popExitAnim="@anim/frag_end_from_left" />
+        <action
+            android:id="@+id/action_todayFragment_to_JEntryAddEditFragment"
+            app:destination="@id/JEntryAddEditFragment"
+            app:enterAnim="@anim/frag_start_from_right"
+            app:exitAnim="@anim/frag_end_from_left"
+            app:popEnterAnim="@anim/frag_start_from_right"
+            app:popExitAnim="@anim/frag_end_from_left" />
     </fragment>
     <fragment
         android:id="@+id/taskAddEditFragment"
@@ -128,4 +139,20 @@
         android:name="com.rajchenbergstudios.hoygenda.ui.todaylists.journalentrieslist.JEntriesListFragment"
         android:label="fragment_child_journal_entries_list"
         tools:layout="@layout/fragment_child_journal_entries_list" />
+    <fragment
+        android:id="@+id/JEntryAddEditFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.jentryaddedit.JEntryAddEditFragment"
+        android:label="fragment_add_edit_journal_entry"
+        tools:layout="@layout/fragment_add_edit_journal_entry" />
+    <action
+        android:id="@+id/action_global_todayFragment"
+        app:destination="@id/todayFragment" />
+    <action
+        android:id="@+id/action_global_taskSetsListFragment"
+        app:destination="@id/taskSetsListFragment"
+        app:enterAnim="@anim/frag_start_from_bottom" />
+    <action
+        android:id="@+id/action_global_daysListFragment"
+        app:destination="@id/daysListFragment"
+        app:enterAnim="@anim/frag_start_from_bottom" />
 </navigation>

@@ -1,20 +1,23 @@
 package com.rajchenbergstudios.hoygenda.ui.activity
 
 import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import com.rajchenbergstudios.hoygenda.R
-import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
+import com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragmentDirections
+import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -25,8 +28,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
-    private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var navigationView: NavigationView
+    private var toolBar:Toolbar? = null
+    private lateinit var currentFragName: String
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -35,47 +40,112 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        initializeObjects()
         setupCustomActionBar()
-        setupNavControllerWithNavHostFrag()
-        setupBottomNavigationView()
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        setupBottomNavStateConfig()
+        setupNavController()
+        setupNavigationViewNavigation()
+        setupNavigationDrawerListener()
+        setupActionBarWithNavController(navController, drawerLayout)
+
+        loadMainEventCollector()
     }
 
-    private fun setupCustomActionBar(){
-        setSupportActionBar(findViewById(R.id.hoytask_appbar))
+    private fun initializeObjects(){
+        toolBar = findViewById(R.id.hoytask_appbar)
+        drawerLayout = findViewById(R.id.hoytask_drawer_layout)
+        navigationView = findViewById(R.id.hoytask_navigationview)
     }
 
-    private fun setupNavControllerWithNavHostFrag(){
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.hoytask_nav_host_fragment_container)
-                as NavHostFragment
-        navController = navHostFragment.findNavController()
+    private fun setupCustomActionBar() {
+        setSupportActionBar(toolBar)
     }
 
-    private fun setupBottomNavigationView(){
-        bottomNavigationView = findViewById(R.id.hoytask_bottom_nav)
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.todayFragment, R.id.taskSetsListFragment, R.id.daysListFragment))
-        bottomNavigationView.setupWithNavController(navController)
+    private fun setupNavController() {
+        navController = Navigation.findNavController(this, R.id.hoytask_nav_host_fragment_container)
+        NavigationUI.setupWithNavController(navigationView, navController)
+        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout)
     }
 
-    private fun setupBottomNavStateConfig(){
-        navController.addOnDestinationChangedListener{ _, destination, _ ->
-            when (destination.id) {
-                R.id.todayFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
-                R.id.tasksListFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
-                R.id.jEntriesListFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
-                R.id.taskSetsListFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
-                R.id.daysListFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.VISIBLE)
-                R.id.taskAddEditFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.GONE)
-                R.id.tasksSetEditListFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.GONE)
-                R.id.daysDetailsFragment -> HGDAViewStateUtils.setViewVisibility(v1 = bottomNavigationView, visibility = View.GONE)
+    private fun setupNavigationViewNavigation() {
+        currentFragName = "TodayFragment"
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.taskSetsListFragment -> {
+                    when (currentFragName) {
+                        "TodayFragment" -> {
+                            viewModel.onTaskSetsListFragmentClick()
+                        }
+                    }
+                    closeDrawer()
+                    currentFragName = "TaskSetsListFragment"
+                }
+                R.id.daysListFragment -> {
+                    when (currentFragName) {
+                        "TodayFragment" -> {
+                            viewModel.onDaysListFragmentClick()
+                        }
+                    }
+                    closeDrawer()
+                    currentFragName = "DaysListFragment"
+                }
+            }
+            true
+        }
+    }
+
+    private fun loadMainEventCollector() {
+        this.lifecycleScope.launchWhenStarted {
+            viewModel.mainEvent.collect { mainEvent ->
+                when (mainEvent) {
+                    MainViewModel.MainEvent.NavigateToTaskSetsListFragment -> {
+                        navController.navigate(TodayFragmentDirections.actionGlobalTaskSetsListFragment())
+                        lockDrawer()
+                    }
+                    MainViewModel.MainEvent.NavigateToDaysListFragment -> {
+                        navController.navigate(TodayFragmentDirections.actionGlobalDaysListFragment())
+                        lockDrawer()
+                    }
+                }.exhaustive
             }
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || super.onSupportNavigateUp()
+    private fun setupNavigationDrawerListener() {
+        drawerLayout.addDrawerListener(object: DrawerLayout.DrawerListener{
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+
+            }
+
+            override fun onDrawerOpened(drawerView: View) {
+
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+
+            }
+
+            override fun onDrawerStateChanged(newState: Int) {
+
+            }
+        })
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        if (currentFragName == "TaskSetsListFragment" || currentFragName == "DaysListFragment") {
+            unlockDrawer()
+            openDrawer()
+        }
+        currentFragName = "TodayFragment"
+        return NavigationUI.navigateUp(navController, drawerLayout)
+    }
+
+    private fun openDrawer() { drawerLayout.openDrawer(GravityCompat.START, false) }
+
+    private fun closeDrawer() { drawerLayout.closeDrawer(GravityCompat.START, false) }
+
+    private fun lockDrawer() { drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED) }
+
+    private fun unlockDrawer() { drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED) }
 }
 
 const val ADD_TASK_RESULT_OK = Activity.RESULT_FIRST_USER
