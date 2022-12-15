@@ -44,4 +44,11 @@
     <string name="nav_close">Close</string>
     <string name="more">More</string>
     <string name="past_days">Past days</string>
+    <string name="drawer_logo">drawer logo</string>
+    <string name="get_in_touch">Get in touch</string>
+    <string name="leave_a_review">Leave a review</string>
+    <string name="changelog">Changelog</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="tell_your_friends">Tell your friends</string>
+    <string name="my_hoygenda">My Hoygenda</string>
 </resources>
