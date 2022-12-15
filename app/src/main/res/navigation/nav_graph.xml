@@ -3,25 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/tasksListFragment">
+    app:startDestination="@id/todayFragment">
 
     <fragment
-        android:id="@+id/tasksListFragment"
-        android:name="com.rajchenbergstudios.hoytask.ui.taskslist.TasksListFragment"
+        android:id="@+id/todayFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragment"
         android:label="Today"
-        tools:layout="@layout/fragment_tasks_list" >
+        tools:layout="@layout/fragment_parent_today">
         <action
-            android:id="@+id/action_tasksListFragment_to_taskAddEditFragment"
-            app:destination="@id/taskAddEditFragment" />
+            android:id="@+id/action_todayFragment_to_taskAddEditFragment"
+            app:destination="@id/taskAddEditFragment"
+            app:enterAnim="@anim/frag_start_from_right"
+            app:exitAnim="@anim/frag_end_from_left"
+            app:popEnterAnim="@anim/frag_start_from_right"
+            app:popExitAnim="@anim/frag_end_from_left" />
+        <action
+            android:id="@+id/action_todayFragment_to_JEntryAddEditFragment"
+            app:destination="@id/JEntryAddEditFragment"
+            app:enterAnim="@anim/frag_start_from_right"
+            app:exitAnim="@anim/frag_end_from_left"
+            app:popEnterAnim="@anim/frag_start_from_right"
+            app:popExitAnim="@anim/frag_end_from_left" />
     </fragment>
     <fragment
         android:id="@+id/taskAddEditFragment"
-        android:name="com.rajchenbergstudios.hoytask.ui.taskaddedit.TaskAddEditFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.taskaddedit.TaskAddEditFragment"
         android:label="{title}"
         tools:layout="@layout/fragment_add_edit_task" >
         <argument
             android:name="task"
-            app:argType="com.rajchenbergstudios.hoytask.data.task.Task"
+            app:argType="com.rajchenbergstudios.hoygenda.data.today.task.Task"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
@@ -29,7 +40,7 @@
             app:argType="string" />
         <argument
             android:name="taskinset"
-            app:argType="com.rajchenbergstudios.hoytask.data.taskinset.TaskInSet"
+            app:argType="com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSet"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
@@ -39,7 +50,7 @@
     </fragment>
     <dialog
         android:id="@+id/tasksDeleteAllDialogFragment"
-        android:name="com.rajchenbergstudios.hoytask.ui.deleteall.DeleteAllDialogFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.deleteall.DeleteAllDialogFragment"
         android:label="TasksDeleteAllDialogFragment">
         <argument
             android:name="origin"
@@ -48,7 +59,7 @@
     <action android:id="@+id/action_global_tasksDeleteAllDialogFragment" app:destination="@id/tasksDeleteAllDialogFragment" />
     <fragment
         android:id="@+id/daysListFragment"
-        android:name="com.rajchenbergstudios.hoytask.ui.dayshistory.DaysListFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.dayshistory.DaysListFragment"
         android:label="Past days"
         tools:layout="@layout/fragment_days_history" >
         <action
@@ -57,7 +68,7 @@
     </fragment>
     <fragment
         android:id="@+id/taskSetsListFragment"
-        android:name="com.rajchenbergstudios.hoytask.ui.tasksset.TaskSetsListFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.tasksset.TaskSetsListFragment"
         android:label="Sets of tasks"
         tools:layout="@layout/fragment_tasks_set" >
         <action
@@ -66,16 +77,16 @@
     </fragment>
     <fragment
         android:id="@+id/daysDetailsFragment"
-        android:name="com.rajchenbergstudios.hoytask.ui.daysdetails.DaysDetailsFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.daysdetails.DaysDetailsFragment"
         android:label="Past days"
         tools:layout="@layout/fragment_days_details">
         <argument
             android:name="day"
-            app:argType="com.rajchenbergstudios.hoytask.data.day.Day" />
+            app:argType="com.rajchenbergstudios.hoygenda.data.day.Day" />
     </fragment>
     <fragment
         android:id="@+id/tasksSetEditListFragment"
-        android:name="com.rajchenbergstudios.hoytask.ui.taskssetedit.TasksInSetListFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.taskssetedit.TasksInSetListFragment"
         android:label="{settitle}"
         tools:layout="@layout/fragment_tasks_in_set" >
         <action
@@ -87,7 +98,7 @@
     </fragment>
     <dialog
         android:id="@+id/createTaskSetDialogFragment"
-        android:name="com.rajchenbergstudios.hoytask.ui.createtaskset.CreateTaskSetDialogFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.createtaskset.CreateTaskSetDialogFragment"
         android:label="fragment_task_set_create"
         tools:layout="@layout/fragment_task_set_create" >
         <action
@@ -95,7 +106,7 @@
             app:destination="@id/tasksSetEditListFragment" />
         <argument
             android:name="task"
-            app:argType="com.rajchenbergstudios.hoytask.data.task.Task"
+            app:argType="com.rajchenbergstudios.hoygenda.data.today.task.Task"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
@@ -104,12 +115,12 @@
     </dialog><action android:id="@+id/action_global_createTaskSetDialogFragment" app:destination="@id/createTaskSetDialogFragment"/>
     <dialog
         android:id="@+id/SetBottomSheetDialogFragment"
-        android:name="com.rajchenbergstudios.hoytask.ui.todaytasktoset.SetBottomSheetDialogFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.todaytasktoset.SetBottomSheetDialogFragment"
         android:label="fragment_set_bottom_sheet"
         tools:layout="@layout/fragment_set_bottom_sheet" >
         <argument
             android:name="task"
-            app:argType="com.rajchenbergstudios.hoytask.data.task.Task"
+            app:argType="com.rajchenbergstudios.hoygenda.data.today.task.Task"
             app:nullable="true"
             android:defaultValue="@null" />
         <argument
@@ -117,4 +128,31 @@
             app:argType="integer" />
     </dialog>
     <action android:id="@+id/action_global_SetBottomSheetDialogFragment" app:destination="@id/SetBottomSheetDialogFragment" />
+    <fragment
+        android:id="@+id/tasksListFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListFragment"
+        android:label="Tasks"
+        tools:layout="@layout/fragment_child_tasks_list" >
+    </fragment>
+    <fragment
+        android:id="@+id/jEntriesListFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.todaylists.journalentrieslist.JEntriesListFragment"
+        android:label="fragment_child_journal_entries_list"
+        tools:layout="@layout/fragment_child_journal_entries_list" />
+    <fragment
+        android:id="@+id/JEntryAddEditFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.jentryaddedit.JEntryAddEditFragment"
+        android:label="fragment_add_edit_journal_entry"
+        tools:layout="@layout/fragment_add_edit_journal_entry" />
+    <action
+        android:id="@+id/action_global_todayFragment"
+        app:destination="@id/todayFragment" />
+    <action
+        android:id="@+id/action_global_taskSetsListFragment"
+        app:destination="@id/taskSetsListFragment"
+        app:enterAnim="@anim/frag_start_from_bottom" />
+    <action
+        android:id="@+id/action_global_daysListFragment"
+        app:destination="@id/daysListFragment"
+        app:enterAnim="@anim/frag_start_from_bottom" />
 </navigation>

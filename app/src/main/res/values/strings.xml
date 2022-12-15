@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hoytask</string>
+    <string name="app_name">Hoygenda</string>
     <string name="high_priority_task">high priority task</string>
     <string name="task_title">Enter text…</string>
     <string name="important_task">Important task</string>
@@ -31,4 +31,24 @@
     <string name="add_task">Add task</string>
     <string name="select_set">Select set</string>
     <string name="delete_all">Delete all</string>
+    <string name="journal_entry_icon">journal entry icon</string>
+    <string name="important_entry">Important entry</string>
+    <string name="tasks_set">Tasks set</string>
+    <string name="task">Task</string>
+    <string name="journal_entry">Journal entry</string>
+    <string name="today">Today</string>
+    <string name="my_history">My history</string>
+    <string name="tasks_sets">Task sets</string>
+    <string name="about">About</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+    <string name="more">More</string>
+    <string name="past_days">Past days</string>
+    <string name="drawer_logo">drawer logo</string>
+    <string name="get_in_touch">Get in touch</string>
+    <string name="leave_a_review">Leave a review</string>
+    <string name="changelog">Changelog</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="tell_your_friends">Tell your friends</string>
+    <string name="my_hoygenda">My Hoygenda</string>
 </resources>

@@ -9,12 +9,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
-        applicationId "com.rajchenbergstudios.hoytask"
+        applicationId "com.rajchenbergstudios.hoygenda"
         minSdk 26
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -36,6 +36,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    namespace 'com.rajchenbergstudios.hoygenda'
 }
 
 dependencies {
@@ -47,20 +48,21 @@ dependencies {
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 
     // Splashscreen Android API
     implementation 'androidx.core:core-splashscreen:1.0.0'
 
     // Fragment
-    implementation "androidx.fragment:fragment-ktx:1.5.4"
+    implementation "androidx.fragment:fragment-ktx:1.5.5"
 
     // LifeCycle + ViewModel & LiveData
-    // androidx.lifecycle:lifecycle-viewmodel-ktx-:2.6.0-alpha02 causes a crash
-    // androidx.lifecycle:lifecycle-livedata-ktx-:2.6.0-alpha02 causes a crash
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-alpha01"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.0-alpha01"
+    // androidx.lifecycle:lifecycle-viewmodel-ktx-:2.6.0-alpha02 caused a crash
+    // androidx.lifecycle:lifecycle-livedata-ktx-:2.6.0-alpha02 caused a crash
+    // androidx.lifecycle:lifecycle-livedata-ktx-:2.6.0-alpha03 was last one to work
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-alpha03"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.0-alpha03"
 
     // Navigation component
     implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
