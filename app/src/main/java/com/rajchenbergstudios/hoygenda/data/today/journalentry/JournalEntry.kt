@@ -10,7 +10,7 @@ import java.text.DateFormat
 @Entity(tableName = "journal_table")
 @Parcelize
 @JsonIgnoreProperties(ignoreUnknown = true)
-class JournalEntry(
+data class JournalEntry(
     val content: String,
     val important: Boolean = false,
     val created: Long = System.currentTimeMillis(),

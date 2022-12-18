@@ -169,7 +169,7 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksLis
                     viewModel.onSortOrderSelected(SortOrder.BY_DATE)
                     true
                 }
-                R.id.tasks_list_menu_sort_by_name -> {
+                R.id.tasks_list_menu_sort_alphabetically -> {
                     viewModel.onSortOrderSelected(SortOrder.BY_NAME)
                     true
                 }

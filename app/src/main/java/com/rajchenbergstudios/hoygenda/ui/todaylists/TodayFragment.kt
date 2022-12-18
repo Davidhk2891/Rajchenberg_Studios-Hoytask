@@ -58,8 +58,12 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
     }
 
     private fun getFragmentResultListeners() {
-        setFragmentResultListener("add_edit_request"){_, bundle ->
-            val result = bundle.getInt("add_edit_result")
+        setFragmentResultListener("task_add_edit_request"){_, bundle ->
+            val result = bundle.getInt("task_add_edit_result")
+            onFragmentResult(result)
+        }
+        setFragmentResultListener("je_add_edit_request"){_, bundle ->
+            val result = bundle.getInt("je_add_edit_result")
             onFragmentResult(result)
         }
         setFragmentResultListener("create_set_request_2"){_, bundle ->
@@ -85,6 +89,7 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
     /**
      * TodayViewModel.TodayEvent.NavigateToAddTaskScreen: Relevant to this class. Belongs to Fab which are all in this class.
      * TodayViewModel.TodayEvent.ShowTaskSavedConfirmationMessage: Relevant to this class. Belongs to onFragmentResultListener which is here.
+     * TodayViewModel.TodayEvent.ShowJEntrySavedConfirmationMessage: Relevant to this class. Belongs to onFragmentResultListener which is here.
      * TodayViewModel.TodayEvent.ShowTaskSavedInNewOrOldSetConfirmationMessage: Relevant to this class. Belongs to onFragmentResultListener which is here.
      * TodayViewModel.TodayEvent.ShowTaskAddedFromSetConfirmationMessage: Relevant to this class. Belongs to onFragmentResultListener which is here.
      * TodayViewModel.TodayEvent.NavigateToAddTasksFromSetBottomSheet: Relevant to this class. Belongs to Fab which are all in this class.
@@ -99,9 +104,18 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
                                 , taskinset = null, origin = 1)
                         findNavController().navigate(action)
                     }
+                    TodayViewModel.TodayEvent.NavigateToAddJEntryScreen -> {
+                        val action = TodayFragmentDirections
+                            .actionTodayFragmentToJEntryAddEditFragment(jentry = null, title = "Add entry")
+                        findNavController().navigate(action)
+                    }
                     is TodayViewModel.TodayEvent.ShowTaskSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                         setViewPagerPage(0)
+                    }
+                    is TodayViewModel.TodayEvent.ShowJEntrySavedConfirmationMessage -> {
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
+                        setViewPagerPage(1)
                     }
                     is TodayViewModel.TodayEvent.ShowTaskSavedInNewOrOldSetConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg.toString(), Snackbar.LENGTH_LONG).show()
@@ -170,7 +184,7 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
                 onMainFabClick(binding)
             }
             tasksListSubFab1.setOnClickListener {
-                Logger.i(TAG, "initFabs", "Coming soon")
+                viewModel.onAddNewJEntryClick()
             }
             tasksListSubFab2.setOnClickListener {
                 viewModel.onAddTasksFromSetClick()

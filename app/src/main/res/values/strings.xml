@@ -51,4 +51,6 @@
     <string name="tutorial">Tutorial</string>
     <string name="tell_your_friends">Tell your friends</string>
     <string name="my_hoygenda">My Hoygenda</string>
+    <string name="sort_by_time">Sort by time</string>
+    <string name="sort_alphabetically">Sort alphabetically</string>
 </resources>

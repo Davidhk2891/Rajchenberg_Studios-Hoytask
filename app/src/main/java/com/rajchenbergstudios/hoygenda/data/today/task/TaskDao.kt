@@ -17,13 +17,11 @@ interface TaskDao {
         }
 
     @Query("SELECT * FROM task_table WHERE (completed != :hideCompleted OR completed = 0) AND" +
-            " title LIKE '%' || :searchQuery || '%' ORDER BY important DESC, title"
-    )
+            " title LIKE '%' || :searchQuery || '%' ORDER BY important DESC, title")
     fun getTasksSortedByName(searchQuery: String, hideCompleted: Boolean): Flow<List<Task>>
 
     @Query("SELECT * FROM task_table WHERE (completed != :hideCompleted OR completed = 0) AND" +
-            " title LIKE '%' || :searchQuery || '%' ORDER BY important DESC, created"
-    )
+            " title LIKE '%' || :searchQuery || '%' ORDER BY important DESC, created")
     fun getTasksSortedByDate(searchQuery: String, hideCompleted: Boolean): Flow<List<Task>>
 
     @Query("SELECT * FROM task_table LIMIT 1")
