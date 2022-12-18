@@ -1,4 +1,4 @@
-package com.rajchenbergstudios.hoygenda.ui.daysdetails
+package com.rajchenbergstudios.hoygenda.ui.pastday
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

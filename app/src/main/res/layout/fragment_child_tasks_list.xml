@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.todaylists.taskslist.TasksListFragment">
+    tools:context=".ui.today.todaytaskslist.TasksListFragment">
 
     <include
         android:id="@+id/tasks_list_recyclerview"

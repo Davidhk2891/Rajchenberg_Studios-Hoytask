@@ -1,4 +1,4 @@
-package com.rajchenbergstudios.hoygenda.ui.todaylists.journalentrieslist
+package com.rajchenbergstudios.hoygenda.ui.today.todayjentrieslist
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class JEntriesListViewModel @Inject constructor(
+class TJEntriesListViewModel @Inject constructor(
     private val journalEntryDao: JournalEntryDao,
     private val preferencesManager: PreferencesManager,
     state: SavedStateHandle

@@ -1,4 +1,4 @@
-package com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist
+package com.rajchenbergstudios.hoygenda.ui.today.todaytaskslist
 
 import android.os.Bundle
 import android.view.Menu
@@ -21,7 +21,7 @@ import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildTasksListBinding
-import com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragmentDirections
+import com.rajchenbergstudios.hoygenda.ui.today.TodayFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import com.rajchenbergstudios.hoygenda.utils.Logger
 import com.rajchenbergstudios.hoygenda.utils.OnQueryTextChanged
@@ -34,9 +34,9 @@ const val TAG = "TasksListFragment"
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksListAdapter.OnItemClickListener {
+class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TTasksListAdapter.OnItemClickListener {
 
-    private val viewModel: TasksListViewModel by viewModels()
+    private val viewModel: TTasksListViewModel by viewModels()
     private lateinit var searchView: SearchView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,12 +44,12 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksLis
 
         loadMenu()
         val binding = FragmentChildTasksListBinding.bind(view)
-        val tasksListAdapter = TasksListAdapter(this)
+        val TTasksListAdapter = TTasksListAdapter(this)
 
         binding.apply {
 
             tasksListRecyclerview.layoutTasksListRecyclerview.apply {
-                adapter = tasksListAdapter
+                adapter = TTasksListAdapter
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
             }
@@ -66,17 +66,17 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksLis
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    val task = tasksListAdapter.currentList[viewHolder.adapterPosition]
+                    val task = TTasksListAdapter.currentList[viewHolder.adapterPosition]
                     viewModel.onTaskSwiped(task)
                 }
             }).attachToRecyclerView(tasksListRecyclerview.layoutTasksListRecyclerview)
         }
 
-        loadObservable(binding, tasksListAdapter)
+        loadObservable(binding, TTasksListAdapter)
         loadTasksEventCollector()
     }
 
-    private fun loadObservable(binding: FragmentChildTasksListBinding, tasksListAdapter: TasksListAdapter) {
+    private fun loadObservable(binding: FragmentChildTasksListBinding, TTasksListAdapter: TTasksListAdapter) {
         viewModel.tasks.observe(viewLifecycleOwner){ tasksList ->
             binding.apply {
                 HGDAViewStateUtils.apply {
@@ -86,7 +86,7 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksLis
                     } else {
                         setViewVisibility(tasksListRecyclerview.layoutTasksListRecyclerview, visibility = View.VISIBLE)
                         setViewVisibility(tasksListLayoutNoData.layoutNoDataLinearlayout, visibility = View.INVISIBLE)
-                        tasksListAdapter.submitList(tasksList)
+                        TTasksListAdapter.submitList(tasksList)
                     }
                 }
             }
@@ -94,16 +94,16 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksLis
     }
 
     /**
-     * TasksListViewModel.TaskEvent.ShowUndoDeleteTaskMessage: Stays in this class. It asks for components relevant to this class.
-     * TasksListViewModel.TaskEvent.NavigateToEditTaskScreen: Stays in this class. The method it overrides comes from task list adapter.
-     * TasksListViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen: Stays in this class. Relevant to menu which is in this class.
-     * TasksListViewModel.TaskEvent.NavigateToDeleteAllScreen: Stays in this class. Relevant to menu which is in this class.
+     * TTasksListViewModel.TaskEvent.ShowUndoDeleteTaskMessage: Stays in this class. It asks for components relevant to this class.
+     * TTasksListViewModel.TaskEvent.NavigateToEditTaskScreen: Stays in this class. The method it overrides comes from task list adapter.
+     * TTasksListViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen: Stays in this class. Relevant to menu which is in this class.
+     * TTasksListViewModel.TaskEvent.NavigateToDeleteAllScreen: Stays in this class. Relevant to menu which is in this class.
      */
     private fun loadTasksEventCollector() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.tasksEvent.collect { event ->
                 when (event) {
-                    is TasksListViewModel.TaskEvent.ShowUndoDeleteTaskMessage -> {
+                    is TTasksListViewModel.TaskEvent.ShowUndoDeleteTaskMessage -> {
                         Snackbar
                             .make(requireView(), "Task deleted", Snackbar.LENGTH_LONG)
                             .setAction("UNDO"){
@@ -111,21 +111,21 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TasksLis
                             }
                             .show()
                     }
-                    is TasksListViewModel.TaskEvent.NavigateToEditTaskScreen -> {
+                    is TTasksListViewModel.TaskEvent.NavigateToEditTaskScreen -> {
                         val action = TodayFragmentDirections
                             .actionTodayFragmentToTaskAddEditFragment(task = event.task, title = "Edit task", taskinset = null, origin = 1)
                         findNavController().navigate(action)
                     }
-                    is TasksListViewModel.TaskEvent.NavigateToAddTaskToSetBottomSheet -> {
+                    is TTasksListViewModel.TaskEvent.NavigateToAddTaskToSetBottomSheet -> {
                         val action = TasksListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = event.task, origin = 1)
                         findNavController().navigate(action)
                     }
-                    is TasksListViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen -> {
+                    is TTasksListViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen -> {
                         val action = TasksListFragmentDirections
                             .actionGlobalTasksDeleteAllDialogFragment(origin = 1)
                         findNavController().navigate(action)
                     }
-                    is TasksListViewModel.TaskEvent.NavigateToDeleteAllScreen -> {
+                    is TTasksListViewModel.TaskEvent.NavigateToDeleteAllScreen -> {
                         val action = TasksListFragmentDirections
                             .actionGlobalTasksDeleteAllDialogFragment(origin = 3)
                         findNavController().navigate(action)

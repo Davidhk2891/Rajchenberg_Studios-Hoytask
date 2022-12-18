@@ -1,4 +1,4 @@
-package com.rajchenbergstudios.hoygenda.ui.daysdetails
+package com.rajchenbergstudios.hoygenda.ui.pastday
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -22,5 +22,5 @@ class DaysDetailsViewModel @Inject constructor(
 
     val dayMonthDay = stateHandle["monthDay"] ?: day?.dayOfMonth ?: "null"
 
-    val mTasks: List<Task>? = day?.listOfDays
+    val mTasks: List<Task>? = day?.listOfTasks
 }

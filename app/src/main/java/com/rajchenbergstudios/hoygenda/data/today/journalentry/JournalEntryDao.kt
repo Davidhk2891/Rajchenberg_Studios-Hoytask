@@ -6,6 +6,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface JournalEntryDao {
 
+    @Query("SELECT * FROM journal_table")
+    suspend fun getTodays(): List<JournalEntry>
+
     /*
     @Query("SELECT * FROM task_table WHERE (completed != :hideCompleted OR completed = 0) AND" +
             " title LIKE '%' || :searchQuery || '%' ORDER BY important DESC, title")
@@ -22,4 +25,7 @@ interface JournalEntryDao {
 
     @Delete
     suspend fun delete(journalEntry: JournalEntry)
+
+    @Query("DELETE FROM journal_table")
+    suspend fun nukeJEntryTable()
 }

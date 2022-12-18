@@ -1,4 +1,4 @@
-package com.rajchenbergstudios.hoygenda.ui.todaylists
+package com.rajchenbergstudios.hoygenda.ui.today
 
 
 import androidx.lifecycle.ViewModel

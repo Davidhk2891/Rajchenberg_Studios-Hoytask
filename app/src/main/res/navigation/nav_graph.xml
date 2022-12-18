@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/todayFragment"
-        android:name="com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.today.TodayFragment"
         android:label="Today"
         tools:layout="@layout/fragment_parent_today">
         <action
@@ -77,7 +77,7 @@
     </fragment>
     <fragment
         android:id="@+id/daysDetailsFragment"
-        android:name="com.rajchenbergstudios.hoygenda.ui.daysdetails.DaysDetailsFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.pastday.DaysDetailsFragment"
         android:label="Past days"
         tools:layout="@layout/fragment_days_details">
         <argument
@@ -130,13 +130,13 @@
     <action android:id="@+id/action_global_SetBottomSheetDialogFragment" app:destination="@id/SetBottomSheetDialogFragment" />
     <fragment
         android:id="@+id/tasksListFragment"
-        android:name="com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.today.todaytaskslist.TasksListFragment"
         android:label="Tasks"
         tools:layout="@layout/fragment_child_tasks_list" >
     </fragment>
     <fragment
-        android:id="@+id/jEntriesListFragment"
-        android:name="com.rajchenbergstudios.hoygenda.ui.todaylists.journalentrieslist.JEntriesListFragment"
+        android:id="@+id/TJEntriesListFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.today.todayjentrieslist.TJEntriesListFragment"
         android:label="fragment_child_journal_entries_list"
         tools:layout="@layout/fragment_child_journal_entries_list" />
     <fragment

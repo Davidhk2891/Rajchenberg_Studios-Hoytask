@@ -1,4 +1,4 @@
-package com.rajchenbergstudios.hoygenda.ui.todaylists
+package com.rajchenbergstudios.hoygenda.ui.today
 
 import android.content.res.Resources
 import android.os.Bundle
@@ -16,7 +16,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.databinding.FragmentParentTodayBinding
-import com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist.TasksListFragmentDirections
+import com.rajchenbergstudios.hoygenda.ui.today.todaytaskslist.TasksListFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi

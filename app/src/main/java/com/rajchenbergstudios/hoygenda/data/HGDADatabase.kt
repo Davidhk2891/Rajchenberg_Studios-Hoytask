@@ -23,7 +23,7 @@ import javax.inject.Provider
 
 // const val TAG = "HoytaskDatabase.kt"
 
-@Database(entities = [Task::class, Day::class, TaskSet::class, TaskInSet::class, JournalEntry::class], version = 21, exportSchema = false)
+@Database(entities = [Task::class, Day::class, TaskSet::class, TaskInSet::class, JournalEntry::class], version = 22, exportSchema = false)
 @TypeConverters(HGDATypeConvUtils::class)
 abstract class HGDADatabase : RoomDatabase(){
 
@@ -85,20 +85,6 @@ abstract class HGDADatabase : RoomDatabase(){
                     insert(set1)
                     insert(set2)
                     insert(set3)
-
-                    var i = 0
-                    repeat(6){
-                        i += 1
-                        val testTask1 = TaskInSet("Do thing 1", "Set $i")
-                        val testTask2 = TaskInSet("Do thing 2", "Set $i")
-                        val testTask3 = TaskInSet("Do thing 3", "Set $i")
-                        val listOfTestTasks = listOf(testTask1, testTask2, testTask3)
-                        val set = TaskSet("Set $i", listOfTestTasks)
-                        insert(set)
-                        for (item in listOfTestTasks) {
-                            taskInSetDao.insert(item)
-                        }
-                    }
                 }
 
                 taskInSetDao.apply {
