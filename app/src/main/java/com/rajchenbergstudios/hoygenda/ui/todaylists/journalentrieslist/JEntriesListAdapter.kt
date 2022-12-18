@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.databinding.SingleItemJournalEntryBinding
 
-class JEntriesListAdapter : ListAdapter<JournalEntry, JEntriesListAdapter.JEntriesListViewHolder>(DiffCallback()){
+class JEntriesListAdapter(private val listener: OnItemClickListener) : ListAdapter<JournalEntry, JEntriesListAdapter.JEntriesListViewHolder>(DiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JEntriesListViewHolder {
 
@@ -25,6 +25,26 @@ class JEntriesListAdapter : ListAdapter<JournalEntry, JEntriesListAdapter.JEntri
 
     inner class JEntriesListViewHolder(private val binding: SingleItemJournalEntryBinding) : RecyclerView.ViewHolder(binding.root) {
 
+        init {
+            binding.apply {
+                root.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val jEntry = getItem(position)
+                        listener.onItemClick(jEntry)
+                    }
+                }
+                root.setOnLongClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val jEntry = getItem(position)
+                        listener.onItemLongClick(jEntry)
+                    }
+                    return@setOnLongClickListener true
+                }
+            }
+        }
+
         fun bind(journalEntry: JournalEntry){
 
             binding.apply {
@@ -36,6 +56,10 @@ class JEntriesListAdapter : ListAdapter<JournalEntry, JEntriesListAdapter.JEntri
         }
     }
 
+    interface OnItemClickListener {
+        fun onItemClick(journalEntry: JournalEntry)
+        fun onItemLongClick(journalEntry: JournalEntry)
+    }
 
     // No idea why areContentsTheSame function return expression gives error. Both .equals() and == are not liked by IDE
     class DiffCallback : DiffUtil.ItemCallback<JournalEntry>() {

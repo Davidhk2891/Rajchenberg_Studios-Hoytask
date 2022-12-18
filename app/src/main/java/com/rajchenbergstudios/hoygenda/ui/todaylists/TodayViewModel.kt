@@ -47,12 +47,18 @@ class TodayViewModel @Inject constructor(
         todayEventChannel.send(TodayEvent.NavigateToAddTaskScreen)
     }
 
+    fun onAddNewJEntryClick() = viewModelScope.launch {
+        todayEventChannel.send(TodayEvent.NavigateToAddJEntryScreen)
+    }
+
     fun onFragmentResult(result: Int, message: String?) {
         when (result) {
             ADD_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task added")
             EDIT_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task updated")
+            ADD_JENTRY_RESULT_OK -> showJEntrySavedConfirmationMessage("Journal entry added")
+            EDIT_JENTRY_RESULT_OK -> showJEntrySavedConfirmationMessage("Journal entry updated")
             CREATE_SET_RESULT_OK -> showTaskSavedInNewOrOldSetConfirmationMessage("Task added to new set")
-            EDIT_SET_RESULT_OK ->   showTaskSavedInNewOrOldSetConfirmationMessage(message)
+            EDIT_SET_RESULT_OK -> showTaskSavedInNewOrOldSetConfirmationMessage(message)
             ADD_TASK_FROM_SET_RESULT_OK -> showTaskAddedFromSetConfirmationMessage(message)
         }
     }
@@ -73,6 +79,10 @@ class TodayViewModel @Inject constructor(
         todayEventChannel.send(TodayEvent.ShowTaskSavedConfirmationMessage(msg))
     }
 
+    private fun showJEntrySavedConfirmationMessage(msg: String) = viewModelScope.launch {
+        todayEventChannel.send(TodayEvent.ShowJEntrySavedConfirmationMessage(msg))
+    }
+
     fun postActionWithDelay(delay: Long, postActionCallback: PostActionListener) = mainThreadScope.launch {
         delay(delay)
         postActionCallback.onDelayFinished()
@@ -85,8 +95,10 @@ class TodayViewModel @Inject constructor(
     // Events wrapper class
     sealed class TodayEvent {
         object NavigateToAddTaskScreen : TodayEvent()
+        object NavigateToAddJEntryScreen : TodayEvent()
         object NavigateToAddTasksFromSetBottomSheet : TodayEvent()
         data class ShowTaskSavedConfirmationMessage(val msg: String) : TodayEvent()
+        data class ShowJEntrySavedConfirmationMessage(val msg: String) : TodayEvent()
         data class ShowTaskSavedInNewOrOldSetConfirmationMessage(val msg: String?) : TodayEvent()
         data class ShowTaskAddedFromSetConfirmationMessage(val msg: String?) : TodayEvent()
     }

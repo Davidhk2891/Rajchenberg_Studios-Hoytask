@@ -34,7 +34,6 @@ class TaskAddEditFragment : Fragment(R.layout.fragment_add_edit_task){
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentAddEditTaskBinding.bind(view)
-
         binding.apply {
             fragmentAddEditFab.setOnClickListener {
                 viewModel.onSaveClick()
@@ -50,8 +49,8 @@ class TaskAddEditFragment : Fragment(R.layout.fragment_add_edit_task){
                     is TaskAddEditViewModel.AddEditEvent.NavigateBackWithResult -> {
                         binding.fragmentAddEditTitleEdittext.clearFocus()
                         setFragmentResult(
-                            "add_edit_request",
-                            bundleOf("add_edit_result" to event.result)
+                            "task_add_edit_request",
+                            bundleOf("task_add_edit_result" to event.result)
                         )
                         findNavController().popBackStack()
                     }

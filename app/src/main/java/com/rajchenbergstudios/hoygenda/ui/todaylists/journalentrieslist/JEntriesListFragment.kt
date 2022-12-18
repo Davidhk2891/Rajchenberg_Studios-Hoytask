@@ -11,15 +11,19 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rajchenbergstudios.hoygenda.R
+import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildJournalEntriesListBinding
+import com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class JEntriesListFragment : Fragment(R.layout.fragment_child_journal_entries_list) {
+class JEntriesListFragment : Fragment(R.layout.fragment_child_journal_entries_list), JEntriesListAdapter.OnItemClickListener {
 
     private val viewModel: JEntriesListViewModel by viewModels()
     private lateinit var searchView: SearchView
@@ -30,7 +34,7 @@ class JEntriesListFragment : Fragment(R.layout.fragment_child_journal_entries_li
 
         loadMenu()
         val binding = FragmentChildJournalEntriesListBinding.bind(view)
-        val jEntriesAdapter = JEntriesListAdapter()
+        val jEntriesAdapter = JEntriesListAdapter(this)
 
         binding.apply {
             journalEntriesListRecyclerview.layoutTasksListRecyclerview.apply {
@@ -42,6 +46,22 @@ class JEntriesListFragment : Fragment(R.layout.fragment_child_journal_entries_li
 
         viewModel.entries.observe(viewLifecycleOwner){ jEntriesList ->
             jEntriesAdapter.submitList(jEntriesList)
+        }
+
+        loadJEntriesEventCollector()
+    }
+
+    private fun loadJEntriesEventCollector() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.jEntriesEvent.collect { event ->
+                when (event) {
+                    is JEntriesListViewModel.JEntriesEvent.NavigateToEditJEntryScreen -> {
+                        val action = TodayFragmentDirections
+                            .actionTodayFragmentToJEntryAddEditFragment(title = "Edit entry", jentry = event.journalEntry)
+                        findNavController().navigate(action)
+                    }
+                }
+            }
         }
     }
 
@@ -68,19 +88,15 @@ class JEntriesListFragment : Fragment(R.layout.fragment_child_journal_entries_li
 //                    viewModel.searchQuery.value = searchQuery
 //                }
 //
-//                viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-//                    menu.findItem(R.id.tasks_list_menu_hide_completed).isChecked =
-//                        viewModel.preferencesFlow.first().hideCompleted
-//                }
         }
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
             return when (menuItem.itemId) {
-                R.id.jentries_list_menu_sort_by_date -> {
+                R.id.jentries_list_menu_sort_by_time -> {
 //                        viewModel.onSortOrderSelected(SortOrder.BY_DATE)
                     true
                 }
-                R.id.jentries_list_menu_sort_by_name -> {
+                R.id.jentries_list_menu_sort_alphabetically -> {
 //                        viewModel.onSortOrderSelected(SortOrder.BY_NAME)
                     true
                 }
@@ -91,5 +107,13 @@ class JEntriesListFragment : Fragment(R.layout.fragment_child_journal_entries_li
                 else -> false
             }
         }
+    }
+
+    override fun onItemClick(journalEntry: JournalEntry) {
+        viewModel.onJEntrySelected(journalEntry)
+    }
+
+    override fun onItemLongClick(journalEntry: JournalEntry) {
+
     }
 }

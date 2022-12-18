@@ -6,7 +6,12 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface JournalEntryDao {
 
-    @Query("SELECT * FROM journal_table")
+    /*
+    @Query("SELECT * FROM task_table WHERE (completed != :hideCompleted OR completed = 0) AND" +
+            " title LIKE '%' || :searchQuery || '%' ORDER BY important DESC, title")
+     */
+
+    @Query("SELECT * FROM journal_table ORDER BY important DESC, created")
     fun getJournalEntries(): Flow<List<JournalEntry>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
