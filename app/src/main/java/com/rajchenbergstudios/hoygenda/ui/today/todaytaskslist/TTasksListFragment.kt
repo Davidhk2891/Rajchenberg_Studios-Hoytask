@@ -20,7 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
-import com.rajchenbergstudios.hoygenda.databinding.FragmentChildTasksListBinding
+import com.rajchenbergstudios.hoygenda.databinding.FragmentChildTTasksListBinding
 import com.rajchenbergstudios.hoygenda.ui.today.TodayFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import com.rajchenbergstudios.hoygenda.utils.Logger
@@ -34,7 +34,7 @@ const val TAG = "TasksListFragment"
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TTasksListAdapter.OnItemClickListener {
+class TasksListFragment : Fragment(R.layout.fragment_child_t_tasks_list), TTasksListAdapter.OnItemClickListener {
 
     private val viewModel: TTasksListViewModel by viewModels()
     private lateinit var searchView: SearchView
@@ -43,13 +43,13 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TTasksLi
         super.onViewCreated(view, savedInstanceState)
 
         loadMenu()
-        val binding = FragmentChildTasksListBinding.bind(view)
-        val TTasksListAdapter = TTasksListAdapter(this)
+        val binding = FragmentChildTTasksListBinding.bind(view)
+        val tTasksListAdapter = TTasksListAdapter(this)
 
         binding.apply {
 
             tasksListRecyclerview.layoutTasksListRecyclerview.apply {
-                adapter = TTasksListAdapter
+                adapter = tTasksListAdapter
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
             }
@@ -66,17 +66,17 @@ class TasksListFragment : Fragment(R.layout.fragment_child_tasks_list), TTasksLi
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    val task = TTasksListAdapter.currentList[viewHolder.adapterPosition]
+                    val task = tTasksListAdapter.currentList[viewHolder.adapterPosition]
                     viewModel.onTaskSwiped(task)
                 }
             }).attachToRecyclerView(tasksListRecyclerview.layoutTasksListRecyclerview)
         }
 
-        loadObservable(binding, TTasksListAdapter)
+        loadObservable(binding, tTasksListAdapter)
         loadTasksEventCollector()
     }
 
-    private fun loadObservable(binding: FragmentChildTasksListBinding, TTasksListAdapter: TTasksListAdapter) {
+    private fun loadObservable(binding: FragmentChildTTasksListBinding, TTasksListAdapter: TTasksListAdapter) {
         viewModel.tasks.observe(viewLifecycleOwner){ tasksList ->
             binding.apply {
                 HGDAViewStateUtils.apply {

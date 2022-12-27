@@ -132,13 +132,13 @@
         android:id="@+id/tasksListFragment"
         android:name="com.rajchenbergstudios.hoygenda.ui.today.todaytaskslist.TasksListFragment"
         android:label="Tasks"
-        tools:layout="@layout/fragment_child_tasks_list" >
+        tools:layout="@layout/fragment_child_t_tasks_list" >
     </fragment>
     <fragment
         android:id="@+id/TJEntriesListFragment"
         android:name="com.rajchenbergstudios.hoygenda.ui.today.todayjentrieslist.TJEntriesListFragment"
         android:label="fragment_child_journal_entries_list"
-        tools:layout="@layout/fragment_child_journal_entries_list" />
+        tools:layout="@layout/fragment_child_t_journal_entries_list" />
     <fragment
         android:id="@+id/JEntryAddEditFragment"
         android:name="com.rajchenbergstudios.hoygenda.ui.jentryaddedit.JEntryAddEditFragment"
@@ -164,4 +164,14 @@
         android:id="@+id/action_global_daysListFragment"
         app:destination="@id/daysListFragment"
         app:enterAnim="@anim/frag_start_from_bottom" />
+    <fragment
+        android:id="@+id/PDTasksListFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.pastday.daydetailstaskslist.PDTasksListFragment"
+        android:label="fragment_child_pd_tasks_list"
+        tools:layout="@layout/fragment_child_pd_tasks_list" />
+    <fragment
+        android:id="@+id/PDJEntriesListFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.pastday.daydetailsjentrieslist.PDJEntriesListFragment"
+        android:label="fragment_child_pd_journal_entries_list"
+        tools:layout="@layout/fragment_child_pd_journal_entries_list" />
 </navigation>

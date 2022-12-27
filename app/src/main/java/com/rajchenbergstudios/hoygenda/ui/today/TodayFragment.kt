@@ -136,15 +136,6 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
         }
     }
 
-    // This will soon be used to be 1
-    private fun setViewPagerPage(index: Int){
-        viewModel.postActionWithDelay(300, object: TodayViewModel.PostActionListener{
-            override fun onDelayFinished() {
-                viewPager.setCurrentItem(index, true)
-            }
-        })
-    }
-
     private fun todayDateDisplay(binding: FragmentParentTodayBinding) {
         binding.apply {
             tasksListDateheader.apply {
@@ -154,6 +145,14 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
                 dateHeaderDayofweek.text = viewModel.getCurrentDayOfWeek()
             }
         }
+    }
+
+    private fun setViewPagerPage(index: Int){
+        viewModel.postActionWithDelay(300, object: TodayViewModel.PostActionListener{
+            override fun onDelayFinished() {
+                viewPager.setCurrentItem(index, true)
+            }
+        })
     }
 
     private fun initViewPagerWithTabLayout(binding: FragmentParentTodayBinding) {

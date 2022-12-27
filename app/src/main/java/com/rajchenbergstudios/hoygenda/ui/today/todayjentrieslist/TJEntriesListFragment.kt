@@ -16,14 +16,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
-import com.rajchenbergstudios.hoygenda.databinding.FragmentChildJournalEntriesListBinding
+import com.rajchenbergstudios.hoygenda.databinding.FragmentChildTJournalEntriesListBinding
 import com.rajchenbergstudios.hoygenda.ui.today.TodayFragmentDirections
+import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class TJEntriesListFragment : Fragment(R.layout.fragment_child_journal_entries_list), TJEntriesListAdapter.OnItemClickListener {
+class TJEntriesListFragment : Fragment(R.layout.fragment_child_t_journal_entries_list), TJEntriesListAdapter.OnItemClickListener {
 
     private val viewModel: TJEntriesListViewModel by viewModels()
     private lateinit var searchView: SearchView
@@ -33,7 +34,7 @@ class TJEntriesListFragment : Fragment(R.layout.fragment_child_journal_entries_l
         super.onViewCreated(view, savedInstanceState)
 
         loadMenu()
-        val binding = FragmentChildJournalEntriesListBinding.bind(view)
+        val binding = FragmentChildTJournalEntriesListBinding.bind(view)
         val jEntriesAdapter = TJEntriesListAdapter(this)
 
         binding.apply {
@@ -48,6 +49,7 @@ class TJEntriesListFragment : Fragment(R.layout.fragment_child_journal_entries_l
             jEntriesAdapter.submitList(jEntriesList)
         }
 
+        loadObservable(binding, jEntriesAdapter)
         loadJEntriesEventCollector()
     }
 
@@ -59,6 +61,23 @@ class TJEntriesListFragment : Fragment(R.layout.fragment_child_journal_entries_l
                         val action = TodayFragmentDirections
                             .actionTodayFragmentToJEntryAddEditFragment(title = "Edit entry", jentry = event.journalEntry)
                         findNavController().navigate(action)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun loadObservable(binding: FragmentChildTJournalEntriesListBinding, TJEntriesListAdapter: TJEntriesListAdapter) {
+        viewModel.entries.observe(viewLifecycleOwner){ jEntriesList ->
+            binding.apply {
+                HGDAViewStateUtils.apply {
+                    if (jEntriesList.isEmpty()) {
+                        setViewVisibility(journalEntriesListRecyclerview.layoutTasksListRecyclerview, visibility = View.INVISIBLE)
+                        setViewVisibility(journalEntriesListLayoutNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)
+                    } else {
+                        setViewVisibility(journalEntriesListRecyclerview.layoutTasksListRecyclerview, visibility = View.VISIBLE)
+                        setViewVisibility(journalEntriesListLayoutNoData.layoutNoDataLinearlayout, visibility = View.INVISIBLE)
+                        TJEntriesListAdapter.submitList(jEntriesList)
                     }
                 }
             }

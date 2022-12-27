@@ -15,6 +15,7 @@ import com.rajchenbergstudios.hoygenda.data.taskset.TaskSet
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntryDao
 import com.rajchenbergstudios.hoygenda.di.ApplicationScope
+import com.rajchenbergstudios.hoygenda.utils.HGDADateUtils
 import com.rajchenbergstudios.hoygenda.utils.HGDATypeConvUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -45,6 +46,7 @@ abstract class HGDADatabase : RoomDatabase(){
             val taskSetDao = database.get().taskSetDao()
             val taskInSetDao = database.get().taskInSetDao()
             val journalEntryDao = database.get().journalEntryDao()
+            val dayDao = database.get().dayDao()
 
             // Initial Task for current day
             applicationScope.launch {
@@ -92,6 +94,32 @@ abstract class HGDADatabase : RoomDatabase(){
                     for (item in listOfTasksWeekends) { insert(item) }
                     for (item in listOfTasksMorningRoutine) { insert(item) }
                 }
+
+                // To insert in Day
+                val taskForDay1 = Task("Start setting up your tasks", important = true)
+                val taskForDay2 = Task("Apply some passion", important = false)
+
+                val journalEntryForDay1 = JournalEntry("Today I woke up feeling a bit better than yesterday" +
+                        " and decided to get to work. I really hope I do better today than I did yesterday")
+                val journalEntryForDay2 = JournalEntry("We are trying to do something here which is to build a repertoir of apps" +
+                        "that I will leverage from when I apply for jobs and look for future clients.", important = true)
+
+                val tasksForDayList = listOf(taskForDay1, taskForDay2)
+                val journalEntryForDayList = listOf(journalEntryForDay1, journalEntryForDay2)
+                val day1 = Day(
+                    HGDADateUtils.currentDayOfWeekFormatted,
+                    HGDADateUtils.currentDayOfMonthFormatted,
+                    HGDADateUtils.currentMonthFormatted,
+                    HGDADateUtils.currentYearFormatted,
+                tasksForDayList, journalEntryForDayList)
+                val day2 = Day(
+                    HGDADateUtils.currentDayOfWeekFormatted,
+                    HGDADateUtils.currentDayOfMonthFormatted + 1,
+                    HGDADateUtils.currentMonthFormatted,
+                    HGDADateUtils.currentYearFormatted,
+                    tasksForDayList, journalEntryForDayList)
+                dayDao.insert(day1)
+                dayDao.insert(day2)
             }
         }
     }
