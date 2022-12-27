@@ -29,7 +29,6 @@ class DaysDetailsFragment : Fragment(R.layout.fragment_days_details) {
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentDaysDetailsBinding.bind(view)
-        Logger.i(TAG, "onViewCreated", "some data: ${sharedViewModel.dayMonth} - ${sharedViewModel.dayYear}")
         todayDateDisplay(binding)
         initViewPagerWithTabLayout(binding)
     }

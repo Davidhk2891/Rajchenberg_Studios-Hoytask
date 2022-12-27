@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.databinding.FragmentAddEditTaskBinding
+import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -59,6 +60,9 @@ class TaskAddEditFragment : Fragment(R.layout.fragment_add_edit_task){
                     }
                     is TaskAddEditViewModel.AddEditEvent.ShowFlowFromTaskList -> {
                         showFlowFromTaskList(binding)
+                    }
+                    TaskAddEditViewModel.AddEditEvent.ShowFlowFromPastDayTaskList -> {
+                        showFlowFromPastDayTaskList(binding)
                     }
                 }.exhaustive
             }
@@ -119,6 +123,18 @@ class TaskAddEditFragment : Fragment(R.layout.fragment_add_edit_task){
             fragmentAddEditTitleEdittext.addTextChangedListener { newText ->
                 viewModel.taskInSetName = newText.toString()
             }
+        }
+    }
+
+    private fun showFlowFromPastDayTaskList(binding: FragmentAddEditTaskBinding) {
+        binding.apply {
+            fragmentAddEditTitleEdittext.setText(viewModel.taskName)
+            fragmentAddEditImportantCheckbox.isChecked = viewModel.taskImportance
+            fragmentAddEditImportantCheckbox.jumpDrawablesToCurrentState()
+
+            HGDAViewStateUtils.setViewClickState(v1 = fragmentAddEditTitleEdittext, v2 = fragmentAddEditImportantCheckbox, v3 = fragmentAddEditFab, clickable = false)
+            HGDAViewStateUtils.setViewVisibility(v1 = fragmentAddEditCreatedTextview, v2 = fragmentAddEditFab, visibility = View.INVISIBLE)
+            HGDAViewStateUtils.setViewFocusability(v1 = fragmentAddEditTitleEdittext, focusable = false)
         }
     }
 }

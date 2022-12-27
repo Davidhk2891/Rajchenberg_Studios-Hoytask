@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.databinding.SingleItemJournalEntryBinding
 
-class PDJEntriesListAdapter : ListAdapter<JournalEntry, PDJEntriesListAdapter.PDJEntriesListViewHolder>(DiffCallback()){
+class PDJEntriesListAdapter(private val listener: OnItemClickListener) : ListAdapter<JournalEntry, PDJEntriesListAdapter.PDJEntriesListViewHolder>(DiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PDJEntriesListViewHolder {
         val binding = SingleItemJournalEntryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -21,7 +21,19 @@ class PDJEntriesListAdapter : ListAdapter<JournalEntry, PDJEntriesListAdapter.PD
         holder.bind(currentItem)
     }
 
-    class PDJEntriesListViewHolder(private val binding: SingleItemJournalEntryBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class PDJEntriesListViewHolder(private val binding: SingleItemJournalEntryBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.apply {
+                root.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val pdTask = getItem(position)
+                        listener.onItemClick(pdTask)
+                    }
+                }
+            }
+        }
 
         fun bind(journalEntry: JournalEntry) {
             binding.apply {
@@ -29,6 +41,10 @@ class PDJEntriesListAdapter : ListAdapter<JournalEntry, PDJEntriesListAdapter.PD
                 itemJournalEntryImportantImageview.isVisible = journalEntry.important
             }
         }
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(journalEntry: JournalEntry)
     }
 
     class DiffCallback : DiffUtil.ItemCallback<JournalEntry>() {

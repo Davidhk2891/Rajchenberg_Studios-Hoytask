@@ -83,6 +83,12 @@
         <argument
             android:name="day"
             app:argType="com.rajchenbergstudios.hoygenda.data.day.Day" />
+        <action
+            android:id="@+id/action_daysDetailsFragment_to_taskAddEditFragment"
+            app:destination="@id/taskAddEditFragment" />
+        <action
+            android:id="@+id/action_daysDetailsFragment_to_JEntryAddEditFragment"
+            app:destination="@id/JEntryAddEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/tasksSetEditListFragment"
@@ -152,6 +158,9 @@
         <argument
             android:name="title"
             app:argType="string" />
+        <argument
+            android:name="origin"
+            app:argType="integer" />
     </fragment>
     <action
         android:id="@+id/action_global_todayFragment"

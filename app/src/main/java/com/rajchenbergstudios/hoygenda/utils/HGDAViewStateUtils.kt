@@ -17,6 +17,10 @@ class HGDAViewStateUtils {
             setClickable(v1, v2, v3, v4, clickable)
         }
 
+        fun setViewFocusability(v1: View, v2: View? = null, v3: View? = null, v4: View? = null, focusable: Boolean){
+            setFocusability(v1, v2, v3, v4, focusable)
+        }
+
         private fun setVisibility(v1: View, v2: View?, v3: View?, v4: View?, visibility: Int){
             v1.visibility = visibility
             v2?.visibility = visibility
@@ -38,6 +42,13 @@ class HGDAViewStateUtils {
             v2?.isClickable = clickable
             v3?.isClickable = clickable
             v4?.isClickable = clickable
+        }
+
+        private fun setFocusability(v1: View, v2: View?, v3: View?, v4: View?, focusable: Boolean){
+            v1.isFocusable = focusable
+            v2?.isFocusable = focusable
+            v3?.isFocusable = focusable
+            v4?.isFocusable = focusable
         }
     }
 }

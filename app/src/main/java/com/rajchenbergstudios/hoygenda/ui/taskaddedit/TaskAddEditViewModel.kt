@@ -79,6 +79,7 @@ class TaskAddEditViewModel @Inject constructor(
         when (origin) {
             1 -> {addEditEventChannel.send(AddEditEvent.ShowFlowFromTaskList)}
             2 -> {addEditEventChannel.send(AddEditEvent.ShowFlowFromTaskInSetList)}
+            3 -> {addEditEventChannel.send(AddEditEvent.ShowFlowFromPastDayTaskList)}
         }
     }
 
@@ -141,6 +142,7 @@ class TaskAddEditViewModel @Inject constructor(
     sealed class AddEditEvent {
         object ShowFlowFromTaskList : AddEditEvent()
         object ShowFlowFromTaskInSetList : AddEditEvent()
+        object ShowFlowFromPastDayTaskList : AddEditEvent()
         data class ShowInvalidInputMessage(val msg: String) : AddEditEvent()
         data class NavigateBackWithResult(val result: Int) : AddEditEvent()
     }

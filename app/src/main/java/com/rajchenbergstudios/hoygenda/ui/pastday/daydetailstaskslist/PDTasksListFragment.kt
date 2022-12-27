@@ -11,12 +11,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rajchenbergstudios.hoygenda.R
+import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildPdTasksListBinding
+import com.rajchenbergstudios.hoygenda.ui.pastday.DaysDetailsFragmentDirections
 import com.rajchenbergstudios.hoygenda.ui.pastday.SharedDayDetailsViewModel
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import com.rajchenbergstudios.hoygenda.utils.Logger
+import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.withContext
@@ -24,7 +28,7 @@ import kotlinx.coroutines.withContext
 const val TAG = "PDTasksListFragment"
 
 @ExperimentalCoroutinesApi
-class PDTasksListFragment : Fragment(R.layout.fragment_child_pd_tasks_list) {
+class PDTasksListFragment : Fragment(R.layout.fragment_child_pd_tasks_list), PDTasksListAdapter.OnItemClickListener {
 
     private val sharedViewModel: SharedDayDetailsViewModel by viewModels()
 
@@ -33,7 +37,7 @@ class PDTasksListFragment : Fragment(R.layout.fragment_child_pd_tasks_list) {
 
         val binding = FragmentChildPdTasksListBinding.bind(view)
 
-        val pdTasksListAdapter = PDTasksListAdapter()
+        val pdTasksListAdapter = PDTasksListAdapter(this)
 
         binding.apply {
 
@@ -46,6 +50,7 @@ class PDTasksListFragment : Fragment(R.layout.fragment_child_pd_tasks_list) {
 
         loadMenu()
         loadObservable(sharedViewModel, binding, pdTasksListAdapter)
+        loadPastDayTaskEventCollector()
     }
 
     private fun loadObservable(viewModel: SharedDayDetailsViewModel, binding: FragmentChildPdTasksListBinding, pdTasksListAdapter: PDTasksListAdapter) {
@@ -68,6 +73,20 @@ class PDTasksListFragment : Fragment(R.layout.fragment_child_pd_tasks_list) {
         }
     }
 
+    private fun loadPastDayTaskEventCollector() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            sharedViewModel.pastDayTaskEvent.collect { pastDayTaskEvent ->
+                when (pastDayTaskEvent) {
+                    is SharedDayDetailsViewModel.PastDayTaskEvent.NavigateToTaskDetailsScreen -> {
+                        val action = DaysDetailsFragmentDirections.actionDaysDetailsFragmentToTaskAddEditFragment(task = pastDayTaskEvent.task
+                            , title = "Task from ${pastDayTaskEvent.date}", taskinset = null, origin = 3)
+                        findNavController().navigate(action)
+                    }
+                }.exhaustive
+            }
+        }
+    }
+
     private fun loadMenu(){
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(TasksMenuProvider(), viewLifecycleOwner, Lifecycle.State.RESUMED)
@@ -84,5 +103,9 @@ class PDTasksListFragment : Fragment(R.layout.fragment_child_pd_tasks_list) {
                 else -> false
             }
         }
+    }
+
+    override fun onItemClick(task: Task) {
+        sharedViewModel.onPastDayTaskClick(task, sharedViewModel.formattedDate)
     }
 }

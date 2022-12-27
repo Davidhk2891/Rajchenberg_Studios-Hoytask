@@ -106,7 +106,7 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
                     }
                     TodayViewModel.TodayEvent.NavigateToAddJEntryScreen -> {
                         val action = TodayFragmentDirections
-                            .actionTodayFragmentToJEntryAddEditFragment(jentry = null, title = "Add entry")
+                            .actionTodayFragmentToJEntryAddEditFragment(jentry = null, title = "Add entry", origin = 1)
                         findNavController().navigate(action)
                     }
                     is TodayViewModel.TodayEvent.ShowTaskSavedConfirmationMessage -> {

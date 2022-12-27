@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.databinding.SingleItemTaskBinding
 
-class PDTasksListAdapter : ListAdapter<Task, PDTasksListAdapter.PDTasksListViewHolder>(DiffCallback()){
+class PDTasksListAdapter(private val listener: OnItemClickListener) : ListAdapter<Task, PDTasksListAdapter.PDTasksListViewHolder>(DiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PDTasksListViewHolder {
         val binding = SingleItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -21,7 +21,19 @@ class PDTasksListAdapter : ListAdapter<Task, PDTasksListAdapter.PDTasksListViewH
         holder.bind(currentItem)
     }
 
-    class PDTasksListViewHolder(private val binding: SingleItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class PDTasksListViewHolder(private val binding: SingleItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.apply {
+                root.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val pdTask = getItem(position)
+                        listener.onItemClick(pdTask)
+                    }
+                }
+            }
+        }
 
         fun bind(task: Task) {
             binding.apply {
@@ -32,6 +44,10 @@ class PDTasksListAdapter : ListAdapter<Task, PDTasksListAdapter.PDTasksListViewH
                 itemTaskImportantImageview.isVisible = task.important
             }
         }
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(task: Task)
     }
 
     class DiffCallback : DiffUtil.ItemCallback<Task>() {

@@ -59,7 +59,7 @@ class TJEntriesListFragment : Fragment(R.layout.fragment_child_t_journal_entries
                 when (event) {
                     is TJEntriesListViewModel.JEntriesEvent.NavigateToEditJEntryScreen -> {
                         val action = TodayFragmentDirections
-                            .actionTodayFragmentToJEntryAddEditFragment(title = "Edit entry", jentry = event.journalEntry)
+                            .actionTodayFragmentToJEntryAddEditFragment(title = "Edit entry", jentry = event.journalEntry, origin = 1)
                         findNavController().navigate(action)
                     }
                 }

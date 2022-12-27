@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.databinding.FragmentAddEditJournalEntryBinding
+import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,15 +46,25 @@ class JEntryAddEditFragment : Fragment(R.layout.fragment_add_edit_journal_entry)
                         )
                         findNavController().popBackStack()
                     }
+                    JEntryAddEditViewModel.JEAddEditEvent.ShowFlowFromJEntriesList -> {
+                        showFlowFromJEntriesList(binding)
+                    }
+                    JEntryAddEditViewModel.JEAddEditEvent.ShowFlowFromPastDayJEntriesList -> {
+                        showFlowFromPastJEntriesList(binding)
+                    }
                 }
             }
         }
 
         loadMenu()
-        showViews(binding)
+        deduceUserFlow()
     }
 
-    private fun showViews(binding: FragmentAddEditJournalEntryBinding) {
+    private fun deduceUserFlow() {
+        viewModel.deduceFlow()
+    }
+
+    private fun showFlowFromJEntriesList(binding: FragmentAddEditJournalEntryBinding) {
         binding.apply {
             fragmentJentryAddEditTitleEdittext.setText(viewModel.jentryText)
             fragmentJentryAddEditImportantCheckbox.isChecked = viewModel.jentryImportance
@@ -73,6 +84,18 @@ class JEntryAddEditFragment : Fragment(R.layout.fragment_add_edit_journal_entry)
             fragmentJentryAddEditFab.setOnClickListener {
                 viewModel.onSaveClick()
             }
+        }
+    }
+
+    private fun showFlowFromPastJEntriesList(binding: FragmentAddEditJournalEntryBinding) {
+        binding.apply {
+            fragmentJentryAddEditTitleEdittext.setText(viewModel.jentryText)
+            fragmentJentryAddEditImportantCheckbox.isChecked = viewModel.jentryImportance
+            fragmentJentryAddEditImportantCheckbox.jumpDrawablesToCurrentState()
+
+            HGDAViewStateUtils.setViewClickState(v1 = fragmentJentryAddEditTitleEdittext, v2 = fragmentJentryAddEditImportantCheckbox, v3 = fragmentJentryAddEditFab, clickable = false)
+            HGDAViewStateUtils.setViewVisibility(v1 = fragmentJentryAddEditCreatedTextview, v2 = fragmentJentryAddEditFab, visibility = View.INVISIBLE)
+            HGDAViewStateUtils.setViewFocusability(v1 = fragmentJentryAddEditTitleEdittext, focusable = false)
         }
     }
 

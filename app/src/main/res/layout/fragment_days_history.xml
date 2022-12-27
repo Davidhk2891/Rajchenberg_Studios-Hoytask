@@ -13,7 +13,7 @@
 
     <include
         android:id="@+id/days_list_layout_no_data"
-        layout="@layout/layout_no_data_with_image"
+        layout="@layout/layout_tasks_no_data_with_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible" />

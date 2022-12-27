@@ -11,17 +11,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rajchenbergstudios.hoygenda.R
+import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildPdJournalEntriesListBinding
+import com.rajchenbergstudios.hoygenda.ui.pastday.DaysDetailsFragmentDirections
 import com.rajchenbergstudios.hoygenda.ui.pastday.SharedDayDetailsViewModel
 import com.rajchenbergstudios.hoygenda.ui.pastday.daydetailstaskslist.TAG
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import com.rajchenbergstudios.hoygenda.utils.Logger
+import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class PDJEntriesListFragment : Fragment(R.layout.fragment_child_pd_journal_entries_list) {
+class PDJEntriesListFragment : Fragment(R.layout.fragment_child_pd_journal_entries_list), PDJEntriesListAdapter.OnItemClickListener {
 
     private val sharedViewModel: SharedDayDetailsViewModel by viewModels()
 
@@ -30,7 +34,7 @@ class PDJEntriesListFragment : Fragment(R.layout.fragment_child_pd_journal_entri
 
         val binding = FragmentChildPdJournalEntriesListBinding.bind(view)
 
-        val pdJEntriesListAdapter = PDJEntriesListAdapter()
+        val pdJEntriesListAdapter = PDJEntriesListAdapter(this)
 
         binding.apply {
 
@@ -43,6 +47,7 @@ class PDJEntriesListFragment : Fragment(R.layout.fragment_child_pd_journal_entri
 
         loadMenu()
         loadObservable(sharedViewModel, binding, pdJEntriesListAdapter)
+        loadPastDayJEntryEventCollector()
     }
 
     private fun loadObservable(viewModel: SharedDayDetailsViewModel, binding: FragmentChildPdJournalEntriesListBinding, pdjEntriesListAdapter: PDJEntriesListAdapter) {
@@ -65,6 +70,20 @@ class PDJEntriesListFragment : Fragment(R.layout.fragment_child_pd_journal_entri
         }
     }
 
+    private fun loadPastDayJEntryEventCollector() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            sharedViewModel.pastDayJEntryEvent.collect { pastDayJEntryEvent ->
+                when (pastDayJEntryEvent) {
+                    is SharedDayDetailsViewModel.PastDayJEntryEvent.NavigateToJEntryDetailsScreen -> {
+                        val action = DaysDetailsFragmentDirections.actionDaysDetailsFragmentToJEntryAddEditFragment(title = "Entry from ${pastDayJEntryEvent.date}"
+                            , jentry = pastDayJEntryEvent.journalEntry, origin = 2)
+                        findNavController().navigate(action)
+                    }
+                }.exhaustive
+            }
+        }
+    }
+
     private fun loadMenu(){
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(JEntriesMenuProvider(), viewLifecycleOwner, Lifecycle.State.RESUMED)
@@ -81,5 +100,9 @@ class PDJEntriesListFragment : Fragment(R.layout.fragment_child_pd_journal_entri
                 else -> false
             }
         }
+    }
+
+    override fun onItemClick(journalEntry: JournalEntry) {
+        sharedViewModel.onPastDayJEntryClick(journalEntry, sharedViewModel.formattedDate)
     }
 }
