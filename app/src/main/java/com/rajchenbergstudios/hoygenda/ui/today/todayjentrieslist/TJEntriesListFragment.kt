@@ -13,7 +13,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildTJournalEntriesListBinding
@@ -38,11 +41,29 @@ class TJEntriesListFragment : Fragment(R.layout.fragment_child_t_journal_entries
         val jEntriesAdapter = TJEntriesListAdapter(this)
 
         binding.apply {
+
             journalEntriesListRecyclerview.layoutTasksListRecyclerview.apply {
                 adapter = jEntriesAdapter
                 layoutManager = LinearLayoutManager(requireContext())
                 setHasFixedSize(true)
             }
+
+            ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val task = jEntriesAdapter.currentList[viewHolder.adapterPosition]
+                    viewModel.onJEntrySwiped(task)
+                }
+            }).attachToRecyclerView(journalEntriesListRecyclerview.layoutTasksListRecyclerview)
         }
 
         viewModel.entries.observe(viewLifecycleOwner){ jEntriesList ->
@@ -57,6 +78,14 @@ class TJEntriesListFragment : Fragment(R.layout.fragment_child_t_journal_entries
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.jEntriesEvent.collect { event ->
                 when (event) {
+                    is TJEntriesListViewModel.JEntriesEvent.ShowUndoDeleteJEntryMessage -> {
+                        Snackbar
+                            .make(requireView(), "Entry deleted", Snackbar.LENGTH_LONG)
+                            .setAction("UNDO"){
+                                viewModel.onUndoDeleteClick(event.journalEntry)
+                            }
+                            .show()
+                    }
                     is TJEntriesListViewModel.JEntriesEvent.NavigateToEditJEntryScreen -> {
                         val action = TodayFragmentDirections
                             .actionTodayFragmentToJEntryAddEditFragment(title = "Edit entry", jentry = event.journalEntry, origin = 1)

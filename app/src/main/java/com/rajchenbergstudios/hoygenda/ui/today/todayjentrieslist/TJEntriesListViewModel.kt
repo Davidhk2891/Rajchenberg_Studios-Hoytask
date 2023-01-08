@@ -32,7 +32,17 @@ class TJEntriesListViewModel @Inject constructor(
         jEntriesEventChannel.send(JEntriesEvent.NavigateToEditJEntryScreen(journalEntry))
     }
 
+    fun onJEntrySwiped(journalEntry: JournalEntry) = viewModelScope.launch {
+        journalEntryDao.delete(journalEntry)
+        jEntriesEventChannel.send(JEntriesEvent.ShowUndoDeleteJEntryMessage(journalEntry))
+    }
+
+    fun onUndoDeleteClick(journalEntry: JournalEntry) = viewModelScope.launch {
+        journalEntryDao.insert(journalEntry)
+    }
+
     sealed class JEntriesEvent {
+        data class ShowUndoDeleteJEntryMessage(val journalEntry: JournalEntry) : JEntriesEvent()
         data class NavigateToEditJEntryScreen(val journalEntry: JournalEntry) : JEntriesEvent()
     }
 }
