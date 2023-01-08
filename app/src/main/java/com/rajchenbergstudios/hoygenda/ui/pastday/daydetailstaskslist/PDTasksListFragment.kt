@@ -55,18 +55,16 @@ class PDTasksListFragment : Fragment(R.layout.fragment_child_pd_tasks_list), PDT
 
     private fun loadObservable(viewModel: SharedDayDetailsViewModel, binding: FragmentChildPdTasksListBinding, pdTasksListAdapter: PDTasksListAdapter) {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            withContext(Dispatchers.IO) {
-                binding.apply {
-                    HGDAViewStateUtils.apply {
-                        Logger.i(TAG, "loadObservable", "some tasks data: ${viewModel.dayMonth} - ${viewModel.dayYear}: ${viewModel.tasksList}")
-                        if (viewModel.tasksList?.isEmpty() == true) {
-                            setViewVisibility(tasksListRecyclerview.layoutTasksListRecyclerview, visibility = View.INVISIBLE)
-                            setViewVisibility(tasksListLayoutNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)
-                        } else {
-                            setViewVisibility(tasksListRecyclerview.layoutTasksListRecyclerview, visibility = View.VISIBLE)
-                            setViewVisibility(tasksListLayoutNoData.layoutNoDataLinearlayout, visibility = View.INVISIBLE)
-                            pdTasksListAdapter.submitList(viewModel.tasksList)
-                        }
+            binding.apply {
+                HGDAViewStateUtils.apply {
+                    Logger.i(TAG, "loadObservable", "some tasks data: ${viewModel.dayMonth} - ${viewModel.dayYear}: ${viewModel.tasksList}")
+                    if (viewModel.tasksList?.isEmpty() == true) {
+                        setViewVisibility(tasksListRecyclerview.layoutTasksListRecyclerview, visibility = View.INVISIBLE)
+                        setViewVisibility(tasksListLayoutNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)
+                    } else {
+                        setViewVisibility(tasksListRecyclerview.layoutTasksListRecyclerview, visibility = View.VISIBLE)
+                        setViewVisibility(tasksListLayoutNoData.layoutNoDataLinearlayout, visibility = View.INVISIBLE)
+                        pdTasksListAdapter.submitList(viewModel.tasksList)
                     }
                 }
             }

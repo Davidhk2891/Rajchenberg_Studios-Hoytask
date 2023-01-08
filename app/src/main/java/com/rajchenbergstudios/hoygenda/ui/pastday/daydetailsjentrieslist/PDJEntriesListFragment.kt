@@ -52,18 +52,16 @@ class PDJEntriesListFragment : Fragment(R.layout.fragment_child_pd_journal_entri
 
     private fun loadObservable(viewModel: SharedDayDetailsViewModel, binding: FragmentChildPdJournalEntriesListBinding, pdjEntriesListAdapter: PDJEntriesListAdapter) {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            withContext(Dispatchers.IO) {
-                binding.apply {
-                    HGDAViewStateUtils.apply {
-                        Logger.i(TAG, "loadObservable", "some jEntries data: ${viewModel.dayMonth} - ${viewModel.dayYear}: ${viewModel.jEntriesList}")
-                        if (viewModel.jEntriesList?.isEmpty() == true) {
-                            setViewVisibility(journalEntriesListRecyclerview.layoutTasksListRecyclerview, visibility = View.INVISIBLE)
-                            setViewVisibility(journalEntriesListLayoutNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)
-                        } else {
-                            setViewVisibility(journalEntriesListRecyclerview.layoutTasksListRecyclerview, visibility = View.VISIBLE)
-                            setViewVisibility(journalEntriesListLayoutNoData.layoutNoDataLinearlayout, visibility = View.INVISIBLE)
-                            pdjEntriesListAdapter.submitList(viewModel.jEntriesList)
-                        }
+            binding.apply {
+                HGDAViewStateUtils.apply {
+                    Logger.i(TAG, "loadObservable", "some jEntries data: ${viewModel.dayMonth} - ${viewModel.dayYear}: ${viewModel.jEntriesList}")
+                    if (viewModel.jEntriesList?.isEmpty() == true) {
+                        setViewVisibility(journalEntriesListRecyclerview.layoutTasksListRecyclerview, visibility = View.INVISIBLE)
+                        setViewVisibility(journalEntriesListLayoutNoData.layoutNoDataLinearlayout, visibility = View.VISIBLE)
+                    } else {
+                        setViewVisibility(journalEntriesListRecyclerview.layoutTasksListRecyclerview, visibility = View.VISIBLE)
+                        setViewVisibility(journalEntriesListLayoutNoData.layoutNoDataLinearlayout, visibility = View.INVISIBLE)
+                        pdjEntriesListAdapter.submitList(viewModel.jEntriesList)
                     }
                 }
             }
