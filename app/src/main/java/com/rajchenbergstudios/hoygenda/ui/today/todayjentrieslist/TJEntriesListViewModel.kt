@@ -1,18 +1,20 @@
 package com.rajchenbergstudios.hoygenda.ui.today.todayjentrieslist
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.rajchenbergstudios.hoygenda.data.prefs.PreferencesManager
+import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntryDao
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 @HiltViewModel
 class TJEntriesListViewModel @Inject constructor(
     private val journalEntryDao: JournalEntryDao,
@@ -20,7 +22,19 @@ class TJEntriesListViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    val entries = journalEntryDao.getJournalEntries().asLiveData()
+    val searchQuery = state.getLiveData("jEntriesSearchQuery", "")
+
+    // DataStore
+    private val preferencesFlow = preferencesManager.preferencesFlow
+
+    private val jEntriesFlow = combine(
+        searchQuery.asFlow(),
+        preferencesFlow
+    ) { searchQuery, filterPreferences ->
+        Pair(searchQuery, filterPreferences)
+    }.flatMapLatest { (searchQuery, filterPreferences) ->
+        journalEntryDao.getJournalEntries(searchQuery, filterPreferences.sortOrder)
+    }
 
     // JEntries Channel
     private val jEntriesEventChannel = Channel<JEntriesEvent>()
@@ -40,6 +54,12 @@ class TJEntriesListViewModel @Inject constructor(
     fun onUndoDeleteClick(journalEntry: JournalEntry) = viewModelScope.launch {
         journalEntryDao.insert(journalEntry)
     }
+
+    fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {
+        preferencesManager.updateSortOrder(sortOrder)
+    }
+
+    val entries = jEntriesFlow.asLiveData()
 
     sealed class JEntriesEvent {
         data class ShowUndoDeleteJEntryMessage(val journalEntry: JournalEntry) : JEntriesEvent()

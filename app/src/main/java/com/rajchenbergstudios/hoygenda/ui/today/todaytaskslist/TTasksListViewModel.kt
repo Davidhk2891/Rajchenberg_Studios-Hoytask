@@ -39,7 +39,7 @@ class TTasksListViewModel @Inject constructor(
     ) { searchQuery, filterPreferences ->
         Pair(searchQuery, filterPreferences)
     }.flatMapLatest { (searchQuery, filterPreferences) ->
-        taskDao.getTodays(searchQuery, filterPreferences.sortOrder, filterPreferences.hideCompleted)
+        taskDao.getTasks(searchQuery, filterPreferences.sortOrder, filterPreferences.hideCompleted)
     }
 
     fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {

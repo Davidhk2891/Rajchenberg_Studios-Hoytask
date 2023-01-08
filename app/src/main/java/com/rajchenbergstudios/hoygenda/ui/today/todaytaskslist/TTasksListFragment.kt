@@ -144,6 +144,7 @@ class TasksListFragment : Fragment(R.layout.fragment_child_t_tasks_list), TTasks
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
             menu.clear()
             menuInflater.inflate(R.menu.menu_tasks_list_fragment, menu)
+
             val searchItem = menu.findItem(R.id.tasks_list_menu_search)
             searchView = searchItem.actionView as SearchView
 
@@ -166,7 +167,7 @@ class TasksListFragment : Fragment(R.layout.fragment_child_t_tasks_list), TTasks
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
             return when (menuItem.itemId) {
                 R.id.tasks_list_menu_sort_by_date -> {
-                    viewModel.onSortOrderSelected(SortOrder.BY_DATE)
+                    viewModel.onSortOrderSelected(SortOrder.BY_TIME)
                     true
                 }
                 R.id.tasks_list_menu_sort_alphabetically -> {

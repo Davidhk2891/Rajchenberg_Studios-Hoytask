@@ -53,8 +53,8 @@ class MainViewModel @Inject constructor(
     }
 
     private suspend fun pullListAndCompareDate() {
-        val tasksList = taskDao.getTodays()
-        val jEntriesList = journalEntryDao.getTodays()
+        val tasksList = taskDao.getTasksList()
+        val jEntriesList = journalEntryDao.getJournalEntriesList()
         if (tasksList.isNotEmpty()) {
             val lastTaskDateInMillis = tasksList.last().created
             val localDate = LocalDate.now()

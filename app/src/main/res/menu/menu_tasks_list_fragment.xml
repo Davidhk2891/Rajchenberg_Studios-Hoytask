@@ -21,7 +21,7 @@
                 android:title="@string/sort_alphabetically"/>
             <item
                 android:id="@+id/tasks_list_menu_sort_by_date"
-                android:title="@string/sort_by_date"/>
+                android:title="@string/sort_by_time"/>
         </menu>
     </item>
 

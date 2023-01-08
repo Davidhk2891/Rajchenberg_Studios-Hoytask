@@ -1,21 +1,26 @@
 package com.rajchenbergstudios.hoygenda.data.today.journalentry
 
 import androidx.room.*
+import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface JournalEntryDao {
 
     @Query("SELECT * FROM journal_table")
-    suspend fun getTodays(): List<JournalEntry>
+    suspend fun getJournalEntriesList(): List<JournalEntry>
 
-    /*
-    @Query("SELECT * FROM task_table WHERE (completed != :hideCompleted OR completed = 0) AND" +
-            " title LIKE '%' || :searchQuery || '%' ORDER BY important DESC, title")
-     */
+    fun getJournalEntries(searchQuery: String, sortOrder: SortOrder): Flow<List<JournalEntry>> =
+        when (sortOrder) {
+            SortOrder.BY_NAME -> getJournalEntriesByAlphabet(searchQuery)
+            SortOrder.BY_TIME -> getJournalEntriesByTime(searchQuery)
+        }
 
-    @Query("SELECT * FROM journal_table ORDER BY important DESC, created")
-    fun getJournalEntries(): Flow<List<JournalEntry>>
+    @Query("SELECT * FROM journal_table WHERE content LIKE '%' || :searchQuery || '%' ORDER BY important DESC, content")
+    fun getJournalEntriesByAlphabet(searchQuery: String): Flow<List<JournalEntry>>
+
+    @Query("SELECT * FROM journal_table WHERE content LIKE '%' || :searchQuery || '%' ORDER BY important DESC, created")
+    fun getJournalEntriesByTime(searchQuery: String): Flow<List<JournalEntry>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(journalEntry: JournalEntry)

@@ -18,10 +18,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.rajchenbergstudios.hoygenda.R
+import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildTJournalEntriesListBinding
 import com.rajchenbergstudios.hoygenda.ui.today.TodayFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
+import com.rajchenbergstudios.hoygenda.utils.OnQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -126,26 +128,25 @@ class TJEntriesListFragment : Fragment(R.layout.fragment_child_t_journal_entries
             val searchItem = menu.findItem(R.id.jentries_list_menu_search)
             searchView = searchItem.actionView as SearchView
 
-//                val pendingQuery = viewModel.searchQuery.value
-//                if (pendingQuery != null && pendingQuery.isNotEmpty()) {
-//                    searchItem.expandActionView()
-//                    searchView.setQuery(pendingQuery, false)
-//                }
-//
-//                searchView.OnQueryTextChanged{ searchQuery ->
-//                    viewModel.searchQuery.value = searchQuery
-//                }
-//
+            val pendingQuery = viewModel.searchQuery.value
+            if (pendingQuery != null && pendingQuery.isNotEmpty()) {
+                searchItem.expandActionView()
+                searchView.setQuery(pendingQuery, false)
+            }
+
+            searchView.OnQueryTextChanged{ searchQuery ->
+                viewModel.searchQuery.value = searchQuery
+            }
         }
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
             return when (menuItem.itemId) {
                 R.id.jentries_list_menu_sort_by_time -> {
-//                        viewModel.onSortOrderSelected(SortOrder.BY_DATE)
+                        viewModel.onSortOrderSelected(SortOrder.BY_TIME)
                     true
                 }
                 R.id.jentries_list_menu_sort_alphabetically -> {
-//                        viewModel.onSortOrderSelected(SortOrder.BY_NAME)
+                        viewModel.onSortOrderSelected(SortOrder.BY_NAME)
                     true
                 }
                 R.id.jentries_list_menu_delete_all -> {
