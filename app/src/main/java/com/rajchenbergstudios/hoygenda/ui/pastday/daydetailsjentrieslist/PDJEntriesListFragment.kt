@@ -22,12 +22,12 @@ import com.rajchenbergstudios.hoygenda.ui.pastday.daydetailstaskslist.TAG
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import com.rajchenbergstudios.hoygenda.utils.Logger
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class PDJEntriesListFragment : Fragment(R.layout.fragment_child_pd_journal_entries_list), PDJEntriesListAdapter.OnItemClickListener {
 
     private val sharedViewModel: SharedDayDetailsViewModel by viewModels()
+
+    private lateinit var menuHost: MenuHost
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -83,14 +83,14 @@ class PDJEntriesListFragment : Fragment(R.layout.fragment_child_pd_journal_entri
     }
 
     private fun loadMenu(){
-        val menuHost: MenuHost = requireActivity()
+        menuHost = requireActivity()
         menuHost.addMenuProvider(JEntriesMenuProvider(), viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private inner class JEntriesMenuProvider : MenuProvider {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
             menu.clear()
-            // menuInflater.inflate(R.menu.menu_jentries_list_fragment, menu)
+            menuInflater.inflate(R.menu.menu_pd_jentries_list_fragment, menu)
         }
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -102,5 +102,9 @@ class PDJEntriesListFragment : Fragment(R.layout.fragment_child_pd_journal_entri
 
     override fun onItemClick(journalEntry: JournalEntry) {
         sharedViewModel.onPastDayJEntryClick(journalEntry, sharedViewModel.formattedDate)
+    }
+
+    override fun onPause() {
+        super.onPause()
     }
 }

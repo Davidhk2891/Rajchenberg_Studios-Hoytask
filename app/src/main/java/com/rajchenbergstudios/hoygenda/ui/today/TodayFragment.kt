@@ -16,10 +16,11 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.databinding.FragmentParentTodayBinding
-import com.rajchenbergstudios.hoygenda.ui.today.todaytaskslist.TasksListFragmentDirections
+import com.rajchenbergstudios.hoygenda.ui.today.todaytaskslist.TTasksListFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+
 
 private const val TAG = "TodayFragment"
 
@@ -127,7 +128,7 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
                         setViewPagerPage(0)
                     }
                     is TodayViewModel.TodayEvent.NavigateToAddTasksFromSetBottomSheet -> {
-                        val action = TasksListFragmentDirections
+                        val action = TTasksListFragmentDirections
                             .actionGlobalSetBottomSheetDialogFragment(task = null, origin = 2)
                         findNavController().navigate(action)
                     }
@@ -158,23 +159,23 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
     private fun initViewPagerWithTabLayout(binding: FragmentParentTodayBinding) {
         viewPager = binding.todayViewpager
         val tabLayout: TabLayout = binding.todayTablayout
-        viewPager.adapter = activity?.let { TodayPagerAdapter(it) }
-            Logger.i(TAG, "initViewPagerWithTabLayout", "viewPager is not null")
-            TabLayoutMediator(tabLayout, viewPager) { tab, index ->
-                tab.text = when (index) {
-                    0 -> "Tasks"
-                    1 -> "Journal"
-                    else -> throw Resources.NotFoundException("Tab not found at position")
-                }.exhaustive
-                when (index) {
-                    0 -> {
+        viewPager.adapter = activity?.let { TodayPagerAdapter(childFragmentManager, lifecycle) }
+        Logger.i(TAG, "initViewPagerWithTabLayout", "viewPager is not null")
+        TabLayoutMediator(tabLayout, viewPager) { tab, index ->
+            tab.text = when (index) {
+                0 -> "Tasks"
+                1 -> "Journal"
+                else -> throw Resources.NotFoundException("Tab not found at position")
+            }.exhaustive
+            when (index) {
+                0 -> {
 
-                    }
-                    1 -> {
-                        fabClicked = false
-                    }
                 }
-            }.attach()
+                1 -> {
+                    fabClicked = false
+                }
+            }
+        }.attach()
     }
 
     private fun initFabs(binding: FragmentParentTodayBinding) {
@@ -241,5 +242,10 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initViewPagerWithTabLayout(binding)
     }
 }

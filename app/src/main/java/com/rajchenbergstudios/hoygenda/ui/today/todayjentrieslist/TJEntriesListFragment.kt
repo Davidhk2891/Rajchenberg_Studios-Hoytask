@@ -6,7 +6,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -33,7 +32,6 @@ class TJEntriesListFragment : Fragment(R.layout.fragment_child_t_journal_entries
 
     private val viewModel: TJEntriesListViewModel by viewModels()
     private lateinit var searchView: SearchView
-    private lateinit var menuHost: MenuHost
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -116,14 +114,15 @@ class TJEntriesListFragment : Fragment(R.layout.fragment_child_t_journal_entries
     }
 
     private fun loadMenu(){
-        menuHost = requireActivity()
+        // 1st attempt: Move both menu providers to TodayFragment, and depending on which frag you stand, add the right menu provider
+        val menuHost = requireActivity()
         menuHost.addMenuProvider(JEntriesMenuProvider(), viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private inner class JEntriesMenuProvider : MenuProvider{
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
             menu.clear()
-            menuInflater.inflate(R.menu.menu_jentries_list_fragment, menu)
+            menuInflater.inflate(R.menu.menu_t_jentries_list_fragment, menu)
 
             val searchItem = menu.findItem(R.id.jentries_list_menu_search)
             searchView = searchItem.actionView as SearchView

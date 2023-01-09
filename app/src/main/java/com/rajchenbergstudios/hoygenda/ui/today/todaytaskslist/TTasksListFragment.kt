@@ -23,21 +23,21 @@ import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildTTasksListBinding
 import com.rajchenbergstudios.hoygenda.ui.today.TodayFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
-import com.rajchenbergstudios.hoygenda.utils.Logger
 import com.rajchenbergstudios.hoygenda.utils.OnQueryTextChanged
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 
-const val TAG = "TasksListFragment"
+const val TAG = "TTasksListFragment"
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class TasksListFragment : Fragment(R.layout.fragment_child_t_tasks_list), TTasksListAdapter.OnItemClickListener {
+class TTasksListFragment : Fragment(R.layout.fragment_child_t_tasks_list), TTasksListAdapter.OnItemClickListener {
 
     private val viewModel: TTasksListViewModel by viewModels()
     private lateinit var searchView: SearchView
+    private lateinit var menuHost: MenuHost
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -117,16 +117,16 @@ class TasksListFragment : Fragment(R.layout.fragment_child_t_tasks_list), TTasks
                         findNavController().navigate(action)
                     }
                     is TTasksListViewModel.TaskEvent.NavigateToAddTaskToSetBottomSheet -> {
-                        val action = TasksListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = event.task, origin = 1)
+                        val action = TTasksListFragmentDirections.actionGlobalSetBottomSheetDialogFragment(task = event.task, origin = 1)
                         findNavController().navigate(action)
                     }
                     is TTasksListViewModel.TaskEvent.NavigateToDeleteAllCompletedScreen -> {
-                        val action = TasksListFragmentDirections
+                        val action = TTasksListFragmentDirections
                             .actionGlobalTasksDeleteAllDialogFragment(origin = 1)
                         findNavController().navigate(action)
                     }
                     is TTasksListViewModel.TaskEvent.NavigateToDeleteAllScreen -> {
-                        val action = TasksListFragmentDirections
+                        val action = TTasksListFragmentDirections
                             .actionGlobalTasksDeleteAllDialogFragment(origin = 3)
                         findNavController().navigate(action)
                     }
@@ -136,16 +136,16 @@ class TasksListFragment : Fragment(R.layout.fragment_child_t_tasks_list), TTasks
     }
 
     private fun loadMenu(){
-        val menuHost: MenuHost = requireActivity()
+        menuHost = requireActivity()
         menuHost.addMenuProvider(TasksMenuProvider(), viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private inner class TasksMenuProvider : MenuProvider {
+    inner class TasksMenuProvider : MenuProvider {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
             menu.clear()
-            menuInflater.inflate(R.menu.menu_tasks_list_fragment, menu)
+            menuInflater.inflate(R.menu.menu_t_tasks_list_fragment, menu)
 
-            val searchItem = menu.findItem(R.id.tasks_list_menu_search)
+            val searchItem = menu.findItem(R.id.pd_tasks_list_menu_search)
             searchView = searchItem.actionView as SearchView
 
             val pendingQuery = viewModel.searchQuery.value
@@ -166,11 +166,11 @@ class TasksListFragment : Fragment(R.layout.fragment_child_t_tasks_list), TTasks
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
             return when (menuItem.itemId) {
-                R.id.tasks_list_menu_sort_by_date -> {
+                R.id.pd_tasks_list_menu_sort_by_date -> {
                     viewModel.onSortOrderSelected(SortOrder.BY_TIME)
                     true
                 }
-                R.id.tasks_list_menu_sort_alphabetically -> {
+                R.id.pd_tasks_list_menu_sort_alphabetically -> {
                     viewModel.onSortOrderSelected(SortOrder.BY_NAME)
                     true
                 }
@@ -207,10 +207,5 @@ class TasksListFragment : Fragment(R.layout.fragment_child_t_tasks_list), TTasks
     override fun onDestroyView() {
         super.onDestroyView()
         searchView.setOnQueryTextListener(null)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Logger.i(TAG, "onPause", "onPause CALLED")
     }
 }

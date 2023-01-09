@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
         setupNavigationViewNavigation()
         setupNavigationDrawerListener()
         setupActionBarWithNavController(navController, drawerLayout)
-
         loadMainEventCollector()
     }
 

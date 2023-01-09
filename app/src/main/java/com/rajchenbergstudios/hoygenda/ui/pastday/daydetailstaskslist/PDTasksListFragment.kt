@@ -21,9 +21,7 @@ import com.rajchenbergstudios.hoygenda.ui.pastday.SharedDayDetailsViewModel
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import com.rajchenbergstudios.hoygenda.utils.Logger
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.withContext
 
 const val TAG = "PDTasksListFragment"
 
@@ -32,11 +30,12 @@ class PDTasksListFragment : Fragment(R.layout.fragment_child_pd_tasks_list), PDT
 
     private val sharedViewModel: SharedDayDetailsViewModel by viewModels()
 
+    private lateinit var menuHost: MenuHost
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentChildPdTasksListBinding.bind(view)
-
         val pdTasksListAdapter = PDTasksListAdapter(this)
 
         binding.apply {
@@ -86,14 +85,14 @@ class PDTasksListFragment : Fragment(R.layout.fragment_child_pd_tasks_list), PDT
     }
 
     private fun loadMenu(){
-        val menuHost: MenuHost = requireActivity()
+        menuHost = requireActivity()
         menuHost.addMenuProvider(TasksMenuProvider(), viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private inner class TasksMenuProvider : MenuProvider {
         override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
             menu.clear()
-            // menuInflater.inflate(R.menu.menu_tasks_list_fragment, menu)
+            menuInflater.inflate(R.menu.menu_pd_tasks_list_fragment, menu)
         }
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -105,5 +104,9 @@ class PDTasksListFragment : Fragment(R.layout.fragment_child_pd_tasks_list), PDT
 
     override fun onItemClick(task: Task) {
         sharedViewModel.onPastDayTaskClick(task, sharedViewModel.formattedDate)
+    }
+
+    override fun onPause() {
+        super.onPause()
     }
 }
