@@ -1,5 +1,6 @@
 package com.rajchenbergstudios.hoygenda.ui.today
 
+import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
@@ -33,6 +34,8 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
     private var fabClicked: Boolean = false
 
     private lateinit var viewPager: ViewPager2
+
+    private lateinit var todayFragmentListener: TodayFragmentListener
 
     private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.view_rotate_open_anim) }
     private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.view_rotate_close_anim) }
@@ -244,8 +247,18 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
         }
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        todayFragmentListener = context as TodayFragmentListener
+    }
+
     override fun onResume() {
         super.onResume()
         initViewPagerWithTabLayout(binding)
+        todayFragmentListener.todayOnResumeCalled()
+    }
+
+    interface TodayFragmentListener {
+        fun todayOnResumeCalled()
     }
 }

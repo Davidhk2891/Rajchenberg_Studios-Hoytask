@@ -16,22 +16,24 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.rajchenbergstudios.hoygenda.R
+import com.rajchenbergstudios.hoygenda.ui.today.TodayFragment
 import com.rajchenbergstudios.hoygenda.ui.today.TodayFragmentDirections
+import com.rajchenbergstudios.hoygenda.utils.Logger
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-// private const val TAG = "MainActivity.kt"
+private const val TAG = "MainActivity.kt"
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
 
     private lateinit var navController: NavController
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
     private var toolBar:Toolbar? = null
-    private lateinit var currentFragName: String
+    private var notInToday: Boolean = false
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -66,26 +68,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigationViewNavigation() {
-        currentFragName = "TodayFragment"
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.taskSetsListFragment -> {
-                    when (currentFragName) {
-                        "TodayFragment" -> {
-                            viewModel.onTaskSetsListFragmentClick()
-                        }
-                    }
+                    viewModel.onTaskSetsListFragmentClick()
                     closeDrawer()
-                    currentFragName = "TaskSetsListFragment"
+                    lockDrawer()
+                    notInToday = true
                 }
                 R.id.daysListFragment -> {
-                    when (currentFragName) {
-                        "TodayFragment" -> {
-                            viewModel.onDaysListFragmentClick()
-                        }
-                    }
+                    viewModel.onDaysListFragmentClick()
                     closeDrawer()
-                    currentFragName = "DaysListFragment"
+                    lockDrawer()
+                    notInToday = true
                 }
             }
             true
@@ -129,15 +124,6 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        if (currentFragName == "TaskSetsListFragment" || currentFragName == "DaysListFragment") {
-            unlockDrawer()
-            openDrawer()
-        }
-        currentFragName = "TodayFragment"
-        return NavigationUI.navigateUp(navController, drawerLayout)
-    }
-
     private fun openDrawer() { drawerLayout.openDrawer(GravityCompat.START, false) }
 
     private fun closeDrawer() { drawerLayout.closeDrawer(GravityCompat.START, false) }
@@ -145,6 +131,17 @@ class MainActivity : AppCompatActivity() {
     private fun lockDrawer() { drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED) }
 
     private fun unlockDrawer() { drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED) }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return NavigationUI.navigateUp(navController, drawerLayout)
+    }
+
+    override fun todayOnResumeCalled() {
+        if (notInToday) {
+            openDrawer()
+            unlockDrawer()
+        }
+    }
 }
 
 const val ADD_TASK_RESULT_OK = Activity.RESULT_FIRST_USER
