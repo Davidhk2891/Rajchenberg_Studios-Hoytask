@@ -18,12 +18,11 @@ import com.google.android.material.navigation.NavigationView
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.ui.today.TodayFragment
 import com.rajchenbergstudios.hoygenda.ui.today.TodayFragmentDirections
-import com.rajchenbergstudios.hoygenda.utils.Logger
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-private const val TAG = "MainActivity.kt"
+// private const val TAG = "MainActivity.kt"
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -70,15 +69,18 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
     private fun setupNavigationViewNavigation() {
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.todayFragment -> {
+                    closeDrawer(true)
+                }
                 R.id.taskSetsListFragment -> {
                     viewModel.onTaskSetsListFragmentClick()
-                    closeDrawer()
+                    closeDrawer(false)
                     lockDrawer()
                     notInToday = true
                 }
                 R.id.daysListFragment -> {
                     viewModel.onDaysListFragmentClick()
-                    closeDrawer()
+                    closeDrawer(false)
                     lockDrawer()
                     notInToday = true
                 }
@@ -126,7 +128,7 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
 
     private fun openDrawer() { drawerLayout.openDrawer(GravityCompat.START, false) }
 
-    private fun closeDrawer() { drawerLayout.closeDrawer(GravityCompat.START, false) }
+    private fun closeDrawer(animate: Boolean) { drawerLayout.closeDrawer(GravityCompat.START, animate) }
 
     private fun lockDrawer() { drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED) }
 
