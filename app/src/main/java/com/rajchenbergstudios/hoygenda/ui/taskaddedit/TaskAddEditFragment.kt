@@ -49,12 +49,20 @@ class TaskAddEditFragment : Fragment(R.layout.fragment_add_edit_task){
                     }
                     is TaskAddEditViewModel.AddEditEvent.NavigateBackWithResult -> {
                         binding.fragmentAddEditTitleEdittext.clearFocus()
-                        // What you need to do, is to make the setFragmentResult below, to only be relevant when adding a new task from the Today fragment.
-                        // You can do that with a simple check. That allows the event below to run only if check is true.
-                        setFragmentResult(
-                            "task_add_edit_request",
-                            bundleOf("task_add_edit_result" to event.result)
-                        )
+                        when (viewModel.origin) {
+                            1 -> {
+                                setFragmentResult(
+                                    "task_add_edit_request",
+                                    bundleOf("task_add_edit_result" to event.result)
+                                )
+                            }
+                            2 -> {
+                                setFragmentResult(
+                                    "task_in_set_add_edit_request",
+                                    bundleOf("task_in_set_add_edit_request" to event.result)
+                                )
+                            }
+                        }
                         findNavController().popBackStack()
                     }
                     is TaskAddEditViewModel.AddEditEvent.ShowFlowFromTaskInSetList -> {

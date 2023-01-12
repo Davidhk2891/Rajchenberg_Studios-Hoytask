@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
     private var toolBar:Toolbar? = null
-    private var notInToday: Boolean = false
+    private var inTopDestination: Boolean = false
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -76,13 +76,13 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                     viewModel.onTaskSetsListFragmentClick()
                     closeDrawer(false)
                     lockDrawer()
-                    notInToday = true
+                    inTopDestination = true
                 }
                 R.id.daysListFragment -> {
                     viewModel.onDaysListFragmentClick()
                     closeDrawer(false)
                     lockDrawer()
-                    notInToday = true
+                    inTopDestination = true
                 }
             }
             true
@@ -139,9 +139,10 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
     }
 
     override fun todayOnResumeCalled() {
-        if (notInToday) {
+        if (inTopDestination) {
             openDrawer()
             unlockDrawer()
+            inTopDestination = false
         }
     }
 }
