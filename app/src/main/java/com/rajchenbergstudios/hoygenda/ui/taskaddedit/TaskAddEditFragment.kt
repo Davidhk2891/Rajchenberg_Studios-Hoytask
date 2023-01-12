@@ -59,7 +59,7 @@ class TaskAddEditFragment : Fragment(R.layout.fragment_add_edit_task){
                             2 -> {
                                 setFragmentResult(
                                     "task_in_set_add_edit_request",
-                                    bundleOf("task_in_set_add_edit_request" to event.result)
+                                    bundleOf("task_in_set_add_edit_result" to event.result)
                                 )
                             }
                         }
@@ -110,7 +110,7 @@ class TaskAddEditFragment : Fragment(R.layout.fragment_add_edit_task){
             fragmentAddEditImportantCheckbox.isChecked = viewModel.taskImportance
             fragmentAddEditImportantCheckbox.jumpDrawablesToCurrentState()
             fragmentAddEditCreatedTextview.isVisible = viewModel.mTask != null
-            val dateCreated = "Time created: ${viewModel.mTask?.createdTimeFormat}"
+            val dateCreated = "Created at: ${viewModel.mTask?.createdTimeFormat}"
             fragmentAddEditCreatedTextview.text = dateCreated
 
             fragmentAddEditTitleEdittext.addTextChangedListener { newText ->
