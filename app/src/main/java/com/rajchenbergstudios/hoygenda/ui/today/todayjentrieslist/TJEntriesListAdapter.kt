@@ -1,4 +1,4 @@
-package com.rajchenbergstudios.hoygenda.ui.todaylists.journalentrieslist
+package com.rajchenbergstudios.hoygenda.ui.today.todayjentrieslist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.databinding.SingleItemJournalEntryBinding
 
-class JEntriesListAdapter(private val listener: OnItemClickListener) : ListAdapter<JournalEntry, JEntriesListAdapter.JEntriesListViewHolder>(DiffCallback()){
+class TJEntriesListAdapter(private val listener: OnItemClickListener) : ListAdapter<JournalEntry, TJEntriesListAdapter.JEntriesListViewHolder>(DiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JEntriesListViewHolder {
 

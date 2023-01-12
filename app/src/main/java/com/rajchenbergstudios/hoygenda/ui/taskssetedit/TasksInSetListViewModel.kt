@@ -6,13 +6,15 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSet
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSetDao
-import com.rajchenbergstudios.hoygenda.ui.activity.ADD_TASK_RESULT_OK
-import com.rajchenbergstudios.hoygenda.ui.activity.EDIT_TASK_RESULT_OK
+import com.rajchenbergstudios.hoygenda.ui.activity.ADD_TASK_IN_SET_OK
+import com.rajchenbergstudios.hoygenda.ui.activity.EDIT_TASK_IN_SET_OK
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+// private const val TAG = "TasksInSetListViewModel"
 
 @HiltViewModel
 class TasksInSetListViewModel @Inject constructor(
@@ -53,10 +55,14 @@ class TasksInSetListViewModel @Inject constructor(
         tasksInSetsChannel.send(TaskInSetEvent.NavigateToAddTaskInSetScreen(taskInSet))
     }
 
-    fun onAddEditResult(result: Int) {
+    fun onAddEditResults(result: Int) {
         when (result) {
-            ADD_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task in Set added")
-            EDIT_TASK_RESULT_OK -> showTaskSavedConfirmationMessage("Task in Set updated")
+            ADD_TASK_IN_SET_OK -> {
+                showTaskSavedConfirmationMessage("Task in Set added")
+            }
+            EDIT_TASK_IN_SET_OK -> {
+                showTaskSavedConfirmationMessage("Task in Set updated")
+            }
         }
     }
 

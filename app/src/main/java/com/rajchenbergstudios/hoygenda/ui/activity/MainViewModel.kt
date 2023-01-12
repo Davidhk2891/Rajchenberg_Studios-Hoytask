@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rajchenbergstudios.hoygenda.data.day.Day
 import com.rajchenbergstudios.hoygenda.data.day.DayDao
+import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
+import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntryDao
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.data.today.task.TaskDao
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +31,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val taskDao: TaskDao,
+    private val journalEntryDao: JournalEntryDao,
     private val dayDao: DayDao
 ) : ViewModel(){
 
@@ -50,30 +53,37 @@ class MainViewModel @Inject constructor(
     }
 
     private suspend fun pullListAndCompareDate() {
-        val tasksList = taskDao.getTodays()
+        val tasksList = taskDao.getTasksList()
+        val jEntriesList = journalEntryDao.getJournalEntriesList()
         if (tasksList.isNotEmpty()) {
             val lastTaskDateInMillis = tasksList.last().created
             val localDate = LocalDate.now()
             val localLastTaskDate = Instant.ofEpochMilli(lastTaskDateInMillis).atZone(ZoneId.systemDefault()).toLocalDate()
             if (localDate.isAfter(localLastTaskDate)) {
-                saveTasksToDay(tasksList, localLastTaskDate)
+                saveTasksAndJEntriesToDay(tasksList, jEntriesList, localLastTaskDate)
                 nukeTodayTasks()
+                nukeTodayJEntries()
             }
         }
     }
 
-    private fun saveTasksToDay(tasksList: List<Task>, tasksDate: LocalDate) = viewModelScope.launch {
+    private fun saveTasksAndJEntriesToDay(tasksList: List<Task>, jEntriesList: List<JournalEntry>, tasksDate: LocalDate) = viewModelScope.launch {
         dayDao.insert(Day(
             tasksDate.dayOfWeek.toString(),
             tasksDate.dayOfMonth.toString(),
             tasksDate.month.toString(),
             tasksDate.year.toString(),
-            tasksList
+            tasksList,
+            jEntriesList
         ))
     }
 
     private fun nukeTodayTasks() = viewModelScope.launch {
         taskDao.nukeTaskTable()
+    }
+
+    private fun nukeTodayJEntries() = viewModelScope.launch {
+        journalEntryDao.nukeJEntryTable()
     }
 
     fun onTaskSetsListFragmentClick() = viewModelScope.launch {

@@ -56,7 +56,7 @@
 
     <include
         android:id="@+id/task_today_add_to_set_no_data"
-        layout="@layout/layout_no_data_with_image"
+        layout="@layout/layout_tasks_no_data_with_image"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         app:layout_constraintEnd_toEndOf="parent"

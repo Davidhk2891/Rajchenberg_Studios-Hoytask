@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.today.todayjentrieslist.TJEntriesListFragment">
+
+    <include
+        android:id="@+id/journal_entries_list_recyclerview"
+        layout="@layout/layout_tasks_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="6dp"/>
+
+    <include
+        android:id="@+id/journal_entries_list_layout_no_data"
+        layout="@layout/layout_journal_entries_no_data_with_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="6dp"/>
+
+</FrameLayout>

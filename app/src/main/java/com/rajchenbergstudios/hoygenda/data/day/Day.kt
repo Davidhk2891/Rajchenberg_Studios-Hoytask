@@ -3,6 +3,7 @@ package com.rajchenbergstudios.hoygenda.data.day
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import kotlinx.parcelize.Parcelize
 
@@ -13,6 +14,7 @@ data class Day(
     val dayOfMonth: String,
     val month: String,
     val year: String,
-    val listOfDays: List<Task> = emptyList(),
+    val listOfTasks: List<Task> = emptyList(),
+    val listOfJEntries: List<JournalEntry> = emptyList(),
     @PrimaryKey(autoGenerate = true) val id: Long = 0
 ) : Parcelable

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.todaylists.journalentrieslist.JEntriesListFragment">
+    tools:context=".ui.pastday.daydetailstaskslist.PDTasksListFragment">
 
     <include
-        android:id="@+id/journal_entries_list_recyclerview"
+        android:id="@+id/tasks_list_recyclerview"
         layout="@layout/layout_tasks_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,8 +16,8 @@
         android:layout_marginEnd="6dp"/>
 
     <include
-        android:id="@+id/journal_entries_list_layout_no_data"
-        layout="@layout/layout_no_data_with_image"
+        android:id="@+id/tasks_list_layout_no_data"
+        layout="@layout/layout_tasks_no_data_with_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible"

@@ -22,6 +22,8 @@ class JEntryAddEditViewModel @Inject constructor(
     private val state: SavedStateHandle
 ) : ViewModel() {
 
+    val origin = state.get<Int>("origin")
+
     val jentry = state.get<JournalEntry>("jentry")
 
     var jentryText = state.get<String>("jentryText") ?: jentry?.content ?: ""
@@ -44,6 +46,13 @@ class JEntryAddEditViewModel @Inject constructor(
 
     fun onSaveClick() {
         createOrUpdateJournalEntry()
+    }
+
+    fun deduceFlow() = viewModelScope.launch {
+        when (origin) {
+            1 -> {jeAddEditEventChannel.send(JEAddEditEvent.ShowFlowFromJEntriesList)}
+            2 -> {jeAddEditEventChannel.send(JEAddEditEvent.ShowFlowFromPastDayJEntriesList)}
+        }
     }
 
     private fun createOrUpdateJournalEntry() {
@@ -76,6 +85,8 @@ class JEntryAddEditViewModel @Inject constructor(
     }
 
     sealed class JEAddEditEvent {
+        object ShowFlowFromJEntriesList : JEAddEditEvent()
+        object ShowFlowFromPastDayJEntriesList : JEAddEditEvent()
         data class NavigateBackWithResult(val result: Int) : JEAddEditEvent()
         data class ShowInvalidInputMessage(val message: String) : JEAddEditEvent()
     }

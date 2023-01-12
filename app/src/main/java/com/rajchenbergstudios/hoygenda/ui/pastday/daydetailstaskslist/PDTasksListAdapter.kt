@@ -1,4 +1,4 @@
-package com.rajchenbergstudios.hoygenda.ui.daysdetails
+package com.rajchenbergstudios.hoygenda.ui.pastday.daydetailstaskslist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,19 +9,31 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.databinding.SingleItemTaskBinding
 
-class DaysDetailsTasksAdapter : ListAdapter<Task, DaysDetailsTasksAdapter.DaysDetailsTasksViewHolder>(DiffCallback()){
+class PDTasksListAdapter(private val listener: OnItemClickListener) : ListAdapter<Task, PDTasksListAdapter.PDTasksListViewHolder>(DiffCallback()){
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DaysDetailsTasksViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PDTasksListViewHolder {
         val binding = SingleItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return DaysDetailsTasksViewHolder(binding)
+        return PDTasksListViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: DaysDetailsTasksViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PDTasksListViewHolder, position: Int) {
         val currentItem = getItem(position)
         holder.bind(currentItem)
     }
 
-    class DaysDetailsTasksViewHolder(private val binding: SingleItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class PDTasksListViewHolder(private val binding: SingleItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.apply {
+                root.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val pdTask = getItem(position)
+                        listener.onItemClick(pdTask)
+                    }
+                }
+            }
+        }
 
         fun bind(task: Task) {
             binding.apply {
@@ -34,12 +46,16 @@ class DaysDetailsTasksAdapter : ListAdapter<Task, DaysDetailsTasksAdapter.DaysDe
         }
     }
 
+    interface OnItemClickListener {
+        fun onItemClick(task: Task)
+    }
+
     class DiffCallback : DiffUtil.ItemCallback<Task>() {
 
         override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean
-            = oldItem.id == newItem.id
+                = oldItem.id == newItem.id
 
         override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean
-            = oldItem.id == newItem.id
+                = oldItem.id == newItem.id
     }
 }

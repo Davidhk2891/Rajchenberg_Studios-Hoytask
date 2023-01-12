@@ -24,6 +24,8 @@
         <item name="android:textColorSecondary">@color/hoytask_grey</item>
         <!-- BottomSheetDialog -->
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+        <!-- Scrollbars -->
+        <item name="android:scrollbarThumbVertical">@android:color/transparent</item>
     </style>
 
     <style name="CustomActionBar" parent="ThemeOverlay.AppCompat.ActionBar">

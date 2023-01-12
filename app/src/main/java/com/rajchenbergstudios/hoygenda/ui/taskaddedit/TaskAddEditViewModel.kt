@@ -7,7 +7,9 @@ import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.data.today.task.TaskDao
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSet
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSetDao
+import com.rajchenbergstudios.hoygenda.ui.activity.ADD_TASK_IN_SET_OK
 import com.rajchenbergstudios.hoygenda.ui.activity.ADD_TASK_RESULT_OK
+import com.rajchenbergstudios.hoygenda.ui.activity.EDIT_TASK_IN_SET_OK
 import com.rajchenbergstudios.hoygenda.ui.activity.EDIT_TASK_RESULT_OK
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -79,6 +81,7 @@ class TaskAddEditViewModel @Inject constructor(
         when (origin) {
             1 -> {addEditEventChannel.send(AddEditEvent.ShowFlowFromTaskList)}
             2 -> {addEditEventChannel.send(AddEditEvent.ShowFlowFromTaskInSetList)}
+            3 -> {addEditEventChannel.send(AddEditEvent.ShowFlowFromPastDayTaskList)}
         }
     }
 
@@ -126,12 +129,12 @@ class TaskAddEditViewModel @Inject constructor(
 
     private fun createTaskInSet(taskInSet: TaskInSet) = viewModelScope.launch {
         taskInSetDao.insert(taskInSet)
-        addEditEventChannel.send(AddEditEvent.NavigateBackWithResult(ADD_TASK_RESULT_OK))
+        addEditEventChannel.send(AddEditEvent.NavigateBackWithResult(ADD_TASK_IN_SET_OK))
     }
 
     private fun updateTaskInSet(taskInSet: TaskInSet) = viewModelScope.launch {
         taskInSetDao.update(taskInSet)
-        addEditEventChannel.send(AddEditEvent.NavigateBackWithResult(EDIT_TASK_RESULT_OK))
+        addEditEventChannel.send(AddEditEvent.NavigateBackWithResult(EDIT_TASK_IN_SET_OK))
     }
 
     private fun showInvalidInputMessage() = viewModelScope.launch {
@@ -141,6 +144,7 @@ class TaskAddEditViewModel @Inject constructor(
     sealed class AddEditEvent {
         object ShowFlowFromTaskList : AddEditEvent()
         object ShowFlowFromTaskInSetList : AddEditEvent()
+        object ShowFlowFromPastDayTaskList : AddEditEvent()
         data class ShowInvalidInputMessage(val msg: String) : AddEditEvent()
         data class NavigateBackWithResult(val result: Int) : AddEditEvent()
     }

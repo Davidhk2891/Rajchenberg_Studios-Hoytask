@@ -1,4 +1,4 @@
-package com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist
+package com.rajchenbergstudios.hoygenda.ui.today.todaytaskslist
 
 import androidx.lifecycle.*
 import com.rajchenbergstudios.hoygenda.data.prefs.PreferencesManager
@@ -12,11 +12,11 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-// private const val TAG = "TasksListViewModel"
+// private const val TAG = "TTasksListViewModel"
 
 @ExperimentalCoroutinesApi
 @HiltViewModel
-class TasksListViewModel @Inject constructor(
+class TTasksListViewModel @Inject constructor(
     private val taskDao: TaskDao,
     private val preferencesManager: PreferencesManager,
     state: SavedStateHandle
@@ -39,7 +39,7 @@ class TasksListViewModel @Inject constructor(
     ) { searchQuery, filterPreferences ->
         Pair(searchQuery, filterPreferences)
     }.flatMapLatest { (searchQuery, filterPreferences) ->
-        taskDao.getTodays(searchQuery, filterPreferences.sortOrder, filterPreferences.hideCompleted)
+        taskDao.getTasks(searchQuery, filterPreferences.sortOrder, filterPreferences.hideCompleted)
     }
 
     fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {

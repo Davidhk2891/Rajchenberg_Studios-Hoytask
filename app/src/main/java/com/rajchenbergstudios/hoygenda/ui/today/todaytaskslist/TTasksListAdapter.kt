@@ -1,4 +1,4 @@
-package com.rajchenbergstudios.hoygenda.ui.todaylists.taskslist
+package com.rajchenbergstudios.hoygenda.ui.today.todaytaskslist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.databinding.SingleItemTaskBinding
 
-class TasksListAdapter(private val listener: OnItemClickListener) : ListAdapter<Task, TasksListAdapter.TasksListViewHolder>(DiffCallback()) {
+class TTasksListAdapter(private val listener: OnItemClickListener) : ListAdapter<Task, TTasksListAdapter.TasksListViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksListViewHolder {
 

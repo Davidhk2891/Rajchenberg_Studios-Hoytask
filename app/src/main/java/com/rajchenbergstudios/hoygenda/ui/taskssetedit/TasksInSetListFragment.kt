@@ -16,6 +16,8 @@ import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSet
 import com.rajchenbergstudios.hoygenda.databinding.FragmentTasksInSetBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+//private const val TAG = "TasksInSetListViewModel"
+
 @AndroidEntryPoint
 class TasksInSetListFragment : Fragment(R.layout.fragment_tasks_in_set), TasksInSetListAdapter.OnItemClickListener {
 
@@ -57,11 +59,6 @@ class TasksInSetListFragment : Fragment(R.layout.fragment_tasks_in_set), TasksIn
             }
         }
 
-        setFragmentResultListener("add_edit_request"){_, bundle ->
-            val result = bundle.getInt("add_edit_result")
-            viewModel.onAddEditResult(result)
-        }
-
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.tasksInSetsEvent.collect { event ->
                 when (event) {
@@ -94,6 +91,11 @@ class TasksInSetListFragment : Fragment(R.layout.fragment_tasks_in_set), TasksIn
 
         viewModel.tasksSet?.observe(viewLifecycleOwner) { tasksInSetList ->
             tasksInSetListAdapter.submitList(tasksInSetList)
+        }
+
+        setFragmentResultListener("task_in_set_add_edit_request"){_, bundle ->
+            val result = bundle.getInt("task_in_set_add_edit_result")
+            viewModel.onAddEditResults(result)
         }
     }
 
