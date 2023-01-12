@@ -5,6 +5,7 @@ import com.rajchenbergstudios.hoygenda.data.prefs.PreferencesManager
 import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntryDao
+import com.rajchenbergstudios.hoygenda.ui.today.todaytaskslist.TTasksListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -59,9 +60,14 @@ class TJEntriesListViewModel @Inject constructor(
         preferencesManager.updateSortOrder(sortOrder)
     }
 
+    fun onDeleteAllClick() = viewModelScope.launch {
+        jEntriesEventChannel.send(JEntriesEvent.NavigateToDeleteAllScreen)
+    }
+
     val entries = jEntriesFlow.asLiveData()
 
     sealed class JEntriesEvent {
+        object NavigateToDeleteAllScreen : JEntriesEvent()
         data class ShowUndoDeleteJEntryMessage(val journalEntry: JournalEntry) : JEntriesEvent()
         data class NavigateToEditJEntryScreen(val journalEntry: JournalEntry) : JEntriesEvent()
     }

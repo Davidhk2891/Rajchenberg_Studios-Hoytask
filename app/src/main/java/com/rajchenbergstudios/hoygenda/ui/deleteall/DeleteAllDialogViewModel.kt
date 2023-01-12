@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.rajchenbergstudios.hoygenda.data.today.task.TaskDao
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSetDao
 import com.rajchenbergstudios.hoygenda.data.taskset.TaskSetDao
+import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntryDao
 import com.rajchenbergstudios.hoygenda.di.ApplicationScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -19,6 +20,7 @@ class DeleteAllDialogViewModel @Inject constructor(
     private val taskDao: TaskDao,
     private val taskSetDao: TaskSetDao,
     private val taskInSetDao: TaskInSetDao,
+    private val journalEntryDao: JournalEntryDao,
     state: SavedStateHandle,
     @ApplicationScope private val applicationScope: CoroutineScope
 ) : ViewModel(){
@@ -37,6 +39,7 @@ class DeleteAllDialogViewModel @Inject constructor(
             1 -> {deleteAllCompletedTasks(resultInterface)}
             2 -> {deleteAllSetsWithTasks(resultInterface)}
             3 -> {deleteAllTasks(resultInterface)}
+            4 -> {deleteAllJournalEntries(resultInterface)}
         }
     }
 
@@ -63,12 +66,20 @@ class DeleteAllDialogViewModel @Inject constructor(
         }
     }
 
+    private fun deleteAllJournalEntries(resultInterface: ResultInterface) = applicationScope.launch {
+        if (journalEntryDao.firstItemFromList().isEmpty())
+            resultInterface.onShowEmptyListMessage(message)
+        else
+            journalEntryDao.nukeJEntryTable()
+    }
+
     fun populateMessage(): String {
         var message = ""
         when (origin) {
             1 -> {message = "Do you really want to delete all completed tasks?"}
             2 -> {message = "Do you really want to delete all sets?"}
             3 -> {message = "Do you really want to delete all tasks?"}
+            4 -> {message = "Do you really want to delete all entries?"}
         }
         return message
     }

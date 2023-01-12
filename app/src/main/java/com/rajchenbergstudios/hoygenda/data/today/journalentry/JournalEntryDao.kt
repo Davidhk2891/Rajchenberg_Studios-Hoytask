@@ -2,6 +2,7 @@ package com.rajchenbergstudios.hoygenda.data.today.journalentry
 
 import androidx.room.*
 import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
+import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -21,6 +22,9 @@ interface JournalEntryDao {
 
     @Query("SELECT * FROM journal_table WHERE content LIKE '%' || :searchQuery || '%' ORDER BY important DESC, created")
     fun getJournalEntriesByTime(searchQuery: String): Flow<List<JournalEntry>>
+
+    @Query("SELECT * FROM journal_table LIMIT 1")
+    suspend fun firstItemFromList(): List<JournalEntry>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(journalEntry: JournalEntry)

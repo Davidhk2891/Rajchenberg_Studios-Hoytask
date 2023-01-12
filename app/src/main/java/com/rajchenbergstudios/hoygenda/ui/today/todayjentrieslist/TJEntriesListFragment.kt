@@ -21,6 +21,7 @@ import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildTJournalEntriesListBinding
 import com.rajchenbergstudios.hoygenda.ui.today.TodayFragmentDirections
+import com.rajchenbergstudios.hoygenda.ui.today.todaytaskslist.TTasksListFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import com.rajchenbergstudios.hoygenda.utils.OnQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
@@ -91,6 +92,10 @@ class TJEntriesListFragment : Fragment(R.layout.fragment_child_t_journal_entries
                             .actionTodayFragmentToJEntryAddEditFragment(title = "Edit entry", jentry = event.journalEntry, origin = 1)
                         findNavController().navigate(action)
                     }
+                    TJEntriesListViewModel.JEntriesEvent.NavigateToDeleteAllScreen -> {
+                        val action = TJEntriesListFragmentDirections.actionGlobalTasksDeleteAllDialogFragment(origin = 4)
+                        findNavController().navigate(action)
+                    }
                 }
             }
         }
@@ -149,7 +154,7 @@ class TJEntriesListFragment : Fragment(R.layout.fragment_child_t_journal_entries
                     true
                 }
                 R.id.jentries_list_menu_delete_all -> {
-//                        viewModel.onDeleteAllClick()
+                        viewModel.onDeleteAllClick()
                     true
                 }
                 else -> false
