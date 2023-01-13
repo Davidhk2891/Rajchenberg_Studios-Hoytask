@@ -21,7 +21,6 @@ import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildTJournalEntriesListBinding
 import com.rajchenbergstudios.hoygenda.ui.today.TodayFragmentDirections
-import com.rajchenbergstudios.hoygenda.ui.today.todaytaskslist.TTasksListFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import com.rajchenbergstudios.hoygenda.utils.OnQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,6 +31,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 class TJEntriesListFragment : Fragment(R.layout.fragment_child_t_journal_entries_list), TJEntriesListAdapter.OnItemClickListener {
 
     private val viewModel: TJEntriesListViewModel by viewModels()
+
     private lateinit var searchView: SearchView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,8 +49,7 @@ class TJEntriesListFragment : Fragment(R.layout.fragment_child_t_journal_entries
                 setHasFixedSize(true)
             }
 
-            ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+            ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT){
 
                 override fun onMove(
                     recyclerView: RecyclerView,

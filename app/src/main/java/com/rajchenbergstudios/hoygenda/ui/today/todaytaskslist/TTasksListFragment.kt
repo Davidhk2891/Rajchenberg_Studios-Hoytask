@@ -54,8 +54,7 @@ class TTasksListFragment : Fragment(R.layout.fragment_child_t_tasks_list), TTask
                 setHasFixedSize(true)
             }
 
-            ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT){
+            ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT){
 
                 override fun onMove(
                     recyclerView: RecyclerView,
