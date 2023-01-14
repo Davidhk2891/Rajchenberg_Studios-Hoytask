@@ -4,7 +4,7 @@
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
      xmlns:app="http://schemas.android.com/apk/res-auto"
-     tools:context=".ui.createtaskset.CreateTaskSetDialogFragment"
+     tools:context=".ui.core.createtaskset.CreateTaskSetDialogFragment"
      android:padding="10dp">
 
     <TextView
