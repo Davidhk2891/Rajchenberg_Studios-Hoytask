@@ -16,11 +16,12 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.rajchenbergstudios.hoygenda.R
-import com.rajchenbergstudios.hoygenda.ui.today.TodayFragment
-import com.rajchenbergstudios.hoygenda.ui.today.TodayFragmentDirections
+import com.rajchenbergstudios.hoygenda.ui.core.today.TodayFragment
+import com.rajchenbergstudios.hoygenda.ui.core.today.TodayFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+
 
 // private const val TAG = "MainActivity.kt"
 
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
     private var toolBar:Toolbar? = null
-    private var inTopDestination: Boolean = false
+    private var inOtherDestination: Boolean = false
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -76,13 +77,17 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                     viewModel.onTaskSetsListFragmentClick()
                     closeDrawer(false)
                     lockDrawer()
-                    inTopDestination = true
+                    inOtherDestination = true
                 }
                 R.id.daysListFragment -> {
                     viewModel.onDaysListFragmentClick()
                     closeDrawer(false)
                     lockDrawer()
-                    inTopDestination = true
+                    inOtherDestination = true
+                }
+                R.id.getInTouchDialogFragment -> {
+                    viewModel.onGetInTouchDialogFragmentClick()
+                    inOtherDestination = true
                 }
             }
             true
@@ -100,6 +105,9 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                     MainViewModel.MainEvent.NavigateToDaysListFragment -> {
                         navController.navigate(TodayFragmentDirections.actionGlobalDaysListFragment())
                         lockDrawer()
+                    }
+                    MainViewModel.MainEvent.NavigateToGetInTouchDialog -> {
+                        navController.navigate(TodayFragmentDirections.actionGlobalGetInTouchDialogFragment())
                     }
                 }.exhaustive
             }
@@ -139,10 +147,10 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
     }
 
     override fun todayOnResumeCalled() {
-        if (inTopDestination) {
+        if (inOtherDestination) {
             openDrawer()
             unlockDrawer()
-            inTopDestination = false
+            inOtherDestination = false
         }
     }
 }

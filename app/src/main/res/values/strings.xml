@@ -54,4 +54,6 @@
     <string name="my_hoygenda">My Hoygenda</string>
     <string name="sort_by_time">Sort by time</string>
     <string name="sort_alphabetically">Sort alphabetically</string>
+    <string name="get_in_touch_content">Found a bug and want to report it?\n\nThought of a feature you\'d like us to add?\n\nWe\'d love to hear from you! Send us an email and we will get back to you :)</string>
+    <string name="email_us">Email us</string>
 </resources>

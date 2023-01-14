@@ -94,8 +94,13 @@ class MainViewModel @Inject constructor(
         mainEventChannel.send(MainEvent.NavigateToDaysListFragment)
     }
 
+    fun onGetInTouchDialogFragmentClick() = viewModelScope.launch {
+        mainEventChannel.send(MainEvent.NavigateToGetInTouchDialog)
+    }
+
     sealed class MainEvent {
         object NavigateToTaskSetsListFragment : MainEvent()
         object NavigateToDaysListFragment : MainEvent()
+        object NavigateToGetInTouchDialog : MainEvent()
     }
 }

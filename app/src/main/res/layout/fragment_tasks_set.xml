@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.tasksset.TaskSetsListFragment"
+    tools:context=".ui.core.tasksset.TaskSetsListFragment"
     android:padding="16dp">
 
     <include
