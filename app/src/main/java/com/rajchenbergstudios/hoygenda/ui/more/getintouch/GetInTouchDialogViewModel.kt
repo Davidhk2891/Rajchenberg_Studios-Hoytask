@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rajchenbergstudios.hoygenda.data.constants.GetInTouchConstants
+import com.rajchenbergstudios.hoygenda.data.constants.GetInTouchAndAboutConstants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -25,9 +25,9 @@ class GetInTouchDialogViewModel @Inject constructor(
 
     fun onEmailUsClick() = viewModelScope.launch {
 
-        val recipient = GetInTouchConstants.SUPPORT_EMAIL_RECIPIENT
-        val subject = GetInTouchConstants.SUPPORT_EMAIL_SUBJECT
-        val content = GetInTouchConstants.SUPPORT_EMAIL_CONTENT
+        val recipient = GetInTouchAndAboutConstants.SUPPORT_EMAIL_RECIPIENT
+        val subject = GetInTouchAndAboutConstants.SUPPORT_EMAIL_SUBJECT
+        val content = GetInTouchAndAboutConstants.SUPPORT_EMAIL_CONTENT
 
         getInTouchEventChannel.send(GetInTouchEvent.GoToEmailClient(
             recipient, subject, content

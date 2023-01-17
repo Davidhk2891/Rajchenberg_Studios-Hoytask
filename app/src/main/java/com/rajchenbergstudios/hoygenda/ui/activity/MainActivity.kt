@@ -101,6 +101,10 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                     viewModel.onTellYourFriendsDialogFragmentClick()
                     inOtherDestination = true
                 }
+                R.id.aboutDialogFragment -> {
+                    viewModel.onAboutDialogFragmentClick()
+                    inOtherDestination = true
+                }
             }
             true
         }
@@ -129,6 +133,9 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                     }
                     MainViewModel.MainEvent.NavigateToTellYourFriendsDialog -> {
                         navController.navigate(TodayFragmentDirections.actionGlobalTellYourFriendsDialogFragment())
+                    }
+                    MainViewModel.MainEvent.NavigateToAboutDialog -> {
+                        navController.navigate(TodayFragmentDirections.actionGlobalAboutDialogFragment())
                     }
                 }.exhaustive
             }
