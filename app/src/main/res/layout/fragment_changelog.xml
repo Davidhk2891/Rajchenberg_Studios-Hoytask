@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="240dp"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    tools:context=".ui.more.changelog.ChangelogDialogFragment">
+
+    <TextView
+        android:id="@+id/changelog_title_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/changelog"
+        android:layout_margin="12dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/changelog_version_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_margin="12dp"
+        android:textStyle="bold"
+        tools:text="1.0"
+        app:layout_constraintTop_toBottomOf="@+id/changelog_title_textview"
+        app:layout_constraintStart_toStartOf="@+id/changelog_title_textview"/>
+
+    <TextView
+        android:id="@+id/changelog_content_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        tools:text="\u2022 Added support for Android 12\n\u2022 Bug fixes\n\u2022 Crash fixes"
+        app:layout_constraintTop_toBottomOf="@+id/changelog_version_textview"
+        app:layout_constraintStart_toStartOf="@+id/changelog_title_textview"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/changelog_options_ok_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ok"
+        android:textColor="@color/hoytask_purple"
+        android:background="?android:attr/selectableItemBackground"
+        app:layout_constraintTop_toBottomOf="@+id/changelog_content_textview"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -98,8 +98,12 @@ class MainViewModel @Inject constructor(
         mainEventChannel.send(MainEvent.NavigateToGetInTouchDialog)
     }
 
-    fun onLeaveReviewFragmentClick() = viewModelScope.launch {
+    fun onLeaveReviewDialogFragmentClick() = viewModelScope.launch {
         mainEventChannel.send(MainEvent.NavigateToLeaveReviewDialog)
+    }
+
+    fun onChangelogDialogFragmentClick() = viewModelScope.launch {
+        mainEventChannel.send(MainEvent.NavigateToChangelogDialog)
     }
 
     sealed class MainEvent {
@@ -107,5 +111,6 @@ class MainViewModel @Inject constructor(
         object NavigateToDaysListFragment : MainEvent()
         object NavigateToGetInTouchDialog : MainEvent()
         object NavigateToLeaveReviewDialog : MainEvent()
+        object NavigateToChangelogDialog : MainEvent()
     }
 }

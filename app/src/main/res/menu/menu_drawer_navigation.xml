@@ -37,7 +37,7 @@
                 android:title="@string/tell_your_friends"
                 android:icon="@drawable/ic_baseline_share_24"/>
             <item
-                android:id="@+id/nav_changelog"
+                android:id="@+id/changelogDialogFragment"
                 android:title="@string/changelog"
                 android:icon="@drawable/ic_baseline_assignment_24"/>
             <item
