@@ -5,16 +5,16 @@
     android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:padding="12dp"
-    tools:context=".ui.more.getintouch.GetInTouchDialogFragment">
+    tools:context=".ui.more.tellyourfriends.TellYourFriendsDialogFragment">
 
     <TextView
-        android:id="@+id/get_in_touch_title_textview"
+        android:id="@+id/tell_your_friends_title_textview"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/get_in_touch"
+        android:text="@string/tell_your_friends"
         android:textColor="@color/hoytask_black"
         android:textStyle="bold"/>
 
@@ -25,9 +25,9 @@
         android:layout_marginTop="12dp"
         android:textSize="16sp"
         android:textColor="@color/hoytask_black"
-        android:text="@string/get_in_touch_content"
-        app:layout_constraintTop_toBottomOf="@+id/get_in_touch_title_textview"
-        app:layout_constraintStart_toStartOf="@+id/get_in_touch_title_textview"/>
+        android:text="@string/spread_the_love_and_share_hoygenda_with_the_world_n_nwe_appreciate_the_help"
+        app:layout_constraintTop_toBottomOf="@+id/tell_your_friends_title_textview"
+        app:layout_constraintStart_toStartOf="@+id/tell_your_friends_title_textview"/>
 
     <LinearLayout
         android:id="@+id/tell_your_friends_options_linearlayout"
@@ -40,7 +40,7 @@
         android:layout_marginTop="8dp">
 
         <Button
-            android:id="@+id/get_in_touch_options_cancel_button"
+            android:id="@+id/tell_your_friends_options_cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cancel"
@@ -48,10 +48,10 @@
             android:background="?android:attr/selectableItemBackground"/>
 
         <Button
-            android:id="@+id/get_in_touch_options_email_us_button"
+            android:id="@+id/tell_your_friends_options_share_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/email_us"
+            android:text="@string/share"
             android:textColor="@color/hoytask_purple"
             android:background="?android:attr/selectableItemBackground"/>
 

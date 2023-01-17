@@ -1,6 +1,5 @@
 package com.rajchenbergstudios.hoygenda.ui.more.getintouch
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,21 +42,12 @@ class GetInTouchDialogFragment : DialogFragment(){
                         dismiss()
                     }
                     is GetInTouchDialogViewModel.GetInTouchEvent.GoToEmailClient -> {
-                        runEmailClient(event.recipient, event.subject, event.content)
+                        viewModel.runEmailClient(activity, event.recipient, event.subject, event.content)
                     }
                 }
             }
         }
 
         return view
-    }
-
-    private fun runEmailClient(recipient: String, subject: String, content: String) {
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
-        intent.putExtra(Intent.EXTRA_SUBJECT,subject)
-        intent.putExtra(Intent.EXTRA_TEXT, content)
-        intent.type = "message/rfc822"
-        startActivity(Intent.createChooser(intent, "Choose an Email client :"))
     }
 }
