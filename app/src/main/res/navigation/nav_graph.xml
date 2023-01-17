@@ -190,5 +190,11 @@
     <dialog
         android:id="@+id/leaveReviewDialogFragment"
         android:name="com.rajchenbergstudios.hoygenda.ui.more.leavereview.LeaveReviewDialogFragment"
-        android:label="LeaveReviewDialogFragment" /><action android:id="@+id/action_global_leaveReviewDialogFragment" app:destination="@id/leaveReviewDialogFragment"/>
+        android:label="LeaveReviewDialogFragment" />
+    <action android:id="@+id/action_global_leaveReviewDialogFragment" app:destination="@id/leaveReviewDialogFragment" />
+    <dialog
+        android:id="@+id/changelogDialogFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.more.changelog.ChangelogDialogFragment"
+        android:label="fragment_changelog"
+        tools:layout="@layout/fragment_changelog" /><action android:id="@+id/action_global_changelogDialogFragment" app:destination="@id/changelogDialogFragment"/>
 </navigation>
