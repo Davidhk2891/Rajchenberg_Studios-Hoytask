@@ -106,11 +106,16 @@ class MainViewModel @Inject constructor(
         mainEventChannel.send(MainEvent.NavigateToChangelogDialog)
     }
 
+    fun onTellYourFriendsDialogFragmentClick() = viewModelScope.launch {
+        mainEventChannel.send(MainEvent.NavigateToTellYourFriendsDialog)
+    }
+
     sealed class MainEvent {
         object NavigateToTaskSetsListFragment : MainEvent()
         object NavigateToDaysListFragment : MainEvent()
         object NavigateToGetInTouchDialog : MainEvent()
         object NavigateToLeaveReviewDialog : MainEvent()
         object NavigateToChangelogDialog : MainEvent()
+        object NavigateToTellYourFriendsDialog : MainEvent()
     }
 }

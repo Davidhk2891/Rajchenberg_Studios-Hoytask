@@ -97,6 +97,10 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                     viewModel.onChangelogDialogFragmentClick()
                     inOtherDestination = true
                 }
+                R.id.tellYourFriendsDialogFragment -> {
+                    viewModel.onTellYourFriendsDialogFragmentClick()
+                    inOtherDestination = true
+                }
             }
             true
         }
@@ -122,6 +126,9 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                     }
                     MainViewModel.MainEvent.NavigateToChangelogDialog -> {
                         navController.navigate(TodayFragmentDirections.actionGlobalChangelogDialogFragment())
+                    }
+                    MainViewModel.MainEvent.NavigateToTellYourFriendsDialog -> {
+                        navController.navigate(TodayFragmentDirections.actionGlobalTellYourFriendsDialogFragment())
                     }
                 }.exhaustive
             }

@@ -1,5 +1,7 @@
 package com.rajchenbergstudios.hoygenda.ui.more.getintouch
 
+import android.content.Intent
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rajchenbergstudios.hoygenda.data.constants.GetInTouchConstants
@@ -34,6 +36,15 @@ class GetInTouchDialogViewModel @Inject constructor(
 
     fun onCancelClick() = viewModelScope.launch {
         getInTouchEventChannel.send(GetInTouchEvent.DoGetInTouchCancellationAction)
+    }
+
+    fun runEmailClient(activity: FragmentActivity?, recipient: String, subject: String, content: String) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(recipient))
+        intent.putExtra(Intent.EXTRA_SUBJECT,subject)
+        intent.putExtra(Intent.EXTRA_TEXT, content)
+        intent.type = "message/rfc822"
+        activity?.startActivity(Intent.createChooser(intent, "Choose an Email client :"))
     }
 
     sealed class GetInTouchEvent {
