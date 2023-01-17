@@ -56,4 +56,9 @@
     <string name="sort_alphabetically">Sort alphabetically</string>
     <string name="get_in_touch_content">Found a bug and want to report it?\n\nThought of a feature you\'d like us to add?\n\nWe\'d love to hear from you! Send us an email and we will get back to you :)</string>
     <string name="email_us">Email us</string>
+    <string name="leave_us_a_review">Leave us a review!</string>
+    <string name="you_can_help_recommend_hoygenda_to_others_by_leaving_us_a_5_star_review_we_d_really_appreciate_it">You can help recommend Hoygenda to others by leaving us a 5* review - we\'d really appreciate it!</string>
+    <string name="rate_now">Rate now</string>
+    <string name="maybe_later">Maybe later</string>
+    <string name="don_t_ask_me_again">Don\'t ask me again</string>
 </resources>

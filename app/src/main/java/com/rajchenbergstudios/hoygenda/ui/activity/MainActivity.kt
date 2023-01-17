@@ -18,12 +18,13 @@ import com.google.android.material.navigation.NavigationView
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.ui.core.today.TodayFragment
 import com.rajchenbergstudios.hoygenda.ui.core.today.TodayFragmentDirections
+import com.rajchenbergstudios.hoygenda.utils.Logger
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
-// private const val TAG = "MainActivity.kt"
+private const val TAG = "MainActivity.kt"
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -86,7 +87,13 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                     inOtherDestination = true
                 }
                 R.id.getInTouchDialogFragment -> {
+                    Logger.i(TAG, "setUpNavigationViewNavigation", "Get in touch called")
                     viewModel.onGetInTouchDialogFragmentClick()
+                    inOtherDestination = true
+                }
+                R.id.leaveReviewDialogFragment -> {
+                    Logger.i(TAG, "setUpNavigationViewNavigation", "Called 1")
+                    viewModel.onLeaveReviewFragmentClick()
                     inOtherDestination = true
                 }
             }
@@ -108,6 +115,9 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                     }
                     MainViewModel.MainEvent.NavigateToGetInTouchDialog -> {
                         navController.navigate(TodayFragmentDirections.actionGlobalGetInTouchDialogFragment())
+                    }
+                    MainViewModel.MainEvent.NavigateToLeaveReviewDialog -> {
+                        navController.navigate(TodayFragmentDirections.actionGlobalLeaveReviewDialogFragment())
                     }
                 }.exhaustive
             }
