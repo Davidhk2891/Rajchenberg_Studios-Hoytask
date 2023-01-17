@@ -25,11 +25,11 @@
     <item android:title="@string/more">
         <menu>
             <item
-                android:id="@+id/nav_leave_a_review"
+                android:id="@+id/leaveReviewDialogFragment"
                 android:title="@string/leave_a_review"
                 android:icon="@drawable/ic_baseline_tag_faces_24"/>
             <item
-                android:id="@+id/nav_get_in_touch"
+                android:id="@+id/getInTouchDialogFragment"
                 android:title="@string/get_in_touch"
                 android:icon="@drawable/ic_baseline_message_24"/>
             <item
@@ -37,7 +37,7 @@
                 android:title="@string/tell_your_friends"
                 android:icon="@drawable/ic_baseline_share_24"/>
             <item
-                android:id="@+id/nav_changelog"
+                android:id="@+id/changelogDialogFragment"
                 android:title="@string/changelog"
                 android:icon="@drawable/ic_baseline_assignment_24"/>
             <item

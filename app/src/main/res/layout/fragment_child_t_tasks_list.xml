@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.core.today.todaytaskslist.TTasksListFragment">
+
+    <include
+        android:id="@+id/tasks_list_recyclerview"
+        layout="@layout/layout_tasks_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="6dp"/>
+
+    <include
+        android:id="@+id/tasks_list_layout_no_data"
+        layout="@layout/layout_tasks_no_data_with_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="6dp"/>
+
+</FrameLayout>

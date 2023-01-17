@@ -8,23 +8,21 @@ import kotlinx.coroutines.flow.Flow
 interface TaskDao {
 
     @Query("SELECT * FROM task_table")
-    suspend fun getTodays(): List<Task>
+    suspend fun getTasksList(): List<Task>
 
-    fun getTodays(searchQuery: String, sortOrder: SortOrder, hideCompleted: Boolean): Flow<List<Task>> =
+    fun getTasks(searchQuery: String, sortOrder: SortOrder, hideCompleted: Boolean): Flow<List<Task>> =
         when (sortOrder) {
             SortOrder.BY_NAME -> getTasksSortedByName(searchQuery, hideCompleted)
-            SortOrder.BY_DATE -> getTasksSortedByDate(searchQuery, hideCompleted)
+            SortOrder.BY_TIME -> getTasksSortedByTime(searchQuery, hideCompleted)
         }
 
     @Query("SELECT * FROM task_table WHERE (completed != :hideCompleted OR completed = 0) AND" +
-            " title LIKE '%' || :searchQuery || '%' ORDER BY important DESC, title"
-    )
+            " title LIKE '%' || :searchQuery || '%' ORDER BY important DESC, title")
     fun getTasksSortedByName(searchQuery: String, hideCompleted: Boolean): Flow<List<Task>>
 
     @Query("SELECT * FROM task_table WHERE (completed != :hideCompleted OR completed = 0) AND" +
-            " title LIKE '%' || :searchQuery || '%' ORDER BY important DESC, created"
-    )
-    fun getTasksSortedByDate(searchQuery: String, hideCompleted: Boolean): Flow<List<Task>>
+            " title LIKE '%' || :searchQuery || '%' ORDER BY important DESC, created")
+    fun getTasksSortedByTime(searchQuery: String, hideCompleted: Boolean): Flow<List<Task>>
 
     @Query("SELECT * FROM task_table LIMIT 1")
     suspend fun firstItemFromList(): List<Task>

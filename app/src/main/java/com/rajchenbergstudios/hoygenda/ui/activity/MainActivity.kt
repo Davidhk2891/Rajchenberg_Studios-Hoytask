@@ -16,22 +16,24 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.rajchenbergstudios.hoygenda.R
-import com.rajchenbergstudios.hoygenda.ui.todaylists.TodayFragmentDirections
+import com.rajchenbergstudios.hoygenda.ui.core.today.TodayFragment
+import com.rajchenbergstudios.hoygenda.ui.core.today.TodayFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+
 
 // private const val TAG = "MainActivity.kt"
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
 
     private lateinit var navController: NavController
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
     private var toolBar:Toolbar? = null
-    private lateinit var currentFragName: String
+    private var inOtherDestination: Boolean = false
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -46,7 +48,6 @@ class MainActivity : AppCompatActivity() {
         setupNavigationViewNavigation()
         setupNavigationDrawerListener()
         setupActionBarWithNavController(navController, drawerLayout)
-
         loadMainEventCollector()
     }
 
@@ -67,26 +68,34 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigationViewNavigation() {
-        currentFragName = "TodayFragment"
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.todayFragment -> {
+                    closeDrawer(true)
+                }
                 R.id.taskSetsListFragment -> {
-                    when (currentFragName) {
-                        "TodayFragment" -> {
-                            viewModel.onTaskSetsListFragmentClick()
-                        }
-                    }
-                    closeDrawer()
-                    currentFragName = "TaskSetsListFragment"
+                    viewModel.onTaskSetsListFragmentClick()
+                    closeDrawer(false)
+                    lockDrawer()
+                    inOtherDestination = true
                 }
                 R.id.daysListFragment -> {
-                    when (currentFragName) {
-                        "TodayFragment" -> {
-                            viewModel.onDaysListFragmentClick()
-                        }
-                    }
-                    closeDrawer()
-                    currentFragName = "DaysListFragment"
+                    viewModel.onDaysListFragmentClick()
+                    closeDrawer(false)
+                    lockDrawer()
+                    inOtherDestination = true
+                }
+                R.id.getInTouchDialogFragment -> {
+                    viewModel.onGetInTouchDialogFragmentClick()
+                    inOtherDestination = true
+                }
+                R.id.leaveReviewDialogFragment -> {
+                    viewModel.onLeaveReviewDialogFragmentClick()
+                    inOtherDestination = true
+                }
+                R.id.changelogDialogFragment -> {
+                    viewModel.onChangelogDialogFragmentClick()
+                    inOtherDestination = true
                 }
             }
             true
@@ -104,6 +113,15 @@ class MainActivity : AppCompatActivity() {
                     MainViewModel.MainEvent.NavigateToDaysListFragment -> {
                         navController.navigate(TodayFragmentDirections.actionGlobalDaysListFragment())
                         lockDrawer()
+                    }
+                    MainViewModel.MainEvent.NavigateToGetInTouchDialog -> {
+                        navController.navigate(TodayFragmentDirections.actionGlobalGetInTouchDialogFragment())
+                    }
+                    MainViewModel.MainEvent.NavigateToLeaveReviewDialog -> {
+                        navController.navigate(TodayFragmentDirections.actionGlobalLeaveReviewDialogFragment())
+                    }
+                    MainViewModel.MainEvent.NavigateToChangelogDialog -> {
+                        navController.navigate(TodayFragmentDirections.actionGlobalChangelogDialogFragment())
                     }
                 }.exhaustive
             }
@@ -130,22 +148,25 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        if (currentFragName == "TaskSetsListFragment" || currentFragName == "DaysListFragment") {
-            unlockDrawer()
-            openDrawer()
-        }
-        currentFragName = "TodayFragment"
-        return NavigationUI.navigateUp(navController, drawerLayout)
-    }
-
     private fun openDrawer() { drawerLayout.openDrawer(GravityCompat.START, false) }
 
-    private fun closeDrawer() { drawerLayout.closeDrawer(GravityCompat.START, false) }
+    private fun closeDrawer(animate: Boolean) { drawerLayout.closeDrawer(GravityCompat.START, animate) }
 
     private fun lockDrawer() { drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED) }
 
     private fun unlockDrawer() { drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED) }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return NavigationUI.navigateUp(navController, drawerLayout)
+    }
+
+    override fun todayOnResumeCalled() {
+        if (inOtherDestination) {
+            openDrawer()
+            unlockDrawer()
+            inOtherDestination = false
+        }
+    }
 }
 
 const val ADD_TASK_RESULT_OK = Activity.RESULT_FIRST_USER
@@ -153,3 +174,7 @@ const val EDIT_TASK_RESULT_OK = Activity.RESULT_FIRST_USER + 1
 const val CREATE_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 2
 const val EDIT_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 3
 const val ADD_TASK_FROM_SET_RESULT_OK = Activity.RESULT_FIRST_USER + 4
+const val ADD_JENTRY_RESULT_OK = Activity.RESULT_FIRST_USER + 5
+const val EDIT_JENTRY_RESULT_OK = Activity.RESULT_FIRST_USER + 6
+const val ADD_TASK_IN_SET_OK = Activity.RESULT_FIRST_USER + 7
+const val EDIT_TASK_IN_SET_OK = Activity.RESULT_FIRST_USER + 8

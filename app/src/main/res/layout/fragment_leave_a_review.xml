@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="14dp"
+    tools:context=".ui.more.leavereview.LeaveReviewDialogFragment">
+
+    <TextView
+        android:id="@+id/leave_a_review_title_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/leave_us_a_review"
+        android:textColor="@color/hoytask_black"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/leave_a_review_content_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:textSize="16sp"
+        android:textColor="@color/hoytask_black"
+        android:text="@string/you_can_help_recommend_hoygenda_to_others_by_leaving_us_a_5_star_review_we_d_really_appreciate_it"
+        app:layout_constraintTop_toBottomOf="@+id/leave_a_review_title_textview"
+        app:layout_constraintStart_toStartOf="@+id/leave_a_review_title_textview"/>
+
+    <LinearLayout
+        android:id="@+id/leave_a_review_options_linearlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/leave_a_review_content_textview"
+        app:layout_constraintEnd_toEndOf="@+id/leave_a_review_content_textview"
+        android:orientation="vertical"
+        android:gravity="end"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/leave_a_review_options_rate_now_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rate_now"
+            android:textColor="@color/hoytask_purple"
+            android:background="?android:attr/selectableItemBackground"/>
+
+        <Button
+            android:id="@+id/leave_a_review_options_maybe_later_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/maybe_later"
+            android:textColor="@color/hoytask_purple"
+            android:background="?android:attr/selectableItemBackground"/>
+
+        <Button
+            android:id="@+id/leave_a_review_options_no_ask_again_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/don_t_ask_me_again"
+            android:textColor="@color/hoytask_purple"
+            android:background="?android:attr/selectableItemBackground"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
