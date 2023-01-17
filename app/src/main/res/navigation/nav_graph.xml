@@ -201,5 +201,12 @@
         android:id="@+id/tellYourFriendsDialogFragment"
         android:name="com.rajchenbergstudios.hoygenda.ui.more.tellyourfriends.TellYourFriendsDialogFragment"
         android:label="fragment_tell_your_friends"
-        tools:layout="@layout/fragment_tell_your_friends" /><action android:id="@+id/action_global_tellYourFriendsDialogFragment" app:destination="@id/tellYourFriendsDialogFragment"/>
+        tools:layout="@layout/fragment_tell_your_friends" />
+    <action android:id="@+id/action_global_tellYourFriendsDialogFragment" app:destination="@id/tellYourFriendsDialogFragment" />
+    <dialog
+        android:id="@+id/aboutDialogFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.more.about.AboutDialogFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
+    <action android:id="@+id/action_global_aboutDialogFragment" app:destination="@id/aboutDialogFragment" />
 </navigation>
