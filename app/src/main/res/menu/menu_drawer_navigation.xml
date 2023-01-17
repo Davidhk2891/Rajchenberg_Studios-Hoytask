@@ -25,7 +25,7 @@
     <item android:title="@string/more">
         <menu>
             <item
-                android:id="@+id/nav_leave_a_review"
+                android:id="@+id/leaveReviewDialogFragment"
                 android:title="@string/leave_a_review"
                 android:icon="@drawable/ic_baseline_tag_faces_24"/>
             <item

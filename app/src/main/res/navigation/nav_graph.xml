@@ -185,5 +185,10 @@
     <dialog
         android:id="@+id/getInTouchDialogFragment"
         android:name="com.rajchenbergstudios.hoygenda.ui.more.getintouch.GetInTouchDialogFragment"
-        android:label="GetInTouchDialogFragment" /><action android:id="@+id/action_global_getInTouchDialogFragment" app:destination="@id/getInTouchDialogFragment"/>
+        android:label="GetInTouchDialogFragment" />
+    <action android:id="@+id/action_global_getInTouchDialogFragment" app:destination="@id/getInTouchDialogFragment" />
+    <dialog
+        android:id="@+id/leaveReviewDialogFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.more.leavereview.LeaveReviewDialogFragment"
+        android:label="LeaveReviewDialogFragment" /><action android:id="@+id/action_global_leaveReviewDialogFragment" app:destination="@id/leaveReviewDialogFragment"/>
 </navigation>
