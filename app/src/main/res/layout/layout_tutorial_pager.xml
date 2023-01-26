@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textSize="34sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
         android:textColor="@color/hoytask_white"
@@ -20,7 +20,7 @@
 
     <ImageView
         android:id="@+id/tutorial_pager_image"
-        android:layout_width="130dp"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:src="@drawable/ic_baseline_tag_faces_24"
@@ -28,14 +28,13 @@
 
     <TextView
         android:id="@+id/tutorial_pager_content"
-        android:textAlignment="center"
-        android:textSize="26sp"
-        android:padding="10dp"
+        android:textSize="16sp"
+        android:padding="12dp"
         tools:text="@string/slide_one_content"
         android:textColor="@color/hoytask_white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center"/>
+        android:gravity="center" />
 
 </LinearLayout>

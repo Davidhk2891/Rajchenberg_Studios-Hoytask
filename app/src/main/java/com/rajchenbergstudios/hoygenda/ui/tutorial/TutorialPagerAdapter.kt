@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.viewpager.widget.PagerAdapter
 import com.rajchenbergstudios.hoygenda.R
@@ -19,11 +21,24 @@ class TutorialPagerAdapter (private val context: Context) : PagerAdapter() {
         R.drawable.ic_baseline_question_answer_24
     )
 
-    //Array ?
-    private val tutorialPagerTitles = ArrayOf()
+    private val tutorialPagerTitles = arrayOf(
+        R.string.slide_one_title,
+        R.string.slide_two_title,
+        R.string.slide_three_title,
+        R.string.slide_four_title,
+        R.string.slide_five_title
+    )
+
+    private val tutorialPagerContent = arrayOf(
+        R.string.slide_one_content,
+        R.string.slide_two_content,
+        R.string.slide_three_content,
+        R.string.slide_four_content,
+        R.string.slide_five_content
+    )
 
     override fun getCount(): Int {
-
+        return tutorialPagerImages.size
     }
 
     override fun isViewFromObject(view: View, `object`: Any): Boolean {
@@ -35,12 +50,20 @@ class TutorialPagerAdapter (private val context: Context) : PagerAdapter() {
         val layoutInflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view: View = layoutInflater.inflate(R.layout.layout_tutorial_pager, container, false)
 
-        val tutorialPagerTitle: View = view.findViewById<TextView>(R.id.tutorial_pager_title)
-        val tutorialPagerImage: View = view.findViewById<TextView>(R.id.tutorial_pager_image)
-        val tutorialPagerContent: View = view.findViewById<TextView>(R.id.tutorial_pager_content)
+        val tutorialPagerTitle: TextView = view.findViewById(R.id.tutorial_pager_title)
+        val tutorialPagerImage: ImageView = view.findViewById(R.id.tutorial_pager_image)
+        val tutorialPagerContent: TextView = view.findViewById(R.id.tutorial_pager_content)
+
+        tutorialPagerTitle.setText(tutorialPagerTitles[position])
+        tutorialPagerImage.setImageResource(tutorialPagerImages[position])
+        tutorialPagerContent.setText(this.tutorialPagerContent[position])
 
         container.addView(view)
 
         return view
+    }
+
+    override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
+        container.removeView(`object` as LinearLayout)
     }
 }

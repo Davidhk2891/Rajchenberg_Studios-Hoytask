@@ -1,12 +1,12 @@
 <resources>
     <string name="slide_one_title">Hi!</string>
     <string name="slide_two_title">It\'s all about today</string>
-    <string name="slide_three_title">Task sets? - Less stress.</string>
+    <string name="slide_three_title">Task sets = Less stress</string>
     <string name="slide_four_title">Go back in time</string>
     <string name="slide_five_title">Let us help you!</string>
     <string name="slide_one_content">Thank you for choosing Hoygenda - Your day-to-day agenda companion!</string>
     <string name="slide_two_content">Hoygenda gives you fresh new board every day. Fill it up with your tasks and journal entries.</string>
-    <string name="slide_three_content">1. Create a task set\n2. Add as many tasks as you want to it\n3. Load the set into your Today board </string>
+    <string name="slide_three_content">- Create a task set\n- Add as many tasks as you want to it\n- Load the set into your Today board </string>
     <string name="slide_four_content">Review all your tasks and journal entries from past days</string>
     <string name="slide_five_content">Get in touch with us for any feature requests or bug fixes.\n You can reach out to us from the main menu :) </string>
 
@@ -78,4 +78,9 @@
     <string name="thanks">thanks</string>
     <string name="about_hoygenda">About Hoygenda</string>
     <string name="tutorial_slide_graphic">Tutorial slide graphic</string>
+    <string name="previous">Previous</string>
+    <string name="next">next</string>
+    <string name="finish">finish</string>
+    <string name="arrow_back">arrow back</string>
+    <string name="arrow_forward">arrow forward</string>
 </resources>

@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
@@ -22,7 +22,7 @@ data class FilterPreferences(val sortOrder: SortOrder, val hideCompleted: Boolea
 @Singleton
 class PreferencesManager @Inject constructor(@ApplicationContext context: Context){
 
-    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_preferences")
 
     private val dataStore = context.dataStore
 
@@ -45,15 +45,19 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
             FilterPreferences(sortOrder, hideCompleted)
         }
 
-    suspend fun getDaySavingSetting(): Boolean? {
-        var isDaySavingSet: Boolean? = null
-        dataStore.data.map { preferences ->
-            isDaySavingSet = preferences[InternalPreferencesKeys.DAY_SAVING_SET]
-        }.firstOrNull()
-        return isDaySavingSet
+    suspend fun isTutorialAutoRun(): Boolean? {
+        return dataStore.data.map { preferences ->
+            preferences[PreferencesKeys.TUTORIAL_AUTO_RUN]
+        }.first()
     }
 
     // Write data to DataStore
+    suspend fun setTutorialAutoRunSettingKey() {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.TUTORIAL_AUTO_RUN] = true
+        }
+    }
+
     suspend fun updateSortOrder(sortOrder: SortOrder) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.SORT_ORDER] = sortOrder.name
@@ -66,18 +70,9 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
         }
     }
 
-    suspend fun setDaySavingSetting() {
-        dataStore.edit { preferences ->
-            preferences[InternalPreferencesKeys.DAY_SAVING_SET] = true
-        }
-    }
-
     private object PreferencesKeys {
         val SORT_ORDER = stringPreferencesKey("sort_order")
         val HIDE_COMPLETED = booleanPreferencesKey("hide_completed")
-    }
-
-    private object InternalPreferencesKeys {
-        val DAY_SAVING_SET = booleanPreferencesKey("day_saving_set")
+        val TUTORIAL_AUTO_RUN = booleanPreferencesKey("tutorial_auto_run")
     }
 }

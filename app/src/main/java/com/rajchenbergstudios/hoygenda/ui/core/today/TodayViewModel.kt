@@ -3,9 +3,11 @@ package com.rajchenbergstudios.hoygenda.ui.core.today
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rajchenbergstudios.hoygenda.data.prefs.PreferencesManager
 import com.rajchenbergstudios.hoygenda.di.MainThreadScope
 import com.rajchenbergstudios.hoygenda.ui.activity.*
 import com.rajchenbergstudios.hoygenda.utils.HGDADateUtils
+import com.rajchenbergstudios.hoygenda.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,10 +17,13 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val TAG = "TodayViewModel"
+
 @ExperimentalCoroutinesApi
 @HiltViewModel
 class TodayViewModel @Inject constructor(
-    @MainThreadScope private val mainThreadScope: CoroutineScope
+    @MainThreadScope private val mainThreadScope: CoroutineScope,
+    private val preferencesManager: PreferencesManager
 ) : ViewModel() {
 
     // Today Channel
@@ -83,6 +88,12 @@ class TodayViewModel @Inject constructor(
         todayEventChannel.send(TodayEvent.ShowJEntrySavedConfirmationMessage(msg))
     }
 
+    fun onTutorialRedirectionEngaged() = viewModelScope.launch{
+        Logger.i(TAG, "onTutorialRedirectionEngaged", "Tutorial AutoRun setting value is: ${preferencesManager.isTutorialAutoRun()}")
+        if (preferencesManager.isTutorialAutoRun() == null)
+            todayEventChannel.send(TodayEvent.NavigateToTutorialFragment)
+    }
+
     fun postActionWithDelay(delay: Long, postActionCallback: PostActionListener) = mainThreadScope.launch {
         delay(delay)
         postActionCallback.onDelayFinished()
@@ -97,6 +108,7 @@ class TodayViewModel @Inject constructor(
         object NavigateToAddTaskScreen : TodayEvent()
         object NavigateToAddJEntryScreen : TodayEvent()
         object NavigateToAddTasksFromSetBottomSheet : TodayEvent()
+        object NavigateToTutorialFragment : TodayEvent()
         data class ShowTaskSavedConfirmationMessage(val msg: String) : TodayEvent()
         data class ShowJEntrySavedConfirmationMessage(val msg: String) : TodayEvent()
         data class ShowTaskSavedInNewOrOldSetConfirmationMessage(val msg: String?) : TodayEvent()
