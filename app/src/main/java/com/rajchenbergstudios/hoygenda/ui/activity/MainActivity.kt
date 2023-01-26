@@ -22,7 +22,6 @@ import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-
 // private const val TAG = "MainActivity.kt"
 
 @ExperimentalCoroutinesApi
@@ -51,7 +50,7 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
         loadMainEventCollector()
     }
 
-    private fun initializeObjects(){
+    private fun initializeObjects() {
         toolBar = findViewById(R.id.hoytask_appbar)
         drawerLayout = findViewById(R.id.hoytask_drawer_layout)
         navigationView = findViewById(R.id.hoytask_navigationview)
@@ -81,6 +80,12 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                 }
                 R.id.daysListFragment -> {
                     viewModel.onDaysListFragmentClick()
+                    closeDrawer(false)
+                    lockDrawer()
+                    inOtherDestination = true
+                }
+                R.id.tutorialFragment -> {
+                    viewModel.onTutorialRedirectionEngaged()
                     closeDrawer(false)
                     lockDrawer()
                     inOtherDestination = true
@@ -136,6 +141,10 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                     }
                     MainViewModel.MainEvent.NavigateToAboutDialog -> {
                         navController.navigate(TodayFragmentDirections.actionGlobalAboutDialogFragment())
+                    }
+                    MainViewModel.MainEvent.NavigateToTutorialFragment -> {
+                        navController.navigate(TodayFragmentDirections.actionTodayFragmentToTutorialFragment())
+                        lockDrawer()
                     }
                 }.exhaustive
             }

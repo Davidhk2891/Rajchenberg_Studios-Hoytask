@@ -24,6 +24,9 @@
             app:exitAnim="@anim/frag_end_from_left"
             app:popEnterAnim="@anim/frag_start_from_right"
             app:popExitAnim="@anim/frag_end_from_left" />
+        <action
+            android:id="@+id/action_todayFragment_to_tutorialFragment"
+            app:destination="@id/tutorialFragment" />
     </fragment>
     <fragment
         android:id="@+id/taskAddEditFragment"
@@ -209,4 +212,9 @@
         android:label="fragment_about"
         tools:layout="@layout/fragment_about" />
     <action android:id="@+id/action_global_aboutDialogFragment" app:destination="@id/aboutDialogFragment" />
+    <fragment
+        android:id="@+id/tutorialFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.tutorial.TutorialFragment"
+        android:label="fragment_tutorial"
+        tools:layout="@layout/fragment_tutorial" />
 </navigation>

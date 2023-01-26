@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -23,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
-private const val TAG = "TodayFragment"
+// private const val TAG = "TodayFragment"
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -46,7 +47,7 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        (activity as AppCompatActivity).supportActionBar?.show()
         binding = FragmentParentTodayBinding.bind(view)
         binding.apply {
             tasksListTransparentWhiteScreen.setOnClickListener {
@@ -59,6 +60,11 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
         initFabs(binding)
         loadTodayEventCollector()
         getFragmentResultListeners()
+        tutorialRedirection()
+    }
+
+    private fun tutorialRedirection() {
+        viewModel.onTutorialRedirectionEngaged()
     }
 
     private fun getFragmentResultListeners() {
@@ -135,6 +141,10 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
                             .actionGlobalSetBottomSheetDialogFragment(task = null, origin = 2)
                         findNavController().navigate(action)
                     }
+                    TodayViewModel.TodayEvent.NavigateToTutorialFragment -> {
+                        val action = TodayFragmentDirections.actionTodayFragmentToTutorialFragment()
+                        findNavController().navigate(action)
+                    }
                 }.exhaustive
             }
         }
@@ -163,7 +173,6 @@ class TodayFragment : Fragment(R.layout.fragment_parent_today) {
         viewPager = binding.todayViewpager
         val tabLayout: TabLayout = binding.todayTablayout
         viewPager.adapter = activity?.let { TodayPagerAdapter(childFragmentManager, lifecycle) }
-        Logger.i(TAG, "initViewPagerWithTabLayout", "viewPager is not null")
         TabLayoutMediator(tabLayout, viewPager) { tab, index ->
             tab.text = when (index) {
                 0 -> "Tasks"

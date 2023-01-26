@@ -114,6 +114,10 @@ class MainViewModel @Inject constructor(
         mainEventChannel.send(MainEvent.NavigateToAboutDialog)
     }
 
+    fun onTutorialRedirectionEngaged() = viewModelScope.launch {
+        mainEventChannel.send(MainEvent.NavigateToTutorialFragment)
+    }
+
     sealed class MainEvent {
         object NavigateToTaskSetsListFragment : MainEvent()
         object NavigateToDaysListFragment : MainEvent()
@@ -122,5 +126,6 @@ class MainViewModel @Inject constructor(
         object NavigateToChangelogDialog : MainEvent()
         object NavigateToTellYourFriendsDialog : MainEvent()
         object NavigateToAboutDialog : MainEvent()
+        object NavigateToTutorialFragment : MainEvent()
     }
 }
