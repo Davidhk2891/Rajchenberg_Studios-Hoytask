@@ -1,9 +1,13 @@
 package com.rajchenbergstudios.hoygenda.ui.core.createtaskset
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -65,7 +69,30 @@ class CreateTaskSetDialogFragment : DialogFragment(){
                 }
             }
         }
-
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+//        val binding = FragmentTaskSetCreateBinding.bind(view)
+//        focusEditText(binding.taskSetCreateSetTitleEdittext)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        focusEditText()
+    }
+
+    private fun focusEditText(editText: EditText) {
+//        val imm: InputMethodManager = dialog?.context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+
+        // binding.taskSetCreateSetTitleEdittext.focusAndShowKeyboard(requireActivity())
+    }
+
+    private fun focusEditText() {
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        // TODO: Carry on trying out solutions from Chat GPT. If come to a halt, check on Stackoverflow
     }
 }

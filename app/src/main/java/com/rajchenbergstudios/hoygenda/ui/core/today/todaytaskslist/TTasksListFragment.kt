@@ -23,7 +23,7 @@ import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildTTasksListBinding
 import com.rajchenbergstudios.hoygenda.ui.core.today.TodayFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
-import com.rajchenbergstudios.hoygenda.utils.OnQueryTextChanged
+import com.rajchenbergstudios.hoygenda.utils.onQueryTextChanged
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -154,7 +154,7 @@ class TTasksListFragment : Fragment(R.layout.fragment_child_t_tasks_list),
                 searchView.setQuery(pendingQuery, false)
             }
 
-            searchView.OnQueryTextChanged{ searchQuery ->
+            searchView.onQueryTextChanged{ searchQuery ->
                 viewModel.searchQuery.value = searchQuery
             }
 

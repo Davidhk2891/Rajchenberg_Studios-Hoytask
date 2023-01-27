@@ -114,7 +114,7 @@ abstract class HGDADatabase : RoomDatabase(){
                 tasksForDayList, journalEntryForDayList)
                 val day2 = Day(
                     HGDADateUtils.currentDayOfWeekFormatted,
-                    HGDADateUtils.currentDayOfMonthFormatted + 1,
+                    HGDADateUtils.currentDayOfMonthFormatted,
                     HGDADateUtils.currentMonthFormatted,
                     HGDADateUtils.currentYearFormatted,
                     tasksForDayList, journalEntryForDayList)
