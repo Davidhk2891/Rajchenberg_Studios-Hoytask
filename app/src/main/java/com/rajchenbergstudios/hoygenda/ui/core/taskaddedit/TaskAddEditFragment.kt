@@ -84,7 +84,7 @@ class TaskAddEditFragment : Fragment(R.layout.fragment_add_edit_task){
     }
 
     private fun focusEditText(editText: EditText) {
-        if (viewModel.origin == 1)
+        if (viewModel.origin == 1 || viewModel.origin == 2)
             editText.focusAndShowKeyboardInFragment(requireActivity())
     }
 
