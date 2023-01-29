@@ -15,7 +15,6 @@ import com.rajchenbergstudios.hoygenda.data.taskset.TaskSet
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntryDao
 import com.rajchenbergstudios.hoygenda.di.ApplicationScope
-import com.rajchenbergstudios.hoygenda.utils.HGDADateUtils
 import com.rajchenbergstudios.hoygenda.utils.HGDATypeConvUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -46,32 +45,30 @@ abstract class HGDADatabase : RoomDatabase(){
             val taskSetDao = database.get().taskSetDao()
             val taskInSetDao = database.get().taskInSetDao()
             val journalEntryDao = database.get().journalEntryDao()
-            val dayDao = database.get().dayDao()
 
             // Initial Task for current day
             applicationScope.launch {
-                todayDao.insert(Task("Start setting up your tasks", important = true))
-                journalEntryDao.insert(JournalEntry("Today I woke up feeling a bit better than yesterday" +
-                        " and decided to get to work. I really hope I do better today than I did yesterday"))
+                todayDao.insert(Task(PresetData.PRESET_TASK, important = true))
+                journalEntryDao.insert(JournalEntry(PresetData.PRESET_ENTRY))
             }
 
             //Initial set of tasks (testing)
             applicationScope.launch {
 
-                val task1 = TaskInSet("Workout for 4 hours", "Dailies")
-                val task2 = TaskInSet("Do Duolingo", "Dailies")
-                val task3 = TaskInSet("Read 10 pages", "Dailies")
-                val task4 = TaskInSet("Work on Android", "Dailies")
+                val task1 = TaskInSet(PresetData.PRESET_DAILIES_TASK_IN_SET_1, PresetData.PRESET_DAILIES)
+                val task2 = TaskInSet(PresetData.PRESET_DAILIES_TASK_IN_SET_2, PresetData.PRESET_DAILIES)
+                val task3 = TaskInSet(PresetData.PRESET_DAILIES_TASK_IN_SET_3, PresetData.PRESET_DAILIES)
+                val task4 = TaskInSet(PresetData.PRESET_DAILIES_TASK_IN_SET_4, PresetData.PRESET_DAILIES)
 
-                val task5 = TaskInSet("Spend time with Rossy", "Weekends")
-                val task6 = TaskInSet("Read your book", "Weekends")
-                val task7 = TaskInSet("Relax", "Weekends")
-                val task8 = TaskInSet("Sleep in", "Weekends")
+                val task5 = TaskInSet(PresetData.PRESET_WEEKENDS_TASK_IN_SET_1, PresetData.PRESET_WEEKENDS)
+                val task6 = TaskInSet(PresetData.PRESET_WEEKENDS_TASK_IN_SET_2, PresetData.PRESET_WEEKENDS)
+                val task7 = TaskInSet(PresetData.PRESET_WEEKENDS_TASK_IN_SET_3, PresetData.PRESET_WEEKENDS)
+                val task8 = TaskInSet(PresetData.PRESET_WEEKENDS_TASK_IN_SET_4, PresetData.PRESET_WEEKENDS)
 
-                val task9 = TaskInSet("Work on the app first thing", "Morning routine")
-                val task10 = TaskInSet("do your German classes", "Morning routine")
-                val task11 = TaskInSet("Read your book", "Morning routine")
-                val task12 = TaskInSet("Get some work done", "Morning routine")
+                val task9 = TaskInSet(PresetData.PRESET_MY_MORNING_ROUTINE_TASK_IN_SET_1, PresetData.PRESET_MY_MORNING_ROUTINE)
+                val task10 = TaskInSet(PresetData.PRESET_MY_MORNING_ROUTINE_TASK_IN_SET_2, PresetData.PRESET_MY_MORNING_ROUTINE)
+                val task11 = TaskInSet(PresetData.PRESET_MY_MORNING_ROUTINE_TASK_IN_SET_3, PresetData.PRESET_MY_MORNING_ROUTINE)
+                val task12 = TaskInSet(PresetData.PRESET_MY_MORNING_ROUTINE_TASK_IN_SET_4, PresetData.PRESET_MY_MORNING_ROUTINE)
 
                 // To insert in TaskInSetDao
                 val listOfTasksDailies = listOf(task1, task2, task3, task4)
@@ -79,9 +76,9 @@ abstract class HGDADatabase : RoomDatabase(){
                 val listOfTasksMorningRoutine = listOf(task9, task10, task11, task12)
 
                 // To insert in TaskSetDao
-                val set1 = TaskSet("Dailies", listOfTasksDailies)
-                val set2 = TaskSet("Weekends", listOfTasksWeekends)
-                val set3 = TaskSet("Morning routine", listOfTasksMorningRoutine)
+                val set1 = TaskSet(PresetData.PRESET_DAILIES, listOfTasksDailies)
+                val set2 = TaskSet(PresetData.PRESET_WEEKENDS, listOfTasksWeekends)
+                val set3 = TaskSet(PresetData.PRESET_MY_MORNING_ROUTINE, listOfTasksMorningRoutine)
 
                 taskSetDao.apply {
                     insert(set1)
@@ -94,32 +91,6 @@ abstract class HGDADatabase : RoomDatabase(){
                     for (item in listOfTasksWeekends) { insert(item) }
                     for (item in listOfTasksMorningRoutine) { insert(item) }
                 }
-
-                // To insert in Day
-                val taskForDay1 = Task("Start setting up your tasks", important = true)
-                val taskForDay2 = Task("Apply some passion", important = false)
-
-                val journalEntryForDay1 = JournalEntry("Today I woke up feeling a bit better than yesterday" +
-                        " and decided to get to work. I really hope I do better today than I did yesterday")
-                val journalEntryForDay2 = JournalEntry("We are trying to do something here which is to build a repertoir of apps" +
-                        "that I will leverage from when I apply for jobs and look for future clients.", important = true)
-
-                val tasksForDayList = listOf(taskForDay1, taskForDay2)
-                val journalEntryForDayList = listOf(journalEntryForDay1, journalEntryForDay2)
-                val day1 = Day(
-                    HGDADateUtils.currentDayOfWeekFormatted,
-                    HGDADateUtils.currentDayOfMonthFormatted,
-                    HGDADateUtils.currentMonthFormatted,
-                    HGDADateUtils.currentYearFormatted,
-                tasksForDayList, journalEntryForDayList)
-                val day2 = Day(
-                    HGDADateUtils.currentDayOfWeekFormatted,
-                    HGDADateUtils.currentDayOfMonthFormatted,
-                    HGDADateUtils.currentMonthFormatted,
-                    HGDADateUtils.currentYearFormatted,
-                    tasksForDayList, journalEntryForDayList)
-                dayDao.insert(day1)
-                dayDao.insert(day2)
             }
         }
     }
