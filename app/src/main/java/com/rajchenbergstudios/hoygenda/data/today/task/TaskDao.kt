@@ -25,7 +25,10 @@ interface TaskDao {
     fun getTasksSortedByTime(searchQuery: String, hideCompleted: Boolean): Flow<List<Task>>
 
     @Query("SELECT * FROM task_table LIMIT 1")
-    suspend fun firstItemFromList(): List<Task>
+    suspend fun checkFirstItemFromList(): List<Task>
+
+    @Query("SELECT * FROM task_table WHERE completed = 1")
+    suspend fun checkCompletedTasksInList(): List<Task>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(task: Task)

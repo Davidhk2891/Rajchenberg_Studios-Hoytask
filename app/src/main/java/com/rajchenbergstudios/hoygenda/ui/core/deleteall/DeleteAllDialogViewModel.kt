@@ -26,7 +26,8 @@ class DeleteAllDialogViewModel @Inject constructor(
 ) : ViewModel(){
 
     private val origin = state.get<Int>("origin")
-    private val message = "Nothing to delete"
+    private val noDataMessage = "Nothing to delete"
+    private val noCompletedTasksMessage = "You don't have any completed tasks"
 
     // DeleteAll channel
     private val deleteAllEventChannel = Channel<DeleteAllEvent>()
@@ -44,22 +45,22 @@ class DeleteAllDialogViewModel @Inject constructor(
     }
 
     private fun deleteAllCompletedTasks(resultInterface: ResultInterface) = applicationScope.launch{
-        if (taskDao.firstItemFromList().isEmpty())
-            resultInterface.onShowEmptyListMessage(message)
+        if (taskDao.checkCompletedTasksInList().isEmpty())
+            resultInterface.onShowEmptyListMessage(noCompletedTasksMessage)
         else
             taskDao.deleteAllCompleted()
     }
 
     private fun deleteAllTasks(resultInterface: ResultInterface) = applicationScope.launch {
-        if (taskDao.firstItemFromList().isEmpty())
-            resultInterface.onShowEmptyListMessage(message)
+        if (taskDao.checkFirstItemFromList().isEmpty())
+            resultInterface.onShowEmptyListMessage(noDataMessage)
         else
             taskDao.nukeTaskTable()
     }
 
     private fun deleteAllSetsWithTasks(resultInterface: ResultInterface) = applicationScope.launch {
         if (taskSetDao.firstItemFromList().isEmpty())
-            resultInterface.onShowEmptyListMessage(message)
+            resultInterface.onShowEmptyListMessage(noDataMessage)
         else {
             taskInSetDao.deleteAllTasksInSets()
             taskSetDao.deleteAllSets()
@@ -68,7 +69,7 @@ class DeleteAllDialogViewModel @Inject constructor(
 
     private fun deleteAllJournalEntries(resultInterface: ResultInterface) = applicationScope.launch {
         if (journalEntryDao.firstItemFromList().isEmpty())
-            resultInterface.onShowEmptyListMessage(message)
+            resultInterface.onShowEmptyListMessage(noDataMessage)
         else
             journalEntryDao.nukeJEntryTable()
     }

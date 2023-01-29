@@ -1,4 +1,5 @@
 <resources>
+    <!--  Tutorial  -->
     <string name="slide_one_title">Hi!</string>
     <string name="slide_two_title">It\'s all about today</string>
     <string name="slide_three_title">Task sets = Less stress</string>
@@ -9,6 +10,21 @@
     <string name="slide_three_content">- Create a task set\n- Add as many tasks as you want to it\n- Load the set into your Today board </string>
     <string name="slide_four_content">Review all your tasks and journal entries from past days</string>
     <string name="slide_five_content">Get in touch with us for any feature requests or bug fixes.\n You can reach out to us from the main menu :) </string>
+
+    <!--  Delete tasks, completed tasks  -->
+    <string name="confirm_deletion">Confirm deletion</string>
+    <string name="yes">Yes</string>
+    <string name="cancel_confirm_deletion">Cancel</string>
+    <string name="do_you_really_want_to_delete_all_completed_tasks">Do you really want to delete all completed tasks?</string>
+    <string name="do_you_really_want_to_delete_all_sets">Do you really want to delete all sets?</string>
+    <string name="do_you_really_want_to_delete_all_tasks">Do you really want to delete all tasks?</string>
+    <string name="do_you_really_want_to_Delte_al_entries">Do you really want to delete all entries?</string>
+    <string name="nothing_to_delete">Nothing to delete</string>
+    <string name="close">Close</string>
+    <string name="you_do_not_have_any_completed_tasks">You don\'t have any completed tasks to delete</string>
+    <string name="you_do_not_have_any_sets">You don\'t have any sets to delete</string>
+    <string name="you_do_not_have_any_tasks">You don\'t have any tasks to delete</string>
+    <string name="you_do_not_have_any_entries">You don\'t have any entries to delete</string>
 
     <string name="app_name">Hoygenda</string>
     <string name="high_priority_task">high priority task</string>
