@@ -10,12 +10,9 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.databinding.FragmentDaysDetailsBinding
-import com.rajchenbergstudios.hoygenda.utils.Logger
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-
-const val TAG = "DaysDetailsFragment"
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -49,7 +46,6 @@ class DaysDetailsFragment : Fragment(R.layout.fragment_days_details) {
         val tabLayout: TabLayout = binding.daysDetailsTablayout
         val dayDetailsPagerAdapter = activity?.let { DayDetailsPagerAdapter(it, sharedViewModel.day) }
         viewPager.adapter = dayDetailsPagerAdapter
-        Logger.i(TAG, "initViewPagerWithTabLayout", "viewPager is not null")
         TabLayoutMediator(tabLayout, viewPager) { tab, index ->
             tab.text = when (index) {
                 0 -> "Tasks"

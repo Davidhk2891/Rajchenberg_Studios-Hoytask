@@ -22,10 +22,10 @@ class TTasksListViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel(){
 
-    val searchQuery = state.getLiveData("searchQuery", "")
+    val todaySearchQuery = state.getLiveData("searchQuery", "")
 
     // DataStore
-    val preferencesFlow = preferencesManager.preferencesFlow
+    val todayPreferencesFlow = preferencesManager.todayPreferencesFlow
 
     // Tasks Channel
     private val tasksEventChannel = Channel<TaskEvent>()
@@ -34,13 +34,15 @@ class TTasksListViewModel @Inject constructor(
     val tasksEvent = tasksEventChannel.receiveAsFlow()
 
     private val tasksFlow = combine(
-        searchQuery.asFlow(),
-        preferencesFlow
-    ) { searchQuery, filterPreferences ->
-        Pair(searchQuery, filterPreferences)
-    }.flatMapLatest { (searchQuery, filterPreferences) ->
-        taskDao.getTasks(searchQuery, filterPreferences.sortOrder, filterPreferences.hideCompleted)
+        todaySearchQuery.asFlow(),
+        todayPreferencesFlow
+    ) { searchQuery, filterTodayPreferences ->
+        Pair(searchQuery, filterTodayPreferences)
+    }.flatMapLatest { (searchQuery, filterTodayPreferences) ->
+        taskDao.getTasks(searchQuery, filterTodayPreferences.sortOrder, filterTodayPreferences.hideCompleted)
     }
+
+    val tasks = tasksFlow.asLiveData()
 
     fun onSortOrderSelected(sortOrder: SortOrder) = viewModelScope.launch {
         preferencesManager.updateSortOrder(sortOrder)
@@ -78,8 +80,6 @@ class TTasksListViewModel @Inject constructor(
     fun onTaskLongSelected(task: Task) = viewModelScope.launch {
         tasksEventChannel.send(TaskEvent.NavigateToAddTaskToSetBottomSheet(task))
     }
-
-    val tasks = tasksFlow.asLiveData()
 
     sealed class TaskEvent {
         object NavigateToDeleteAllScreen : TaskEvent()

@@ -1,17 +1,22 @@
 package com.rajchenbergstudios.hoygenda.ui.core.pastday
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.rajchenbergstudios.hoygenda.data.day.Day
+import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+const val TAG = "SharedDayDetailsViewModel"
+
+@FlowPreview
+@ExperimentalCoroutinesApi
 @HiltViewModel
 class SharedDayDetailsViewModel @Inject constructor(
     stateHandle: SavedStateHandle
@@ -29,17 +34,13 @@ class SharedDayDetailsViewModel @Inject constructor(
 
     val dayMonthDay = stateHandle["monthDay"] ?: day?.dayOfMonth ?: "null"
 
-    val tasksList = day?.listOfTasks
-
-    val jEntriesList = day?.listOfJEntries
-
     var formattedDate: String = ""
 
     init {
-        formattedDate = "${formatmonth(dayMonth)} $dayMonthDay, $dayYear"
+        formattedDate = "${formatMonth(dayMonth)} $dayMonthDay, $dayYear"
     }
 
-    private fun formatmonth(month: String): String {
+    private fun formatMonth(month: String): String {
         val dayMonthLowercase = month.lowercase()
         val dayMonthFirstLetterCap = dayMonthLowercase.replaceFirst(
             dayMonthLowercase.first().toString()
@@ -49,6 +50,84 @@ class SharedDayDetailsViewModel @Inject constructor(
     }
 
     // PDTasksListFragment/PDJEntriesListFragment operations ---
+
+    // Search query flow for tasks
+    val pastDaySearchQuery = MutableStateFlow("")
+    // Search query flow for journal entries
+    val pastDaySearchQueryJEntries = MutableStateFlow("")
+
+    // Sort order flow for tasks
+    val pastDaySortOrderQuery = MutableStateFlow(SortOrder.BY_TIME)
+    // Sort order flow for journal entries
+    val pastDaySortOrderQueryJEntries = MutableStateFlow(SortOrder.BY_TIME)
+
+    // Data source tasks
+    val tasksList: List<Task>? = day?.listOfTasks
+    // Data source journal entries
+    val jEntriesList: List<JournalEntry>? = day?.listOfJEntries
+
+    // Converted tasks data source to Flow
+    private val tasksListFlow: Flow<List<Task>>? = tasksList?.let { tasksList -> flowOf(tasksList) }
+    // Converted journal entries data source to Flow
+    private val jEntriesListFlow: Flow<List<JournalEntry>>? = jEntriesList?.let { jEntriesList -> flowOf(jEntriesList) }
+
+
+    // TASKS ---
+
+    // Apply searchQuery to tasksListFlow and filter in the results that match the query
+    private val filteredTasksFlow = tasksListFlow?.flatMapMerge { tasks ->
+        pastDaySearchQuery.flatMapLatest { query ->
+            flowOf(tasks.filter { task ->
+                task.title.contains(query, ignoreCase = true)
+            })
+            // Nothing can be written here
+        }
+    }
+
+    // Apply sortOrder to filteredTasksFlow and sort the list by the requested sorting
+    private val sortedTasksFlow = filteredTasksFlow?.flatMapLatest { tasks ->
+        pastDaySortOrderQuery.map { sortBy ->
+            when (sortBy) {
+                SortOrder.BY_TIME -> tasks.sortedBy { it.createdTimeFormat }
+                SortOrder.BY_NAME -> tasks.sortedBy { it.title }
+            }
+        }
+    }
+
+    // Expose the flow as LiveData to the Fragment so it can be observed
+    val tasks = sortedTasksFlow?.asLiveData()
+
+    // ---------
+
+    // JOURNAL ENTRIES-
+
+    // Apply searchQuery to jEntriesListFlow and filter in the result that match the query
+    private val filteredJEntriesFlow = jEntriesListFlow?.flatMapMerge { jEntries ->
+        pastDaySearchQueryJEntries.flatMapLatest { query ->
+            flowOf(jEntries.filter { jEntry ->
+                jEntry.content.contains(query, ignoreCase = true)
+            })
+            // Nothing can be written here
+        }
+    }
+
+    // Apply sortOrder to filteredJEntriesFlow and sort the list bt the requested sorting
+    private val sortedJEntriesFlow = filteredJEntriesFlow?.flatMapLatest { jEntries ->
+        pastDaySortOrderQueryJEntries.map { sortBy ->
+            when (sortBy) {
+                SortOrder.BY_TIME -> jEntries.sortedBy { it.createdTimeFormat }
+                SortOrder.BY_NAME -> jEntries.sortedBy { it.content }
+            }
+        }
+    }
+
+    // Expose the flow as LiveData to the Fragment so it can be observed
+    val jEntries = sortedJEntriesFlow?.asLiveData()
+
+    // ---------
+
+
+    // ----------------------------------------------------------------------
 
     // Past day Task & JEntries Channels
     private val pastDayTaskEventChannel = Channel<PastDayTaskEvent>()

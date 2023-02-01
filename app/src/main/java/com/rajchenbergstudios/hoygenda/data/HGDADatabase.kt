@@ -15,6 +15,7 @@ import com.rajchenbergstudios.hoygenda.data.taskset.TaskSet
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntryDao
 import com.rajchenbergstudios.hoygenda.di.ApplicationScope
+import com.rajchenbergstudios.hoygenda.utils.HGDADateUtils
 import com.rajchenbergstudios.hoygenda.utils.HGDATypeConvUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -45,16 +46,9 @@ abstract class HGDADatabase : RoomDatabase(){
             val taskSetDao = database.get().taskSetDao()
             val taskInSetDao = database.get().taskInSetDao()
             val journalEntryDao = database.get().journalEntryDao()
+            val dayDao = database.get().dayDao()
 
-            // Initial Task for current day
-            applicationScope.launch {
-                todayDao.insert(Task(PresetData.PRESET_TASK, important = true))
-                journalEntryDao.insert(JournalEntry(PresetData.PRESET_ENTRY))
-            }
-
-            //Initial set of tasks (testing)
-            applicationScope.launch {
-
+            suspend fun testData(taskSetDao: TaskSetDao, taskInSetDao: TaskInSetDao, dayDao: DayDao) {
                 val task1 = TaskInSet(PresetData.PRESET_DAILIES_TASK_IN_SET_1, PresetData.PRESET_DAILIES)
                 val task2 = TaskInSet(PresetData.PRESET_DAILIES_TASK_IN_SET_2, PresetData.PRESET_DAILIES)
                 val task3 = TaskInSet(PresetData.PRESET_DAILIES_TASK_IN_SET_3, PresetData.PRESET_DAILIES)
@@ -91,6 +85,43 @@ abstract class HGDADatabase : RoomDatabase(){
                     for (item in listOfTasksWeekends) { insert(item) }
                     for (item in listOfTasksMorningRoutine) { insert(item) }
                 }
+
+                // TODO: ALL FIXED. EXPLAIN WHY WITH HELP FROM CHAT-GPT
+                // To insert in Day
+                val taskForDay1 = Task(PresetData.PRESET_DAY_TASK_1, important = true, id = 1)
+                val taskForDay2 = Task(PresetData.PRESET_DAY_TASK_2, important = false, id = 2)
+                val taskForDay3 = Task(PresetData.PRESET_DAY_TASK_3, important = false, id = 3)
+                val taskForDay4 = Task(PresetData.PRESET_DAY_TASK_4, important = false, id = 4)
+                val taskForDay5 = Task(PresetData.PRESET_DAY_TASK_5, important = false, id = 5)
+                val taskForDay6 = Task(PresetData.PRESET_DAY_TASK_6, important = false, id = 6)
+
+                val journalEntryForDay1 = JournalEntry(PresetData.PRESET_DAY_JOURNAL_ENTRY_1, id = 1)
+                val journalEntryForDay2 = JournalEntry(PresetData.PRESET_DAY_JOURNAL_ENTRY_2, important = true, id = 2)
+                val journalEntryForDay3 = JournalEntry(PresetData.PRESET_DAY_JOURNAL_ENTRY_3, important = false, id = 3)
+                val journalEntryForDay4 = JournalEntry(PresetData.PRESET_DAY_JOURNAL_ENTRY_4, important = false, id = 4)
+                val journalEntryForDay5 = JournalEntry(PresetData.PRESET_DAY_JOURNAL_ENTRY_5, important = false, id = 5)
+                val journalEntryForDay6 = JournalEntry(PresetData.PRESET_DAY_JOURNAL_ENTRY_6, important = false, id = 6)
+
+                val tasksForDayList = listOf(taskForDay1, taskForDay2, taskForDay3, taskForDay4, taskForDay5, taskForDay6)
+                val journalEntryForDayList = listOf(journalEntryForDay1, journalEntryForDay2, journalEntryForDay3, journalEntryForDay4, journalEntryForDay5, journalEntryForDay6)
+                val day1 = Day(
+                    HGDADateUtils.currentDayOfWeekFormatted,
+                    HGDADateUtils.currentDayOfMonthFormatted,
+                    HGDADateUtils.currentMonthFormatted,
+                    HGDADateUtils.currentYearFormatted,
+                    tasksForDayList, journalEntryForDayList)
+                dayDao.insert(day1)
+            }
+
+            // Initial Task for current day
+            applicationScope.launch {
+                todayDao.insert(Task(PresetData.PRESET_TASK, important = true))
+                journalEntryDao.insert(JournalEntry(PresetData.PRESET_ENTRY))
+            }
+
+            //Initial set of tasks (testing)
+            applicationScope.launch {
+                testData(taskSetDao, taskInSetDao, dayDao)
             }
         }
     }
