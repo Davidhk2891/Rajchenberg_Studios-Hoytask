@@ -28,7 +28,7 @@ import javax.inject.Provider
 @TypeConverters(HGDATypeConvUtils::class)
 abstract class HGDADatabase : RoomDatabase(){
 
-    abstract fun todayDao(): TaskDao
+    abstract fun taskDao(): TaskDao
     abstract fun taskSetDao(): TaskSetDao
     abstract fun taskInSetDao(): TaskInSetDao
     abstract fun dayDao(): DayDao
@@ -42,13 +42,13 @@ abstract class HGDADatabase : RoomDatabase(){
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
 
-            val todayDao = database.get().todayDao()
+            val taskDao = database.get().taskDao()
             val taskSetDao = database.get().taskSetDao()
             val taskInSetDao = database.get().taskInSetDao()
             val journalEntryDao = database.get().journalEntryDao()
             val dayDao = database.get().dayDao()
 
-            suspend fun testData(taskSetDao: TaskSetDao, taskInSetDao: TaskInSetDao, dayDao: DayDao) {
+            suspend fun presetData(taskSetDao: TaskSetDao, taskInSetDao: TaskInSetDao) {
                 val task1 = TaskInSet(PresetData.PRESET_DAILIES_TASK_IN_SET_1, PresetData.PRESET_DAILIES)
                 val task2 = TaskInSet(PresetData.PRESET_DAILIES_TASK_IN_SET_2, PresetData.PRESET_DAILIES)
                 val task3 = TaskInSet(PresetData.PRESET_DAILIES_TASK_IN_SET_3, PresetData.PRESET_DAILIES)
@@ -74,6 +74,14 @@ abstract class HGDADatabase : RoomDatabase(){
                 val set2 = TaskSet(PresetData.PRESET_WEEKENDS, listOfTasksWeekends)
                 val set3 = TaskSet(PresetData.PRESET_MY_MORNING_ROUTINE, listOfTasksMorningRoutine)
 
+                taskDao.insert(Task(PresetData.PRESET_TASK, important = true))
+                journalEntryDao.insert(JournalEntry(PresetData.PRESET_ENTRY, important = true))
+
+                taskDao.insert(Task(PresetData.PRESET_TASK_2))
+                taskDao.insert(Task(PresetData.PRESET_TASK_3))
+                taskDao.insert(Task(PresetData.PRESET_TASK_4))
+                taskDao.insert(Task(PresetData.PRESET_TASK_5))
+
                 taskSetDao.apply {
                     insert(set1)
                     insert(set2)
@@ -85,8 +93,10 @@ abstract class HGDADatabase : RoomDatabase(){
                     for (item in listOfTasksWeekends) { insert(item) }
                     for (item in listOfTasksMorningRoutine) { insert(item) }
                 }
+            }
 
-                // TODO: ALL FIXED. EXPLAIN WHY WITH HELP FROM CHAT-GPT
+            suspend fun testData(dayDao: DayDao) {
+
                 // To insert in Day
                 val taskForDay1 = Task(PresetData.PRESET_DAY_TASK_1, important = true, id = 1)
                 val taskForDay2 = Task(PresetData.PRESET_DAY_TASK_2, important = false, id = 2)
@@ -110,18 +120,18 @@ abstract class HGDADatabase : RoomDatabase(){
                     HGDADateUtils.currentMonthFormatted,
                     HGDADateUtils.currentYearFormatted,
                     tasksForDayList, journalEntryForDayList)
+
                 dayDao.insert(day1)
             }
 
             // Initial Task for current day
             applicationScope.launch {
-                todayDao.insert(Task(PresetData.PRESET_TASK, important = true))
-                journalEntryDao.insert(JournalEntry(PresetData.PRESET_ENTRY))
+                presetData(taskSetDao, taskInSetDao)
             }
 
-            //Initial set of tasks (testing)
+            //Initial day (testing)
             applicationScope.launch {
-                testData(taskSetDao, taskInSetDao, dayDao)
+                //testData(dayDao)
             }
         }
     }

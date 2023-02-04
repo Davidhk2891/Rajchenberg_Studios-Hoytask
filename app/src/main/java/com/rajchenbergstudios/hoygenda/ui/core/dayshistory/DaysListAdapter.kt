@@ -41,7 +41,8 @@ class DaysListAdapter(private val listener: OnItemClickListener) : ListAdapter<D
 
                 // Date header
                 itemDayTasksDateheader.apply {
-                    dateHeaderDayofmonth.text = day.dayOfMonth
+
+                    dateHeaderDayofmonth.text = day.formattedDayOfMonth()
                     dateHeaderMonth.text = day.month
                     dateHeaderYear.text = day.year
                     dateHeaderDayofweek.text = day.dayOfWeek

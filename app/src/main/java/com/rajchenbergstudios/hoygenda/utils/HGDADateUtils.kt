@@ -4,7 +4,8 @@ import java.time.LocalDate
 
 object HGDADateUtils {
 
-    val today = LocalDate.now()
+    val today: LocalDate = LocalDate.now()
+
     val currentDayOfWeekFormatted: String
         get() = today.dayOfWeek.toString()
 
