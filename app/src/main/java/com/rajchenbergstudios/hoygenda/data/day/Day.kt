@@ -7,6 +7,7 @@ import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.utils.Logger
 import kotlinx.parcelize.Parcelize
+
 private const val TAG = "Day"
 @Entity(tableName = "day_table")
 @Parcelize

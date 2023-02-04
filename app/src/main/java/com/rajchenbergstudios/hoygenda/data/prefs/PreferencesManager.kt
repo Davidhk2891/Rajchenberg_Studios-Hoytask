@@ -19,8 +19,6 @@ enum class SortOrder{BY_TIME, BY_NAME}
 
 data class FilterTodayPreferences(val sortOrder: SortOrder, val hideCompleted: Boolean)
 
-data class FilterPastDayPreferences(val sortOrder: SortOrder)
-
 @Singleton
 class PreferencesManager @Inject constructor(@ApplicationContext context: Context){
 
@@ -45,23 +43,6 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
             val hideCompleted = preferences[PreferencesKeys.TODAY_HIDE_COMPLETED] ?: false
 
             FilterTodayPreferences(sortOrder, hideCompleted)
-        }
-
-    val pastDayPreferencesFlow = dataStore.data
-        .catch { exception ->
-            if (exception is IOException) {
-                Log.e(TAG, "Error reading preferences", exception)
-                emit(emptyPreferences())
-            } else {
-                throw exception
-            }
-        }
-        .map { preferences ->
-            val sortOrder = SortOrder.valueOf(
-                preferences[PreferencesKeys.PAST_DAY_SORT_ORDER] ?: SortOrder.BY_TIME.name
-            )
-
-            FilterPastDayPreferences(sortOrder)
         }
 
     suspend fun isTutorialAutoRun(): Boolean? {
@@ -89,16 +70,9 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
         }
     }
 
-    suspend fun updatePastDaySortOrder(sortOrder: SortOrder) {
-        dataStore.edit { preferences ->
-            preferences[PreferencesKeys.PAST_DAY_SORT_ORDER] = sortOrder.name
-        }
-    }
-
     private object PreferencesKeys {
         val TODAY_SORT_ORDER = stringPreferencesKey("sort_order")
         val TODAY_HIDE_COMPLETED = booleanPreferencesKey("hide_completed")
-        val PAST_DAY_SORT_ORDER = stringPreferencesKey("past_day_sort_order")
         val TUTORIAL_AUTO_RUN = booleanPreferencesKey("tutorial_auto_run")
     }
 }

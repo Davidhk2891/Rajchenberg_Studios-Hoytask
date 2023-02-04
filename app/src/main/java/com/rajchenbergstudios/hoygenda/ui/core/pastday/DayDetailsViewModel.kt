@@ -13,17 +13,20 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-const val TAG = "SharedDayDetailsViewModel"
+const val TAG = "DayDetailsViewModel"
 
 @FlowPreview
 @ExperimentalCoroutinesApi
 @HiltViewModel
-class SharedDayDetailsViewModel @Inject constructor(
+class DayDetailsViewModel @Inject constructor(
     stateHandle: SavedStateHandle
 ) : ViewModel(){
 
     // DayDetailsFragment operations ---
 
+    // This is the reason why this is a shared viewModel.
+    // The data comes from this day value below.
+    // Past from the selected day in Days list.
     val day = stateHandle.get<Day>("day")
 
     val dayWeekDay = stateHandle["weekDay"] ?: day?.dayOfWeek ?: "null"
@@ -56,6 +59,7 @@ class SharedDayDetailsViewModel @Inject constructor(
     // Search query flow for journal entries
     val pastDaySearchQueryJEntries = MutableStateFlow("")
 
+    // TODO /////////////////////////////////////////////////////////////////
     // Sort order flow for tasks
     val pastDaySortOrderQuery = MutableStateFlow(SortOrder.BY_TIME)
     // Sort order flow for journal entries
@@ -71,10 +75,25 @@ class SharedDayDetailsViewModel @Inject constructor(
     // Converted journal entries data source to Flow
     private val jEntriesListFlow: Flow<List<JournalEntry>>? = jEntriesList?.let { jEntriesList -> flowOf(jEntriesList) }
 
-
     // TASKS ---
 
-    // Apply searchQuery to tasksListFlow and filter in the results that match the query
+//    Combined flow from pastDaySearchQuery and pastDaySortOrderQuery
+//    private val combinedFlow = tasksListFlow?.flatMapMerge { tasks ->
+//        pastDaySearchQuery.flatMapLatest { query ->
+//            pastDaySortOrderQuery.flatMapLatest { sortBy ->
+//                val filteredTasks = tasks.filter { task ->
+//                    task.title.contains(query, ignoreCase = true)
+//                }
+//                flowOf(
+//                    when (sortBy) {
+//                        SortOrder.BY_TIME -> filteredTasks.sortedBy { it.createdTimeFormat }
+//                        SortOrder.BY_NAME -> filteredTasks.sortedBy { it.title }
+//                    }
+//                )
+//            }
+//        }
+//    }
+
     private val filteredTasksFlow = tasksListFlow?.flatMapMerge { tasks ->
         pastDaySearchQuery.flatMapLatest { query ->
             flowOf(tasks.filter { task ->
@@ -84,18 +103,8 @@ class SharedDayDetailsViewModel @Inject constructor(
         }
     }
 
-    // Apply sortOrder to filteredTasksFlow and sort the list by the requested sorting
-    private val sortedTasksFlow = filteredTasksFlow?.flatMapLatest { tasks ->
-        pastDaySortOrderQuery.map { sortBy ->
-            when (sortBy) {
-                SortOrder.BY_TIME -> tasks.sortedBy { it.createdTimeFormat }
-                SortOrder.BY_NAME -> tasks.sortedBy { it.title }
-            }
-        }
-    }
-
     // Expose the flow as LiveData to the Fragment so it can be observed
-    val tasks = sortedTasksFlow?.asLiveData()
+    val tasks = filteredTasksFlow?.asLiveData()
 
     // ---------
 
@@ -112,17 +121,17 @@ class SharedDayDetailsViewModel @Inject constructor(
     }
 
     // Apply sortOrder to filteredJEntriesFlow and sort the list bt the requested sorting
-    private val sortedJEntriesFlow = filteredJEntriesFlow?.flatMapLatest { jEntries ->
-        pastDaySortOrderQueryJEntries.map { sortBy ->
-            when (sortBy) {
-                SortOrder.BY_TIME -> jEntries.sortedBy { it.createdTimeFormat }
-                SortOrder.BY_NAME -> jEntries.sortedBy { it.content }
-            }
-        }
-    }
+//    private val sortedJEntriesFlow = filteredJEntriesFlow?.flatMapLatest { jEntries ->
+//        pastDaySortOrderQueryJEntries.map { sortBy ->
+//            when (sortBy) {
+//                SortOrder.BY_TIME -> jEntries.sortedBy { it.createdTimeFormat }
+//                SortOrder.BY_NAME -> jEntries.sortedBy { it.content }
+//            }
+//        }
+//    }
 
     // Expose the flow as LiveData to the Fragment so it can be observed
-    val jEntries = sortedJEntriesFlow?.asLiveData()
+    val jEntries = filteredJEntriesFlow?.asLiveData()
 
     // ---------
 

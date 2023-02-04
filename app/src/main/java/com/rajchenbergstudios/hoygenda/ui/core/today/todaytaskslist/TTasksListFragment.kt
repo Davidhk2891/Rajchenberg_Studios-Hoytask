@@ -204,9 +204,9 @@ class TTasksListFragment : Fragment(R.layout.fragment_child_t_tasks_list),
         viewModel.onTaskCheckedChanged(task, isChecked)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        // Fix this
-        // searchView.setOnQueryTextListener(null)
-    }
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        // Fix this
+//        searchView.setOnQueryTextListener(null)
+//    }
 }

@@ -47,7 +47,7 @@ class MainViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             // Enable only when testing
-            pullListAndCompareDateTest()
+            // pullListAndCompareDateTest()
 
             pullListAndCompareDate()
             delay(1500)

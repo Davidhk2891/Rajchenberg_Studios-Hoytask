@@ -30,7 +30,15 @@ class DaysListAdapter(private val listener: OnItemClickListener) : ListAdapter<D
                     val position = adapterPosition
                     if (position != RecyclerView.NO_POSITION){
                         val day = getItem(position)
-                        listener.onItemClick(day)
+                        val formattedDay = Day(
+                            day.dayOfWeek,
+                            day.formattedDayOfMonth(),
+                            day.month,
+                            day.year,
+                            day.listOfTasks,
+                            day.listOfJEntries,
+                            day.id)
+                        listener.onItemClick(formattedDay)
                     }
                 }
             }
