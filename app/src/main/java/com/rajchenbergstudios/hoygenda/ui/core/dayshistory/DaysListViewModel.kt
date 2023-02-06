@@ -28,7 +28,12 @@ class DaysListViewModel @Inject constructor(
         daysEventChannel.send(DaysEvent.NavigateToDaysDetailsScreen(day))
     }
 
+    fun onDeleteAllSetsClick() = viewModelScope.launch {
+        daysEventChannel.send(DaysEvent.NavigateToDeleteAllScreen)
+    }
+
     sealed class DaysEvent {
+        object NavigateToDeleteAllScreen : DaysEvent()
         data class NavigateToDaysDetailsScreen(val day: Day) : DaysEvent()
     }
 }

@@ -77,10 +77,12 @@ abstract class HGDADatabase : RoomDatabase(){
                 taskDao.insert(Task(PresetData.PRESET_TASK, important = true))
                 journalEntryDao.insert(JournalEntry(PresetData.PRESET_ENTRY, important = true))
 
+                /*
                 taskDao.insert(Task(PresetData.PRESET_TASK_2))
                 taskDao.insert(Task(PresetData.PRESET_TASK_3))
                 taskDao.insert(Task(PresetData.PRESET_TASK_4))
                 taskDao.insert(Task(PresetData.PRESET_TASK_5))
+                 */
 
                 taskSetDao.apply {
                     insert(set1)

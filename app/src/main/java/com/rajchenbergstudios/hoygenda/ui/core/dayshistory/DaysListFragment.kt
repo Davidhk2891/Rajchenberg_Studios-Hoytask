@@ -18,8 +18,11 @@ import com.rajchenbergstudios.hoygenda.data.day.Day
 import com.rajchenbergstudios.hoygenda.databinding.FragmentDaysHistoryBinding
 import com.rajchenbergstudios.hoygenda.utils.HGDAAnimationUtils
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
+import com.rajchenbergstudios.hoygenda.utils.Logger
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
+
+const val TAG = "DaysListFragment"
 
 @AndroidEntryPoint
 class DaysListFragment : Fragment(R.layout.fragment_days_history),
@@ -30,7 +33,6 @@ class DaysListFragment : Fragment(R.layout.fragment_days_history),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadMenu()
         startShimmerView()
         val binding = FragmentDaysHistoryBinding.bind(view)
         val daysListAdapter = DaysListAdapter(this)
@@ -69,14 +71,20 @@ class DaysListFragment : Fragment(R.layout.fragment_days_history),
                         val action = DaysListFragmentDirections.actionDaysListFragmentToDaysDetailsFragment(day = event.day)
                         findNavController().navigate(action)
                     }
+                    is DaysListViewModel.DaysEvent.NavigateToDeleteAllScreen -> {
+                        val action = DaysListFragmentDirections.actionGlobalTasksDeleteAllDialogFragment(origin = 5)
+                        findNavController().navigate(action)
+                    }
                 }.exhaustive
             }
         }
+
+        loadMenu()
     }
 
     private fun loadMenu() {
         val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(DaysSetsMenuProvide(), viewLifecycleOwner, Lifecycle.State.CREATED)
+        menuHost.addMenuProvider(DaysSetsMenuProvide(), viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private inner class DaysSetsMenuProvide: MenuProvider {
@@ -87,8 +95,8 @@ class DaysListFragment : Fragment(R.layout.fragment_days_history),
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
             return when (menuItem.itemId) {
-                R.id.task_set_action_delete_all_sets -> {
-                    //viewModel.onDeleteAllSetsClick()
+                R.id.days_list_menu_delete_all -> {
+                    viewModel.onDeleteAllSetsClick()
                     true
                 }
                 else -> false

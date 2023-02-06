@@ -16,7 +16,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rajchenbergstudios.hoygenda.R
-import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildPdTasksListBinding
 import com.rajchenbergstudios.hoygenda.ui.core.pastday.DaysDetailsFragmentDirections

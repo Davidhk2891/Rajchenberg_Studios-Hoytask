@@ -3,6 +3,7 @@ package com.rajchenbergstudios.hoygenda.ui.core.deleteall
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rajchenbergstudios.hoygenda.data.day.DayDao
 import com.rajchenbergstudios.hoygenda.data.today.task.TaskDao
 import com.rajchenbergstudios.hoygenda.data.taskinset.TaskInSetDao
 import com.rajchenbergstudios.hoygenda.data.taskset.TaskSetDao
@@ -21,6 +22,7 @@ class DeleteAllDialogViewModel @Inject constructor(
     private val taskSetDao: TaskSetDao,
     private val taskInSetDao: TaskInSetDao,
     private val journalEntryDao: JournalEntryDao,
+    private val dayDao: DayDao,
     state: SavedStateHandle,
     @ApplicationScope private val applicationScope: CoroutineScope
 ) : ViewModel(){
@@ -41,7 +43,20 @@ class DeleteAllDialogViewModel @Inject constructor(
             2 -> {deleteAllSetsWithTasks(resultInterface)}
             3 -> {deleteAllTasks(resultInterface)}
             4 -> {deleteAllJournalEntries(resultInterface)}
+            5 -> {deleteAllDays(resultInterface)}
         }
+    }
+
+    fun populateMessage(): String {
+        var message = ""
+        when (origin) {
+            1 -> {message = "Do you really want to delete all completed tasks?"}
+            2 -> {message = "Do you really want to delete all sets?"}
+            3 -> {message = "Do you really want to delete all tasks?"}
+            4 -> {message = "Do you really want to delete all entries?"}
+            5 -> {message = "Do you really want to delete all days?"}
+        }
+        return message
     }
 
     private fun deleteAllCompletedTasks(resultInterface: ResultInterface) = applicationScope.launch{
@@ -74,15 +89,11 @@ class DeleteAllDialogViewModel @Inject constructor(
             journalEntryDao.nukeJEntryTable()
     }
 
-    fun populateMessage(): String {
-        var message = ""
-        when (origin) {
-            1 -> {message = "Do you really want to delete all completed tasks?"}
-            2 -> {message = "Do you really want to delete all sets?"}
-            3 -> {message = "Do you really want to delete all tasks?"}
-            4 -> {message = "Do you really want to delete all entries?"}
-        }
-        return message
+    private fun deleteAllDays(resultInterface: ResultInterface) = applicationScope.launch {
+        if (dayDao.checkFirstItemFromList().isEmpty())
+            resultInterface.onShowEmptyListMessage(noDataMessage)
+        else
+            dayDao.nukeDayTable()
     }
 
     fun showNothingToDeleteMessage(message: String) = viewModelScope.launch {
