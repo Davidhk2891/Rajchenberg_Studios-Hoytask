@@ -17,7 +17,7 @@ private const val TAG = "PreferencesManager"
 
 enum class SortOrder{BY_TIME, BY_NAME}
 
-data class FilterPreferences(val sortOrder: SortOrder, val hideCompleted: Boolean)
+data class FilterTodayPreferences(val sortOrder: SortOrder, val hideCompleted: Boolean)
 
 @Singleton
 class PreferencesManager @Inject constructor(@ApplicationContext context: Context){
@@ -27,7 +27,7 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
     private val dataStore = context.dataStore
 
     // Read data from DataStore
-    val preferencesFlow = dataStore.data
+    val todayPreferencesFlow = dataStore.data
         .catch { exception ->
             if (exception is IOException) {
                 Log.e(TAG, "Error reading preferences", exception)
@@ -38,11 +38,11 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
         }
         .map { preferences ->
             val sortOrder = SortOrder.valueOf(
-                preferences[PreferencesKeys.SORT_ORDER] ?: SortOrder.BY_TIME.name
+                preferences[PreferencesKeys.TODAY_SORT_ORDER] ?: SortOrder.BY_TIME.name
             )
-            val hideCompleted = preferences[PreferencesKeys.HIDE_COMPLETED] ?: false
+            val hideCompleted = preferences[PreferencesKeys.TODAY_HIDE_COMPLETED] ?: false
 
-            FilterPreferences(sortOrder, hideCompleted)
+            FilterTodayPreferences(sortOrder, hideCompleted)
         }
 
     suspend fun isTutorialAutoRun(): Boolean? {
@@ -60,19 +60,19 @@ class PreferencesManager @Inject constructor(@ApplicationContext context: Contex
 
     suspend fun updateSortOrder(sortOrder: SortOrder) {
         dataStore.edit { preferences ->
-            preferences[PreferencesKeys.SORT_ORDER] = sortOrder.name
+            preferences[PreferencesKeys.TODAY_SORT_ORDER] = sortOrder.name
         }
     }
 
     suspend fun updateHideCompleted(hideCompleted: Boolean) {
         dataStore.edit { preferences ->
-            preferences[PreferencesKeys.HIDE_COMPLETED] = hideCompleted
+            preferences[PreferencesKeys.TODAY_HIDE_COMPLETED] = hideCompleted
         }
     }
 
     private object PreferencesKeys {
-        val SORT_ORDER = stringPreferencesKey("sort_order")
-        val HIDE_COMPLETED = booleanPreferencesKey("hide_completed")
+        val TODAY_SORT_ORDER = stringPreferencesKey("sort_order")
+        val TODAY_HIDE_COMPLETED = booleanPreferencesKey("hide_completed")
         val TUTORIAL_AUTO_RUN = booleanPreferencesKey("tutorial_auto_run")
     }
 }

@@ -1,10 +1,8 @@
 package com.rajchenbergstudios.hoygenda.ui.core.taskaddedit
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
+import android.widget.EditText
 import androidx.core.os.bundleOf
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -19,9 +17,11 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.databinding.FragmentAddEditTaskBinding
+import com.rajchenbergstudios.hoygenda.utils.focusAndShowKeyboardInFragment
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
+
 
 // private const val TAG = "TaskAddEditFragment.kt"
 
@@ -78,8 +78,14 @@ class TaskAddEditFragment : Fragment(R.layout.fragment_add_edit_task){
             }
         }
 
+        focusEditText(binding.fragmentAddEditTitleEdittext)
         loadMenu()
         deduceUserFlow()
+    }
+
+    private fun focusEditText(editText: EditText) {
+        if (viewModel.origin == 1 || viewModel.origin == 2)
+            editText.focusAndShowKeyboardInFragment(requireActivity())
     }
 
     private fun deduceUserFlow() {

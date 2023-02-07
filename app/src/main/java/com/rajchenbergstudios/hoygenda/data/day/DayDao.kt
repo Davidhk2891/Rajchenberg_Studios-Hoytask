@@ -13,4 +13,10 @@ interface DayDao {
 
     @Insert
     suspend fun insert(day: Day)
+
+    @Query("SELECT * FROM day_table LIMIT 1")
+    suspend fun checkFirstItemFromList(): List<Day>
+
+    @Query("DELETE FROM day_table")
+    suspend fun nukeDayTable()
 }

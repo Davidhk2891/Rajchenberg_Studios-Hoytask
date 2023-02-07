@@ -22,7 +22,7 @@ import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildTJournalEntriesListBinding
 import com.rajchenbergstudios.hoygenda.ui.core.today.TodayFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
-import com.rajchenbergstudios.hoygenda.utils.OnQueryTextChanged
+import com.rajchenbergstudios.hoygenda.utils.onQueryTextChanged
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -138,7 +138,7 @@ class TJEntriesListFragment : Fragment(R.layout.fragment_child_t_journal_entries
                 searchView.setQuery(pendingQuery, false)
             }
 
-            searchView.OnQueryTextChanged{ searchQuery ->
+            searchView.onQueryTextChanged{ searchQuery ->
                 viewModel.searchQuery.value = searchQuery
             }
         }

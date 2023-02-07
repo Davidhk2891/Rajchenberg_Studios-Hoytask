@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import androidx.core.os.bundleOf
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -20,6 +21,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.databinding.FragmentAddEditJournalEntryBinding
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
+import com.rajchenbergstudios.hoygenda.utils.focusAndShowKeyboardInFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -56,8 +58,14 @@ class JEntryAddEditFragment : Fragment(R.layout.fragment_add_edit_journal_entry)
             }
         }
 
+        focusEditText(binding.fragmentJentryAddEditTitleEdittext)
         loadMenu()
         deduceUserFlow()
+    }
+
+    private fun focusEditText(editText: EditText) {
+        if (viewModel.origin == 1)
+            editText.focusAndShowKeyboardInFragment(requireActivity())
     }
 
     private fun deduceUserFlow() {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -13,12 +14,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.databinding.FragmentTaskSetCreateBinding
+import com.rajchenbergstudios.hoygenda.utils.focusAndShowKeyboardInDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CreateTaskSetDialogFragment : DialogFragment(){
 
     private val viewModel: CreateTaskSetDialogViewModel by viewModels()
+    private lateinit var binding: FragmentTaskSetCreateBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,7 +31,7 @@ class CreateTaskSetDialogFragment : DialogFragment(){
 
         val view: View = inflater.inflate(R.layout.fragment_task_set_create, container, false)
 
-        val binding = FragmentTaskSetCreateBinding.bind(view)
+        binding = FragmentTaskSetCreateBinding.bind(view)
 
         binding.apply {
             taskSetCreateOptionsCreateButton.setOnClickListener {
@@ -65,7 +68,15 @@ class CreateTaskSetDialogFragment : DialogFragment(){
                 }
             }
         }
-
         return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+        focusEditText(binding.taskSetCreateSetTitleEdittext)
+    }
+
+    private fun focusEditText(editText: EditText) {
+        editText.focusAndShowKeyboardInDialogFragment(dialog)
     }
 }

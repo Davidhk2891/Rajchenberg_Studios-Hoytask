@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/pd_tasks_list_menu_search"
+        android:id="@+id/t_tasks_list_menu_search"
         android:icon="@drawable/ic_baseline_search_24"
         android:title="@string/search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
@@ -17,27 +17,27 @@
         tools:ignore="AlwaysShowAction">
         <menu>
             <item
-                android:id="@+id/pd_tasks_list_menu_sort_alphabetically"
+                android:id="@+id/t_tasks_list_menu_sort_alphabetically"
                 android:title="@string/sort_alphabetically"/>
             <item
-                android:id="@+id/pd_tasks_list_menu_sort_by_date"
+                android:id="@+id/t_tasks_list_menu_sort_by_date"
                 android:title="@string/sort_by_time"/>
         </menu>
     </item>
 
     <item
-        android:id="@+id/tasks_list_menu_hide_completed"
+        android:id="@+id/t_tasks_list_menu_hide_completed"
         android:title="@string/hide_completed"
         android:checkable="true"
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/tasks_list_menu_delete_completed"
+        android:id="@+id/t_tasks_list_menu_delete_completed"
         android:title="@string/delete_all_completed"
         app:showAsAction="never"/>
 
     <item
-        android:id="@+id/tasks_list_menu_delete_all"
+        android:id="@+id/t_tasks_list_menu_delete_all"
         android:title="@string/delete_all"
         app:showAsAction="never"/>
 </menu>

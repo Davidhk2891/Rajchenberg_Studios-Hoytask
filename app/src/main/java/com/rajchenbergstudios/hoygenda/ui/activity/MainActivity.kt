@@ -86,8 +86,6 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                 }
                 R.id.tutorialFragment -> {
                     viewModel.onTutorialRedirectionEngaged()
-                    closeDrawer(false)
-                    lockDrawer()
                     inOtherDestination = true
                 }
                 R.id.getInTouchDialogFragment -> {
@@ -144,6 +142,7 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                     }
                     MainViewModel.MainEvent.NavigateToTutorialFragment -> {
                         navController.navigate(TodayFragmentDirections.actionTodayFragmentToTutorialFragment())
+                        closeDrawer(false)
                         lockDrawer()
                     }
                 }.exhaustive
@@ -191,6 +190,12 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
         }
     }
 }
+
+/*
+Activity.RESULT_OK = -1
+Activity.RESULT_CANCELED = 0
+Activity.FIRST_USER = 1
+ */
 
 const val ADD_TASK_RESULT_OK = Activity.RESULT_FIRST_USER
 const val EDIT_TASK_RESULT_OK = Activity.RESULT_FIRST_USER + 1

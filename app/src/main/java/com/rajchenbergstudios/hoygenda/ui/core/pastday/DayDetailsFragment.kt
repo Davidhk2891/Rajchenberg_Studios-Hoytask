@@ -10,18 +10,17 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.rajchenbergstudios.hoygenda.R
 import com.rajchenbergstudios.hoygenda.databinding.FragmentDaysDetailsBinding
-import com.rajchenbergstudios.hoygenda.utils.Logger
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
-const val TAG = "DaysDetailsFragment"
-
+@FlowPreview
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class DaysDetailsFragment : Fragment(R.layout.fragment_days_details) {
 
-    private val sharedViewModel: SharedDayDetailsViewModel by viewModels()
+    private val viewModel: DayDetailsViewModel by viewModels()
 
     private lateinit var viewPager: ViewPager2
 
@@ -36,10 +35,10 @@ class DaysDetailsFragment : Fragment(R.layout.fragment_days_details) {
     private fun todayDateDisplay(binding: FragmentDaysDetailsBinding) {
         binding.apply {
             dayDetailsDateheader.apply {
-                dateHeaderDayofmonth.text = sharedViewModel.dayMonthDay
-                dateHeaderMonth.text = sharedViewModel.dayMonth
-                dateHeaderYear.text = sharedViewModel.dayYear
-                dateHeaderDayofweek.text = sharedViewModel.dayWeekDay
+                dateHeaderDayofmonth.text = viewModel.dayMonthDay
+                dateHeaderMonth.text = viewModel.dayMonth
+                dateHeaderYear.text = viewModel.dayYear
+                dateHeaderDayofweek.text = viewModel.dayWeekDay
             }
         }
     }
@@ -47,9 +46,8 @@ class DaysDetailsFragment : Fragment(R.layout.fragment_days_details) {
     private fun initViewPagerWithTabLayout(binding: FragmentDaysDetailsBinding) {
         viewPager = binding.daysDetailsViewpager
         val tabLayout: TabLayout = binding.daysDetailsTablayout
-        val dayDetailsPagerAdapter = activity?.let { DayDetailsPagerAdapter(it, sharedViewModel.day) }
+        val dayDetailsPagerAdapter = activity?.let { DayDetailsPagerAdapter(it, viewModel.day) }
         viewPager.adapter = dayDetailsPagerAdapter
-        Logger.i(TAG, "initViewPagerWithTabLayout", "viewPager is not null")
         TabLayoutMediator(tabLayout, viewPager) { tab, index ->
             tab.text = when (index) {
                 0 -> "Tasks"
