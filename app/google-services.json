@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "543264574163",
+    "project_id": "hoygenda",
+    "storage_bucket": "hoygenda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:543264574163:android:2bf23c9030b8f1e682a226",
+        "android_client_info": {
+          "package_name": "com.rajchenbergstudios.hoygenda"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "543264574163-hmun7b3i2aj0g2bdvthast0m2ghlsmpe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEgvOZi2zsRCBYeHZAPCel9Z9rWN1hqUo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "543264574163-hmun7b3i2aj0g2bdvthast0m2ghlsmpe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
