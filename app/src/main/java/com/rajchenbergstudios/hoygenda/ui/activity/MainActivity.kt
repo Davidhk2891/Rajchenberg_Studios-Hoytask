@@ -86,8 +86,6 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                 }
                 R.id.tutorialFragment -> {
                     viewModel.onTutorialRedirectionEngaged()
-                    closeDrawer(false)
-                    lockDrawer()
                     inOtherDestination = true
                 }
                 R.id.getInTouchDialogFragment -> {
@@ -144,6 +142,7 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                     }
                     MainViewModel.MainEvent.NavigateToTutorialFragment -> {
                         navController.navigate(TodayFragmentDirections.actionTodayFragmentToTutorialFragment())
+                        closeDrawer(false)
                         lockDrawer()
                     }
                 }.exhaustive

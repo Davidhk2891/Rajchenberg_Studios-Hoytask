@@ -18,7 +18,6 @@ import com.rajchenbergstudios.hoygenda.data.day.Day
 import com.rajchenbergstudios.hoygenda.databinding.FragmentDaysHistoryBinding
 import com.rajchenbergstudios.hoygenda.utils.HGDAAnimationUtils
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
-import com.rajchenbergstudios.hoygenda.utils.Logger
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 
