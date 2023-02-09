@@ -28,7 +28,7 @@ object AppModule {
         .build()
 
     @Provides
-    fun provideTodayDao(db: HGDADatabase) = db.todayDao()
+    fun provideTodayDao(db: HGDADatabase) = db.taskDao()
 
     @Provides
     fun provideDayDao(db: HGDADatabase) = db.dayDao()

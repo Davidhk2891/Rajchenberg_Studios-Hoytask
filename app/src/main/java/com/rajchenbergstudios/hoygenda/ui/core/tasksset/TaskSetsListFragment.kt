@@ -23,7 +23,7 @@ import com.rajchenbergstudios.hoygenda.databinding.FragmentTasksSetBinding
 import com.rajchenbergstudios.hoygenda.ui.core.createtaskset.CreateTaskSetDialogFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.HGDAAnimationUtils
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
-import com.rajchenbergstudios.hoygenda.utils.OnQueryTextChanged
+import com.rajchenbergstudios.hoygenda.utils.onQueryTextChanged
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -140,7 +140,7 @@ class TaskSetsListFragment : Fragment(R.layout.fragment_tasks_set),
                 searchView.setQuery(pendingQuery, false)
             }
 
-            searchView.OnQueryTextChanged { searchQuery ->
+            searchView.onQueryTextChanged { searchQuery ->
 
                 viewModel.searchQuery.value = searchQuery
             }

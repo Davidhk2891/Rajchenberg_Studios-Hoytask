@@ -10,18 +10,18 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always|collapseActionView"/>
 
-    <item
-        android:icon="@drawable/ic_baseline_sort_24"
-        android:title="@string/sort"
-        app:showAsAction="always"
-        tools:ignore="AlwaysShowAction">
-        <menu>
-            <item
-                android:id="@+id/pd_jentries_list_menu_sort_alphabetically"
-                android:title="@string/sort_alphabetically"/>
-            <item
-                android:id="@+id/pd_jentries_list_menu_sort_by_date"
-                android:title="@string/sort_by_time"/>
-        </menu>
-    </item>
+<!--    <item-->
+<!--        android:icon="@drawable/ic_baseline_sort_24"-->
+<!--        android:title="@string/sort"-->
+<!--        app:showAsAction="always"-->
+<!--        tools:ignore="AlwaysShowAction">-->
+<!--        <menu>-->
+<!--            <item-->
+<!--                android:id="@+id/pd_jentries_list_menu_sort_alphabetically"-->
+<!--                android:title="@string/sort_alphabetically"/>-->
+<!--            <item-->
+<!--                android:id="@+id/pd_jentries_list_menu_sort_by_date"-->
+<!--                android:title="@string/sort_by_time"/>-->
+<!--        </menu>-->
+<!--    </item>-->
 </menu>

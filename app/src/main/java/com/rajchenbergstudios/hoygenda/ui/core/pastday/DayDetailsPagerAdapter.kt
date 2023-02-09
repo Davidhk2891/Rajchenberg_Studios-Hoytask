@@ -9,7 +9,9 @@ import com.rajchenbergstudios.hoygenda.data.day.Day
 import com.rajchenbergstudios.hoygenda.ui.core.pastday.daydetailsjentrieslist.PDJEntriesListFragment
 import com.rajchenbergstudios.hoygenda.ui.core.pastday.daydetailstaskslist.PDTasksListFragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 class DayDetailsPagerAdapter(fragmentActivity: FragmentActivity, val day: Day?) : FragmentStateAdapter(fragmentActivity) {
 

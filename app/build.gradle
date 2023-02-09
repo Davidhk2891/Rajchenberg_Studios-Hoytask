@@ -6,6 +6,8 @@ plugins {
     id 'kotlin-parcelize'
     id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -97,6 +99,14 @@ dependencies {
 
     // Facebook Shimmer view
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:31.2.0')
+    // ----- Analytics
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    // ----- Crashlytics
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+
 }
 
 kapt {

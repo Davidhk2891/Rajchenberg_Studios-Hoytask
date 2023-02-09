@@ -5,7 +5,6 @@ import com.rajchenbergstudios.hoygenda.data.prefs.PreferencesManager
 import com.rajchenbergstudios.hoygenda.data.prefs.SortOrder
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntryDao
-import com.rajchenbergstudios.hoygenda.ui.core.today.todaytaskslist.TTasksListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -26,7 +25,7 @@ class TJEntriesListViewModel @Inject constructor(
     val searchQuery = state.getLiveData("jEntriesSearchQuery", "")
 
     // DataStore
-    private val preferencesFlow = preferencesManager.preferencesFlow
+    private val preferencesFlow = preferencesManager.todayPreferencesFlow
 
     private val jEntriesFlow = combine(
         searchQuery.asFlow(),

@@ -23,7 +23,7 @@ import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.databinding.FragmentChildTTasksListBinding
 import com.rajchenbergstudios.hoygenda.ui.core.today.TodayFragmentDirections
 import com.rajchenbergstudios.hoygenda.utils.HGDAViewStateUtils
-import com.rajchenbergstudios.hoygenda.utils.OnQueryTextChanged
+import com.rajchenbergstudios.hoygenda.utils.onQueryTextChanged
 import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -145,45 +145,45 @@ class TTasksListFragment : Fragment(R.layout.fragment_child_t_tasks_list),
             menu.clear()
             menuInflater.inflate(R.menu.menu_t_tasks_list_fragment, menu)
 
-            val searchItem = menu.findItem(R.id.pd_tasks_list_menu_search)
+            val searchItem = menu.findItem(R.id.t_tasks_list_menu_search)
             searchView = searchItem.actionView as SearchView
 
-            val pendingQuery = viewModel.searchQuery.value
+            val pendingQuery = viewModel.todaySearchQuery.value
             if (pendingQuery != null && pendingQuery.isNotEmpty()) {
                 searchItem.expandActionView()
                 searchView.setQuery(pendingQuery, false)
             }
 
-            searchView.OnQueryTextChanged{ searchQuery ->
-                viewModel.searchQuery.value = searchQuery
+            searchView.onQueryTextChanged{ searchQuery ->
+                viewModel.todaySearchQuery.value = searchQuery
             }
 
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                menu.findItem(R.id.tasks_list_menu_hide_completed).isChecked =
-                    viewModel.preferencesFlow.first().hideCompleted
+                menu.findItem(R.id.t_tasks_list_menu_hide_completed).isChecked =
+                    viewModel.todayPreferencesFlow.first().hideCompleted
             }
         }
 
         override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
             return when (menuItem.itemId) {
-                R.id.pd_tasks_list_menu_sort_by_date -> {
+                R.id.t_tasks_list_menu_sort_by_date -> {
                     viewModel.onSortOrderSelected(SortOrder.BY_TIME)
                     true
                 }
-                R.id.pd_tasks_list_menu_sort_alphabetically -> {
+                R.id.t_tasks_list_menu_sort_alphabetically -> {
                     viewModel.onSortOrderSelected(SortOrder.BY_NAME)
                     true
                 }
-                R.id.tasks_list_menu_hide_completed -> {
+                R.id.t_tasks_list_menu_hide_completed -> {
                     menuItem.isChecked = !menuItem.isChecked
                     viewModel.onHideCompletedSelected(menuItem.isChecked)
                     true
                 }
-                R.id.tasks_list_menu_delete_completed -> {
+                R.id.t_tasks_list_menu_delete_completed -> {
                     viewModel.onDeleteAllCompletedClick()
                     true
                 }
-                R.id.tasks_list_menu_delete_all -> {
+                R.id.t_tasks_list_menu_delete_all -> {
                     viewModel.onDeleteAllClick()
                     true
                 }
@@ -204,8 +204,9 @@ class TTasksListFragment : Fragment(R.layout.fragment_child_t_tasks_list),
         viewModel.onTaskCheckedChanged(task, isChecked)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        searchView.setOnQueryTextListener(null)
-    }
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        // Fix this
+//        searchView.setOnQueryTextListener(null)
+//    }
 }

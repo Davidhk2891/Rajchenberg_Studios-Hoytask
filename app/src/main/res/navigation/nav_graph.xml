@@ -24,6 +24,10 @@
             app:exitAnim="@anim/frag_end_from_left"
             app:popEnterAnim="@anim/frag_start_from_right"
             app:popExitAnim="@anim/frag_end_from_left" />
+        <action
+            android:id="@+id/action_todayFragment_to_tutorialFragment"
+            app:destination="@id/tutorialFragment"
+            app:enterAnim="@anim/frag_start_from_bottom" />
     </fragment>
     <fragment
         android:id="@+id/taskAddEditFragment"
@@ -64,7 +68,11 @@
         tools:layout="@layout/fragment_days_history" >
         <action
             android:id="@+id/action_daysListFragment_to_daysDetailsFragment"
-            app:destination="@id/daysDetailsFragment" />
+            app:destination="@id/daysDetailsFragment"
+            app:enterAnim="@anim/frag_start_from_right"
+            app:exitAnim="@anim/frag_end_from_left"
+            app:popEnterAnim="@anim/frag_start_from_right"
+            app:popExitAnim="@anim/frag_end_from_left" />
     </fragment>
     <fragment
         android:id="@+id/taskSetsListFragment"
@@ -73,7 +81,11 @@
         tools:layout="@layout/fragment_tasks_set" >
         <action
             android:id="@+id/action_taskSetsListFragment_to_tasksSetEditListFragment"
-            app:destination="@id/tasksSetEditListFragment" />
+            app:destination="@id/tasksSetEditListFragment"
+            app:enterAnim="@anim/frag_start_from_right"
+            app:exitAnim="@anim/frag_end_from_left"
+            app:popEnterAnim="@anim/frag_start_from_right"
+            app:popExitAnim="@anim/frag_end_from_left" />
     </fragment>
     <fragment
         android:id="@+id/daysDetailsFragment"
@@ -85,10 +97,18 @@
             app:argType="com.rajchenbergstudios.hoygenda.data.day.Day" />
         <action
             android:id="@+id/action_daysDetailsFragment_to_taskAddEditFragment"
-            app:destination="@id/taskAddEditFragment" />
+            app:destination="@id/taskAddEditFragment"
+            app:enterAnim="@anim/frag_start_from_right"
+            app:exitAnim="@anim/frag_end_from_left"
+            app:popEnterAnim="@anim/frag_start_from_right"
+            app:popExitAnim="@anim/frag_end_from_left" />
         <action
             android:id="@+id/action_daysDetailsFragment_to_JEntryAddEditFragment"
-            app:destination="@id/JEntryAddEditFragment" />
+            app:destination="@id/JEntryAddEditFragment"
+            app:enterAnim="@anim/frag_start_from_right"
+            app:exitAnim="@anim/frag_end_from_left"
+            app:popEnterAnim="@anim/frag_start_from_right"
+            app:popExitAnim="@anim/frag_end_from_left" />
     </fragment>
     <fragment
         android:id="@+id/tasksSetEditListFragment"
@@ -97,7 +117,11 @@
         tools:layout="@layout/fragment_tasks_in_set" >
         <action
             android:id="@+id/action_tasksSetEditListFragment_to_taskAddEditFragment"
-            app:destination="@id/taskAddEditFragment" />
+            app:destination="@id/taskAddEditFragment"
+            app:enterAnim="@anim/frag_start_from_right"
+            app:exitAnim="@anim/frag_end_from_left"
+            app:popEnterAnim="@anim/frag_start_from_right"
+            app:popExitAnim="@anim/frag_end_from_left" />
         <argument
             android:name="settitle"
             app:argType="string" />
@@ -197,4 +221,21 @@
         android:name="com.rajchenbergstudios.hoygenda.ui.more.changelog.ChangelogDialogFragment"
         android:label="fragment_changelog"
         tools:layout="@layout/fragment_changelog" /><action android:id="@+id/action_global_changelogDialogFragment" app:destination="@id/changelogDialogFragment"/>
+    <dialog
+        android:id="@+id/tellYourFriendsDialogFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.more.tellyourfriends.TellYourFriendsDialogFragment"
+        android:label="fragment_tell_your_friends"
+        tools:layout="@layout/fragment_tell_your_friends" />
+    <action android:id="@+id/action_global_tellYourFriendsDialogFragment" app:destination="@id/tellYourFriendsDialogFragment" />
+    <dialog
+        android:id="@+id/aboutDialogFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.more.about.AboutDialogFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
+    <action android:id="@+id/action_global_aboutDialogFragment" app:destination="@id/aboutDialogFragment" />
+    <fragment
+        android:id="@+id/tutorialFragment"
+        android:name="com.rajchenbergstudios.hoygenda.ui.tutorial.TutorialFragment"
+        android:label="fragment_tutorial"
+        tools:layout="@layout/fragment_tutorial" />
 </navigation>

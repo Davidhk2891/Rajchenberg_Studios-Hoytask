@@ -22,7 +22,6 @@ import com.rajchenbergstudios.hoygenda.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-
 // private const val TAG = "MainActivity.kt"
 
 @ExperimentalCoroutinesApi
@@ -51,7 +50,7 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
         loadMainEventCollector()
     }
 
-    private fun initializeObjects(){
+    private fun initializeObjects() {
         toolBar = findViewById(R.id.hoytask_appbar)
         drawerLayout = findViewById(R.id.hoytask_drawer_layout)
         navigationView = findViewById(R.id.hoytask_navigationview)
@@ -85,6 +84,10 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                     lockDrawer()
                     inOtherDestination = true
                 }
+                R.id.tutorialFragment -> {
+                    viewModel.onTutorialRedirectionEngaged()
+                    inOtherDestination = true
+                }
                 R.id.getInTouchDialogFragment -> {
                     viewModel.onGetInTouchDialogFragmentClick()
                     inOtherDestination = true
@@ -95,6 +98,14 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                 }
                 R.id.changelogDialogFragment -> {
                     viewModel.onChangelogDialogFragmentClick()
+                    inOtherDestination = true
+                }
+                R.id.tellYourFriendsDialogFragment -> {
+                    viewModel.onTellYourFriendsDialogFragmentClick()
+                    inOtherDestination = true
+                }
+                R.id.aboutDialogFragment -> {
+                    viewModel.onAboutDialogFragmentClick()
                     inOtherDestination = true
                 }
             }
@@ -122,6 +133,17 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
                     }
                     MainViewModel.MainEvent.NavigateToChangelogDialog -> {
                         navController.navigate(TodayFragmentDirections.actionGlobalChangelogDialogFragment())
+                    }
+                    MainViewModel.MainEvent.NavigateToTellYourFriendsDialog -> {
+                        navController.navigate(TodayFragmentDirections.actionGlobalTellYourFriendsDialogFragment())
+                    }
+                    MainViewModel.MainEvent.NavigateToAboutDialog -> {
+                        navController.navigate(TodayFragmentDirections.actionGlobalAboutDialogFragment())
+                    }
+                    MainViewModel.MainEvent.NavigateToTutorialFragment -> {
+                        navController.navigate(TodayFragmentDirections.actionTodayFragmentToTutorialFragment())
+                        closeDrawer(false)
+                        lockDrawer()
                     }
                 }.exhaustive
             }
@@ -167,7 +189,26 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
             inOtherDestination = false
         }
     }
+
+    /*
+    private fun forceTestCrash() {
+        val crashButton = Button(this)
+        crashButton.text = "Test Crash"
+        crashButton.setOnClickListener {
+            throw RuntimeException("Test Crash") // Force a crash
+        }
+        addContentView(crashButton, ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT))
+    }
+    */
 }
+
+/*
+Activity.RESULT_OK = -1
+Activity.RESULT_CANCELED = 0
+Activity.FIRST_USER = 1
+ */
 
 const val ADD_TASK_RESULT_OK = Activity.RESULT_FIRST_USER
 const val EDIT_TASK_RESULT_OK = Activity.RESULT_FIRST_USER + 1

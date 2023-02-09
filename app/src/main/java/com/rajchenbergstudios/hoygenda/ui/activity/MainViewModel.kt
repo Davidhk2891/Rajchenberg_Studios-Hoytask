@@ -46,6 +46,9 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            // Enable only when testing
+            // pullListAndCompareDateTest()
+
             pullListAndCompareDate()
             delay(1500)
             _isLoading.value = false
@@ -55,7 +58,7 @@ class MainViewModel @Inject constructor(
     private suspend fun pullListAndCompareDate() {
         val tasksList = taskDao.getTasksList()
         val jEntriesList = journalEntryDao.getJournalEntriesList()
-        if (tasksList.isNotEmpty()) {
+        if (tasksList.isNotEmpty() || jEntriesList.isNotEmpty()) {
             val lastTaskDateInMillis = tasksList.last().created
             val localDate = LocalDate.now()
             val localLastTaskDate = Instant.ofEpochMilli(lastTaskDateInMillis).atZone(ZoneId.systemDefault()).toLocalDate()
@@ -106,11 +109,40 @@ class MainViewModel @Inject constructor(
         mainEventChannel.send(MainEvent.NavigateToChangelogDialog)
     }
 
+    fun onTellYourFriendsDialogFragmentClick() = viewModelScope.launch {
+        mainEventChannel.send(MainEvent.NavigateToTellYourFriendsDialog)
+    }
+
+    fun onAboutDialogFragmentClick() = viewModelScope.launch{
+        mainEventChannel.send(MainEvent.NavigateToAboutDialog)
+    }
+
+    fun onTutorialRedirectionEngaged() = viewModelScope.launch {
+        mainEventChannel.send(MainEvent.NavigateToTutorialFragment)
+    }
+
     sealed class MainEvent {
         object NavigateToTaskSetsListFragment : MainEvent()
         object NavigateToDaysListFragment : MainEvent()
         object NavigateToGetInTouchDialog : MainEvent()
         object NavigateToLeaveReviewDialog : MainEvent()
         object NavigateToChangelogDialog : MainEvent()
+        object NavigateToTellYourFriendsDialog : MainEvent()
+        object NavigateToAboutDialog : MainEvent()
+        object NavigateToTutorialFragment : MainEvent()
+    }
+
+    private suspend fun pullListAndCompareDateTest() {
+        val tasksList = taskDao.getTasksList()
+        val jEntriesList = journalEntryDao.getJournalEntriesList()
+        if (tasksList.isNotEmpty() || jEntriesList.isNotEmpty()) {
+
+            val lastTaskDateInMillis: Long = tasksList.last().created
+            val localLastTaskDate: LocalDate = Instant.ofEpochMilli(lastTaskDateInMillis).atZone(ZoneId.systemDefault()).toLocalDate()
+
+            saveTasksAndJEntriesToDay(tasksList, jEntriesList, localLastTaskDate)
+            nukeTodayTasks()
+            nukeTodayJEntries()
+        }
     }
 }
