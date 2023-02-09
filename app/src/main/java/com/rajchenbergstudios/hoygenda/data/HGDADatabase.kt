@@ -132,9 +132,11 @@ abstract class HGDADatabase : RoomDatabase(){
             }
 
             //Initial day (testing)
+            /*
             applicationScope.launch {
-                // testData(dayDao)
+                testData(dayDao)
             }
+             */
         }
     }
 }
