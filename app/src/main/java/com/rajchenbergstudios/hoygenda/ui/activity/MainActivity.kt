@@ -190,6 +190,17 @@ class MainActivity : AppCompatActivity(), TodayFragment.TodayFragmentListener {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (viewModel.appWasAlreadyOpened)
+            viewModel.compareDateAndSaveDataIfNeededInActivityResumed()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.appWasAlreadyOpened = true
+    }
+
     /*
     private fun forceTestCrash() {
         val crashButton = Button(this)
