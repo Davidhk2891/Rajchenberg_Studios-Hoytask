@@ -8,6 +8,7 @@ import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntry
 import com.rajchenbergstudios.hoygenda.data.today.journalentry.JournalEntryDao
 import com.rajchenbergstudios.hoygenda.data.today.task.Task
 import com.rajchenbergstudios.hoygenda.data.today.task.TaskDao
+import com.rajchenbergstudios.hoygenda.utils.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -28,6 +29,8 @@ import javax.inject.Inject
  Logger.i(TAG, "pullListAndCompareDate", "Local last task date is: $localLastTaskDate")
 */
 
+const val TAG = "MainViewModel.kt"
+
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val taskDao: TaskDao,
@@ -37,6 +40,8 @@ class MainViewModel @Inject constructor(
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
+
+    var appWasAlreadyOpened = false
 
     // Channel
     private val mainEventChannel = Channel<MainEvent>()
@@ -49,13 +54,22 @@ class MainViewModel @Inject constructor(
             // Enable only when testing
             // pullListAndCompareDateTest()
 
-            pullListAndCompareDate()
+            compareDateAndSaveDataIfNeeded()
+            // You can do something here
             delay(1500)
             _isLoading.value = false
         }
     }
 
-    private suspend fun pullListAndCompareDate() {
+    private suspend fun compareDateAndSaveDataIfNeeded() {
+        pullListCompareDatesAndSaveData()
+    }
+
+    fun compareDateAndSaveDataIfNeededInActivityResumed() = viewModelScope.launch {
+        pullListCompareDatesAndSaveData()
+    }
+
+    private suspend fun pullListCompareDatesAndSaveData() {
         val tasksList = taskDao.getTasksList()
         val jEntriesList = journalEntryDao.getJournalEntriesList()
         if (tasksList.isNotEmpty() || jEntriesList.isNotEmpty()) {
@@ -63,9 +77,12 @@ class MainViewModel @Inject constructor(
             val localDate = LocalDate.now()
             val localLastTaskDate = Instant.ofEpochMilli(lastTaskDateInMillis).atZone(ZoneId.systemDefault()).toLocalDate()
             if (localDate.isAfter(localLastTaskDate)) {
+                Logger.i(TAG, "pullListCompareDatesAndSaveData", "It's a new day!")
                 saveTasksAndJEntriesToDay(tasksList, jEntriesList, localLastTaskDate)
                 nukeTodayTasks()
                 nukeTodayJEntries()
+            } else {
+                Logger.i(TAG, "pullListCompareDatesAndSaveData", "We are still in Today")
             }
         }
     }
