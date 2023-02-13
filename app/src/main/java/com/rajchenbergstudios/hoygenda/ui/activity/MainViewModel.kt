@@ -70,10 +70,20 @@ class MainViewModel @Inject constructor(
     }
 
     private suspend fun pullListCompareDatesAndSaveData() {
+        val lastTaskDateInMillis: Long
         val tasksList = taskDao.getTasksList()
         val jEntriesList = journalEntryDao.getJournalEntriesList()
+
         if (tasksList.isNotEmpty() || jEntriesList.isNotEmpty()) {
-            val lastTaskDateInMillis = tasksList.last().created
+
+                if (tasksList.isNotEmpty()) {
+                    lastTaskDateInMillis = tasksList.last().created
+                    Logger.i(TAG, "pullListCompareDatesAndSaveData", "tasksList is not empty")
+                } else {
+                    lastTaskDateInMillis = jEntriesList.last().created
+                    Logger.i(TAG, "pullListCompareDatesAndSaveData", "jEntriesList is not empty")
+                }
+
             val localDate = LocalDate.now()
             val localLastTaskDate = Instant.ofEpochMilli(lastTaskDateInMillis).atZone(ZoneId.systemDefault()).toLocalDate()
             if (localDate.isAfter(localLastTaskDate)) {
@@ -84,6 +94,8 @@ class MainViewModel @Inject constructor(
             } else {
                 Logger.i(TAG, "pullListCompareDatesAndSaveData", "We are still in Today")
             }
+        } else {
+            Logger.i(TAG, "pullListCompareDatesAndSaveData", "Nothing to do, both lists are empty")
         }
     }
 
@@ -149,6 +161,8 @@ class MainViewModel @Inject constructor(
         object NavigateToTutorialFragment : MainEvent()
     }
 
+    /*
+    For testing only!
     private suspend fun pullListAndCompareDateTest() {
         val tasksList = taskDao.getTasksList()
         val jEntriesList = journalEntryDao.getJournalEntriesList()
@@ -162,4 +176,5 @@ class MainViewModel @Inject constructor(
             nukeTodayJEntries()
         }
     }
+     */
 }
