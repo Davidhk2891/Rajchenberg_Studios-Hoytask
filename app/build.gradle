@@ -45,13 +45,13 @@ dependencies {
 
     // Default libraries
     // androidx.core:core-ktx:1.9.0 causes a crash
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // Splashscreen Android API
     implementation 'androidx.core:core-splashscreen:1.0.0'
@@ -60,8 +60,11 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.5.5"
 
     // LifeCycle + ViewModel & LiveData
-    // androidx.lifecycle:lifecycle-viewmodel-ktx-:2.6.0-alpha02 caused a crash
-    // androidx.lifecycle:lifecycle-livedata-ktx-:2.6.0-alpha02 caused a crash
+    // androidx.lifecycle:lifecycle-viewmodel-ktx-:2.6.0-alpha02 causes a crash
+    // androidx.lifecycle:lifecycle-livedata-ktx-:2.6.0-alpha02 causes a crash
+    // androidx.lifecycle:lifecycle-viewmodel-ktx-:2.6.0-beta01 causes a crash
+    // androidx.lifecycle:lifecycle-livedata-ktx-:2.6.0-beta01 causes a crash
+    // androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-alpha03 was last one to work
     // androidx.lifecycle:lifecycle-livedata-ktx-:2.6.0-alpha03 was last one to work
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-alpha03"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.0-alpha03"
@@ -71,9 +74,9 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
 
     // Room
-    implementation "androidx.room:room-runtime:2.4.3"
-    implementation "androidx.room:room-ktx:2.4.3"
-    kapt "androidx.room:room-compiler:2.4.3"
+    implementation "androidx.room:room-runtime:2.5.0"
+    implementation "androidx.room:room-ktx:2.5.0"
+    kapt "androidx.room:room-compiler:2.5.0"
 
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"

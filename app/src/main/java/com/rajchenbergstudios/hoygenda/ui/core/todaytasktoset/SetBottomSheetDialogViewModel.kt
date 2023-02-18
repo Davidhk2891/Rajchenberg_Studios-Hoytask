@@ -24,7 +24,7 @@ import javax.inject.Inject
 // const val TAG = "SetBottomSheetDialogViewModel.kt"
 
 @HiltViewModel
-class TaskToSetBottomSheetDialogViewModel @Inject constructor(
+class SetBottomSheetDialogViewModel @Inject constructor(
     private val taskDao: TaskDao,
     private val taskSetDao: TaskSetDao,
     private val taskInSetDao: TaskInSetDao,

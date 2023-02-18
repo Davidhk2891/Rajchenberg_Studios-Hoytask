@@ -26,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class SetBottomSheetDialogFragment : BottomSheetDialogFragment(),
     SetBottomSheetDialogAdapter.OnItemClickListener {
 
-    private val viewModel: TaskToSetBottomSheetDialogViewModel by viewModels()
+    private val viewModel: SetBottomSheetDialogViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_set_bottom_sheet, container, false)
@@ -91,22 +91,22 @@ class SetBottomSheetDialogFragment : BottomSheetDialogFragment(),
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.taskToSetEvent.collect { event ->
                 when (event) {
-                    is TaskToSetBottomSheetDialogViewModel.TaskToSetEvent.NavigateToCreateTaskSetDialog -> {
+                    is SetBottomSheetDialogViewModel.TaskToSetEvent.NavigateToCreateTaskSetDialog -> {
                         val action = SetBottomSheetDialogFragmentDirections
                             .actionGlobalCreateTaskSetDialogFragment(task = event.task, origin = 2)
                         findNavController().navigate(action)
                     }
-                    is TaskToSetBottomSheetDialogViewModel.TaskToSetEvent.NavigateBackWithResultFromSetCreatedWithTask -> {
+                    is SetBottomSheetDialogViewModel.TaskToSetEvent.NavigateBackWithResultFromSetCreatedWithTask -> {
                         setFragmentResult(
                             "create_set_request_2",
                             bundleOf("create_set_result_2" to event.result)
                         )
                         findNavController().popBackStack()
                     }
-                    is TaskToSetBottomSheetDialogViewModel.TaskToSetEvent.NavigateBackWithNoSetsSelected -> {
+                    is SetBottomSheetDialogViewModel.TaskToSetEvent.NavigateBackWithNoSetsSelected -> {
                         findNavController().popBackStack()
                     }
-                    is TaskToSetBottomSheetDialogViewModel.TaskToSetEvent.NaigateBackWithResultUponSavingTaskToSet -> {
+                    is SetBottomSheetDialogViewModel.TaskToSetEvent.NaigateBackWithResultUponSavingTaskToSet -> {
                         setFragmentResult(
                             "task_added_to_set_request",
                             bundleOf(
@@ -115,7 +115,7 @@ class SetBottomSheetDialogFragment : BottomSheetDialogFragment(),
                         )
                         findNavController().popBackStack()
                     }
-                    is TaskToSetBottomSheetDialogViewModel.TaskToSetEvent.NavigateBackWithResultUponAddingTasksFromSet -> {
+                    is SetBottomSheetDialogViewModel.TaskToSetEvent.NavigateBackWithResultUponAddingTasksFromSet -> {
                         setFragmentResult(
                             "task_added_from_set_request",
                             bundleOf(
